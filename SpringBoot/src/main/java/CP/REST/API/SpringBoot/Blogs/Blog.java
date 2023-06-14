@@ -23,7 +23,7 @@ public class Blog {
     private String title;
 
     @JsonProperty("description")
-    @Size(min = 10, message = "Enter the title with the minimum of 10 characters")
+    @Size(min = 10, message = "Enter the description with the minimum of 10 characters")
     private String description;
 
     @JsonProperty("lastmodified")

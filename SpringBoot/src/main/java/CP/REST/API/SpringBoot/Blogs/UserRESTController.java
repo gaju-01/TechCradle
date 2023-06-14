@@ -42,7 +42,10 @@ public class UserRESTController {
     public ResponseEntity<Blog> createBlog(@PathVariable String name, @RequestBody @Valid Blog blog) {
         Optional<User> user = this.userRepo.findByUserName(name);
         if (user.isEmpty()) {
-            throw new BasicUserDefinedException("User does not exsists");
+            throw new BasicUserDefinedException("User does not exsists!!");
+        }
+        if (blog.getDescription().length() < 10) {
+            throw new BasicUserDefinedException("Description should be minimum of 10 characters!!");
         }
 
         blog.setUser(user.get());

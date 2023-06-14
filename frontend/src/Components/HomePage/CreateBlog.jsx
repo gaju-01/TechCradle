@@ -33,6 +33,8 @@ const CreateBlog = () => {
 						headers: {
 							"Content-Type": "application/json",
 						},
+					}).catch((error) => {
+						setMess(error.response.data.errors[0].defaultMessage);
 					});
 				}
 				setMess(mess);

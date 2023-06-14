@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,7 +59,20 @@ public class BlogRESTController {
                     .toUri();
             return ResponseEntity.created(location).build();
         } else {
-            throw new BasicUserDefinedException("You are not the author of this blog!! So you cannot modiy the blog");
+            throw new BasicUserDefinedException("You are not the author of this blog!! So you cannot modiy the blog!!");
         }
     }
+
+    @DeleteMapping(path = "/cprestapi/{name}/blogs/deleteblog")
+    public void deleteBlog(@PathVariable String name, @RequestParam(name = "title") String title) {
+        Optional<Blog> optionalBlog = this.repo.findByTitle(title);
+        Blog blog = optionalBlog.get();
+        if (!blog.getUserName().equals(name)) {
+            throw new BasicUserDefinedException(
+                    "You are not the author of this blog!! So you cannot delete the blog!!");
+        } else {
+            this.repo.delete(blog);
+        }
+    }
+
 }

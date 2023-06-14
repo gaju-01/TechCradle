@@ -17,6 +17,41 @@ const ModifyBlog = () => {
 		setText(event.target.value);
 	};
 
+	const deleteHandler = (event) => {
+		event.preventDefault();
+		let mess = "";
+		axios({
+			method: "get",
+			url: `http://localhost:8080/cprestapi/blogs/findblog`,
+			params: {
+				title: title,
+			},
+		})
+			.then((resp) => {
+				mess = resp.data;
+				if (mess === "The title is not available") {
+					axios({
+						method: "delete",
+						url: `http://localhost:8080/cprestapi/${context.user}/blogs/deleteblog`,
+						params: {
+							title: title,
+						},
+					})
+						.then((resp) => {
+							setMess("Blog is successfully deleted!!");
+						})
+						.catch((error) => {
+							setMess(error.response.data.message);
+						});
+				} else {
+					setMess("The blog with this title does not exsist");
+				}
+			})
+			.catch((error) => {
+				setMess(error.response.data.message);
+			});
+	};
+
 	const submitHandler = (event) => {
 		event.preventDefault();
 
@@ -106,6 +141,9 @@ const ModifyBlog = () => {
 					</button>
 				</div>
 			</form>
+			<button onClick={deleteHandler} type="submit" className="btn btn-success">
+				Delete
+			</button>
 			<p>{mess}</p>
 		</div>
 	);
