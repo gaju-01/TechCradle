@@ -1,23 +1,40 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import WelcomeStyle from "./Welcome.module.css";
 import { useNavigate } from "react-router-dom";
+import Context from "../ContextProvider/Context";
 const Welcome = (props) => {
 	const navigate = useNavigate();
+	const context = useContext(Context);
 	const [welcome, setWelcome] = useState("Message Cannot be Disaplyed");
 
 	const languageHandler = (event) => {
-		props.setLanguage(event.target.value);
+		context.setLanguage(event.target.value);
 	};
 
 	const clickHandler = () => {
-		navigate("/home");
+		if (context.user !== "" && context.user !== null) {
+			axios({
+				method: "post",
+				url: "http://localhost:8080/cprestapi/users",
+				data: {
+					userName: context.user,
+				},
+			}).then((resp) => {
+				console.log("Welcome resp", resp);
+			});
+		}
+		navigate("/home/blog");
+	};
+
+	const inputChangeHandler = (event) => {
+		context.setUser(event.target.value);
 	};
 
 	useEffect(() => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/title.welcome",
+			url: "http://localhost:8080/cprestapi/intl/title/title.welcome",
 			headers: {
 				"Accept-Language": props.language,
 			},
@@ -57,13 +74,21 @@ const Welcome = (props) => {
 						value={props.language}
 						onChange={languageHandler}
 					>
-						<option selected value="en">
+						<option defaultValue value="en">
 							English
 						</option>
 						<option value="fr">French</option>
 						<option value="de">Dutch</option>
 					</select>
 				</div>
+				<label htmlFor="user">User name</label>
+				<input
+					type="text"
+					name="user"
+					id="user"
+					value={context.user}
+					onChange={inputChangeHandler}
+				/>
 				<div style={{ marginTop: "1rem" }}>
 					<button
 						type="button"

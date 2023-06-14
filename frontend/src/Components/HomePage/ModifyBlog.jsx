@@ -1,48 +1,13 @@
-import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import Context from "../ContextProvider/Context";
 
-const CreateBlog = () => {
+const ModifyBlog = () => {
 	const [head, setHead] = useState("Create blogs");
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
-	const [mess, setMess] = useState("The title is available");
+	const [mess, setMess] = useState("Blog with this title does not exsist");
 	const context = useContext(Context);
-
-	const submitHandler = (event) => {
-		event.preventDefault();
-		let mess = "";
-
-		axios({
-			method: "get",
-			url: `http://localhost:8080/cprestapi/blogs/findblog`,
-			params: {
-				title: title,
-			},
-		})
-			.then((resp) => {
-				mess = resp.data;
-				if (mess === "The title is available") {
-					axios({
-						method: "post",
-						url: `http://localhost:8080/cprestapi/users/${context.user}/blogs`,
-						data: {
-							title: title,
-							description: text,
-						},
-						headers: {
-							"Content-Type": "application/json",
-						},
-					});
-				}
-				setMess(mess);
-			})
-			.catch((error) => {
-				setMess(error.response.data.message);
-			});
-		setTitle("");
-		setText("");
-	};
 
 	const inputChangeHandler = (event) => {
 		setTitle(event.target.value);
@@ -52,10 +17,50 @@ const CreateBlog = () => {
 		setText(event.target.value);
 	};
 
+	const submitHandler = (event) => {
+		event.preventDefault();
+
+		let mess = "";
+		axios({
+			method: "get",
+			url: `http://localhost:8080/cprestapi/blogs/findblog`,
+			params: {
+				title: title,
+			},
+		})
+			.then((resp) => {
+				mess = resp.data;
+				if (mess === "The title is not available") {
+					axios({
+						method: "patch",
+						url: `http://localhost:8080/cprestapi/${context.user}/blogs/updateblog`,
+						data: {
+							title: title,
+							description: text,
+						},
+						headers: {
+							"Content-Type": "application/json",
+						},
+					})
+						.then((resp) => {
+							setMess("Your blog was successfully updated!!");
+						})
+						.catch((error) => {
+							setMess(error.response.data.message);
+						});
+				} else {
+					setMess("Blog with this title does not exsist");
+				}
+			})
+			.catch((error) => {
+				setMess(error.response.data.message);
+			});
+	};
+
 	useEffect(() => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/title/title.create.blog",
+			url: "http://localhost:8080/cprestapi/intl/title/title.modify.blog",
 			headers: {
 				"Accept-Language": context.language,
 			},
@@ -105,4 +110,4 @@ const CreateBlog = () => {
 		</div>
 	);
 };
-export default CreateBlog;
+export default ModifyBlog;
