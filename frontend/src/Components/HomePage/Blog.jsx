@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
+
 const Blog = () => {
 	const context = useContext(Context);
 	const [blogs, setBlogs] = useState([]);
@@ -31,17 +32,28 @@ const Blog = () => {
 			setMessage("You cannot follow yourself");
 		} else {
 			axios({
-				method: "post",
-				url: `http://localhost:8080/cprestapi/following`,
-				data: {
-					userName: context.user,
-				},
+				method: "get",
+				url: "http://localhost:8080/cprestapi/following/check",
 				params: {
-					user: user,
+					parent: user,
+					child: context.user,
 				},
-				headers: {
-					"Content-Type": "application/json",
-				},
+			}).then((resp) => {
+				if (resp.data === "NO") {
+					axios({
+						method: "post",
+						url: `http://localhost:8080/cprestapi/following`,
+						data: {
+							userName: context.user,
+						},
+						params: {
+							user: user,
+						},
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+				}
 			});
 			setMessage(`You are now following ${user}`);
 		}
@@ -50,7 +62,7 @@ const Blog = () => {
 	return (
 		<div>
 			{message !== "" && (
-				<div class="alert alert-success" role="alert">
+				<div className="alert alert-success" role="alert">
 					{message}
 				</div>
 			)}
