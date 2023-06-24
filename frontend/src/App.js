@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Welcome from "./Components/WelcomePage/Welcome";
+import Context from "./Components/ContextProvider/Context";
+import HomePage from "./Components/HomePage/HomePage";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [language, setLanguage] = useState("en");
+	const [user, setUser] = useState("");
+
+	return (
+		<Context.Provider
+			value={{
+				language: language,
+				setLanguage: setLanguage,
+				user: user,
+				setUser: setUser,
+			}}
+		>
+			<Routes>
+				<Route path="/home/:id" element={<HomePage />} />
+				<Route
+					path="/"
+					element={<Welcome language={language} setLanguage={setLanguage} />}
+				/>
+			</Routes>
+		</Context.Provider>
+	);
 }
 
 export default App;
