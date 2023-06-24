@@ -14,14 +14,24 @@ const Welcome = (props) => {
 
 	const clickHandler = () => {
 		if (context.user !== "" && context.user !== null) {
+			let isPresent = "YES";
 			axios({
-				method: "post",
-				url: "http://localhost:8080/cprestapi/users",
-				data: {
-					userName: context.user,
+				method: "get",
+				url: "http://localhost:8080/cprestapi/users/checkuser",
+				params: {
+					user: context.user,
 				},
 			}).then((resp) => {
-				console.log("Welcome resp", resp);
+				isPresent = resp.data;
+				if (isPresent === "NO") {
+					axios({
+						method: "post",
+						url: "http://localhost:8080/cprestapi/users",
+						data: {
+							userName: context.user,
+						},
+					});
+				}
 			});
 		}
 		navigate("/home/blog");

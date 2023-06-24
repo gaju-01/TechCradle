@@ -41,14 +41,16 @@ const ModifyBlog = () => {
 							setMess("Blog is successfully deleted!!");
 						})
 						.catch((error) => {
-							setMess(error.response.data.message);
+							setMess(
+								"Enter the valid title or oyu are not the author this blog!!"
+							);
 						});
 				} else {
 					setMess("The blog with this title does not exsist");
 				}
 			})
 			.catch((error) => {
-				setMess(error.response.data.message);
+				setMess("Enter the valid title or oyu are not the author this blog!!");
 			});
 	};
 
@@ -81,14 +83,18 @@ const ModifyBlog = () => {
 							setMess("Your blog was successfully updated!!");
 						})
 						.catch((error) => {
-							setMess(error.response.data.message);
+							setMess(
+								"Enter the valid title/description or you are not the author this blog!!"
+							);
 						});
 				} else {
 					setMess("Blog with this title does not exsist");
 				}
 			})
 			.catch((error) => {
-				setMess(error.response.data.message);
+				setMess(
+					"Enter the valid title/description or you are not the author this blog!!"
+				);
 			});
 	};
 

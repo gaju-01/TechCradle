@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,16 @@ public class UserRESTController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
                 .buildAndExpand(createdBlog.getId()).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping(path = "/cprestapi/users/checkuser")
+    public String checkUser(@RequestParam(name = "user") String user) {
+        Optional<User> opUser = this.userRepo.findByUserName(user);
+        if (opUser.isEmpty()) {
+            return "NO";
+        } else {
+            return "YES";
+        }
     }
 
 }

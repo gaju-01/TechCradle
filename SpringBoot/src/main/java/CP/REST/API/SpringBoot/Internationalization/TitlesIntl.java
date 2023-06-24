@@ -37,7 +37,7 @@ public class TitlesIntl {
         rec.add(this.messageSource.getMessage("title.navbar.create.blog", null, null, locale));
         rec.add(this.messageSource.getMessage("title.navbar.modify.blog", null, null, locale));
         rec.add(this.messageSource.getMessage("title.navbar.compiler", null, null, locale));
-
+        rec.add(this.messageSource.getMessage("title.navbar.followers", null, null, locale));
         return rec;
     }
 }

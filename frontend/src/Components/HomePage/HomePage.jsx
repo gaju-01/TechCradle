@@ -4,6 +4,7 @@ import Blog from "./Blog";
 import CreateBlog from "./CreateBlog";
 import Compiler from "./Compiler";
 import ModifyBlog from "./ModifyBlog";
+import Followers from "./Followers";
 
 const HomePage = () => {
 	const params = useParams();
@@ -17,6 +18,8 @@ const HomePage = () => {
 		Component = <Blog />;
 	} else if (params.id === "modifyblog") {
 		Component = <ModifyBlog />;
+	} else if (params.id === "followers") {
+		Component = <Followers />;
 	}
 
 	return (

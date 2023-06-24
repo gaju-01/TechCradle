@@ -34,13 +34,13 @@ const CreateBlog = () => {
 							"Content-Type": "application/json",
 						},
 					}).catch((error) => {
-						setMess(error.response.data.errors[0].defaultMessage);
+						setMess("Description should be minimum of 10 characters!!");
 					});
 				}
 				setMess(mess);
 			})
 			.catch((error) => {
-				setMess(error.response.data.message);
+				setMess("The title should me minimum of 2 characters!!");
 			});
 		setTitle("");
 		setText("");

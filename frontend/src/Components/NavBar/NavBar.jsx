@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Context from "../ContextProvider/Context";
+import Followers from "../HomePage/Followers";
 const NavBar = () => {
 	const context = useContext(Context);
 	const [navTitles, setNavTitles] = useState([
@@ -10,6 +11,7 @@ const NavBar = () => {
 		"Create Blogs",
 		"Modify Blog",
 		"Compiler",
+		"Followers",
 	]);
 
 	useEffect(() => {
@@ -55,6 +57,11 @@ const NavBar = () => {
 						<li>
 							<Link className="dropdown-item" to="/home/compiler">
 								{navTitles[4]}
+							</Link>
+						</li>
+						<li>
+							<Link className="dropdown-item" to="/home/followers">
+								{navTitles[5]}
 							</Link>
 						</li>
 					</ul>
