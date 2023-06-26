@@ -5,10 +5,14 @@ import Context from "../ContextProvider/Context";
 const Followers = () => {
 	const [data, setData] = useState([]);
 	const context = useContext(Context);
+
 	useEffect(() => {
 		axios({
 			method: "get",
 			url: `http://localhost:8080/cprestapi/following/${context.user}`,
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		}).then((resp) => {
 			setData(resp.data);
 		});

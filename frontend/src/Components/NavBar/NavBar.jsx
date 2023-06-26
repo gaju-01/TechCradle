@@ -2,7 +2,6 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Context from "../ContextProvider/Context";
-import Followers from "../HomePage/Followers";
 const NavBar = () => {
 	const context = useContext(Context);
 	const [navTitles, setNavTitles] = useState([
@@ -20,6 +19,9 @@ const NavBar = () => {
 			url: "http://localhost:8080/cprestapi/intl/navbar",
 			headers: {
 				"Accept-Language": context.language,
+			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
 			},
 		}).then((resp) => {
 			setNavTitles(resp.data);

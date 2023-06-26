@@ -42,4 +42,17 @@ public class FollowRESTController {
         return getList;
     }
 
+    @GetMapping("/cprestapi/following/check")
+    public String checkIsPresent(@RequestParam(name = "parent") String parent,
+            @RequestParam(name = "child") String child) {
+        Optional<User> opUser = this.userRepo.findByUserName(parent);
+        User gotUser = opUser.get();
+        List<Follow> getList = this.followRepo.findByUser(gotUser);
+        for (Follow x : getList) {
+            if (x.getUserName().equals(child)) {
+                return "YES";
+            }
+        }
+        return "NO";
+    }
 }

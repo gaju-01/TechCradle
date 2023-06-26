@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
+
 const Blog = () => {
 	const context = useContext(Context);
 	const [blogs, setBlogs] = useState([]);
@@ -11,7 +12,10 @@ const Blog = () => {
 		axios({
 			method: "get",
 			url: "http://localhost:8080/cprestapi/intl/title/title.blog",
-			headers: { "Accept-Language": context.language },
+			headers: {
+				"Accept-Language": context.language,
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		}).then((response) => {
 			setTitle(response.data);
 		});
@@ -21,6 +25,9 @@ const Blog = () => {
 		axios({
 			method: "get",
 			url: "http://localhost:8080/cprestapi/blogs",
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		}).then((response) => {
 			setBlogs(response.data);
 		});
@@ -31,17 +38,32 @@ const Blog = () => {
 			setMessage("You cannot follow yourself");
 		} else {
 			axios({
-				method: "post",
-				url: `http://localhost:8080/cprestapi/following`,
-				data: {
-					userName: context.user,
-				},
+				method: "get",
+				url: "http://localhost:8080/cprestapi/following/check",
 				params: {
-					user: user,
+					parent: user,
+					child: context.user,
 				},
 				headers: {
-					"Content-Type": "application/json",
+					Authorization: "Basic " + window.btoa("user:pass"),
 				},
+			}).then((resp) => {
+				if (resp.data === "NO") {
+					axios({
+						method: "post",
+						url: `http://localhost:8080/cprestapi/following`,
+						data: {
+							userName: context.user,
+						},
+						params: {
+							user: user,
+						},
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Basic " + window.btoa("user:pass"),
+						},
+					});
+				}
 			});
 			setMessage(`You are now following ${user}`);
 		}
@@ -50,7 +72,7 @@ const Blog = () => {
 	return (
 		<div>
 			{message !== "" && (
-				<div class="alert alert-success" role="alert">
+				<div className="alert alert-success" role="alert">
 					{message}
 				</div>
 			)}

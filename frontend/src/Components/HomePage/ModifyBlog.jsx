@@ -26,6 +26,9 @@ const ModifyBlog = () => {
 			params: {
 				title: title,
 			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		})
 			.then((resp) => {
 				mess = resp.data;
@@ -35,6 +38,9 @@ const ModifyBlog = () => {
 						url: `http://localhost:8080/cprestapi/${context.user}/blogs/deleteblog`,
 						params: {
 							title: title,
+						},
+						headers: {
+							Authorization: "Basic " + window.btoa("user:pass"),
 						},
 					})
 						.then((resp) => {
@@ -64,6 +70,9 @@ const ModifyBlog = () => {
 			params: {
 				title: title,
 			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		})
 			.then((resp) => {
 				mess = resp.data;
@@ -77,6 +86,7 @@ const ModifyBlog = () => {
 						},
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: "Basic " + window.btoa("user:pass"),
 						},
 					})
 						.then((resp) => {
@@ -104,6 +114,7 @@ const ModifyBlog = () => {
 			url: "http://localhost:8080/cprestapi/intl/title/title.modify.blog",
 			headers: {
 				"Accept-Language": context.language,
+				Authorization: "Basic " + window.btoa("user:pass"),
 			},
 		}).then((resp) => {
 			setHead(resp.data);
