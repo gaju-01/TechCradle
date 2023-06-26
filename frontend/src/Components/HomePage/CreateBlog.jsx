@@ -19,6 +19,9 @@ const CreateBlog = () => {
 			params: {
 				title: title,
 			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		})
 			.then((resp) => {
 				mess = resp.data;
@@ -32,6 +35,7 @@ const CreateBlog = () => {
 						},
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: "Basic " + window.btoa("user:pass"),
 						},
 					}).catch((error) => {
 						setMess("Description should be minimum of 10 characters!!");
@@ -42,6 +46,7 @@ const CreateBlog = () => {
 			.catch((error) => {
 				setMess("The title should me minimum of 2 characters!!");
 			});
+
 		setTitle("");
 		setText("");
 	};
@@ -60,6 +65,7 @@ const CreateBlog = () => {
 			url: "http://localhost:8080/cprestapi/intl/title/title.create.blog",
 			headers: {
 				"Accept-Language": context.language,
+				Authorization: "Basic " + window.btoa("user:pass"),
 			},
 		}).then((resp) => {
 			setHead(resp.data);

@@ -6,7 +6,7 @@ import Context from "../ContextProvider/Context";
 const Welcome = (props) => {
 	const navigate = useNavigate();
 	const context = useContext(Context);
-	const [welcome, setWelcome] = useState("Message Cannot be Disaplyed");
+	const [welcome, setWelcome] = useState("Message Cannot be Dispalyed");
 
 	const languageHandler = (event) => {
 		context.setLanguage(event.target.value);
@@ -21,6 +21,9 @@ const Welcome = (props) => {
 				params: {
 					user: context.user,
 				},
+				headers: {
+					Authorization: "Basic " + window.btoa("user:pass"),
+				},
 			}).then((resp) => {
 				isPresent = resp.data;
 				if (isPresent === "NO") {
@@ -30,11 +33,14 @@ const Welcome = (props) => {
 						data: {
 							userName: context.user,
 						},
+						headers: {
+							Authorization: "Basic " + window.btoa("user:pass"),
+						},
 					});
 				}
 			});
+			navigate("/home/blog");
 		}
-		navigate("/home/blog");
 	};
 
 	const inputChangeHandler = (event) => {
@@ -47,6 +53,7 @@ const Welcome = (props) => {
 			url: "http://localhost:8080/cprestapi/intl/title/title.welcome",
 			headers: {
 				"Accept-Language": props.language,
+				Authorization: "Basic " + window.btoa("user:pass"),
 			},
 		}).then((resp) => {
 			setWelcome(resp.data);

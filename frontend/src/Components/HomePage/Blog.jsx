@@ -12,7 +12,10 @@ const Blog = () => {
 		axios({
 			method: "get",
 			url: "http://localhost:8080/cprestapi/intl/title/title.blog",
-			headers: { "Accept-Language": context.language },
+			headers: {
+				"Accept-Language": context.language,
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		}).then((response) => {
 			setTitle(response.data);
 		});
@@ -22,6 +25,9 @@ const Blog = () => {
 		axios({
 			method: "get",
 			url: "http://localhost:8080/cprestapi/blogs",
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
 		}).then((response) => {
 			setBlogs(response.data);
 		});
@@ -38,6 +44,9 @@ const Blog = () => {
 					parent: user,
 					child: context.user,
 				},
+				headers: {
+					Authorization: "Basic " + window.btoa("user:pass"),
+				},
 			}).then((resp) => {
 				if (resp.data === "NO") {
 					axios({
@@ -51,6 +60,7 @@ const Blog = () => {
 						},
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: "Basic " + window.btoa("user:pass"),
 						},
 					});
 				}
