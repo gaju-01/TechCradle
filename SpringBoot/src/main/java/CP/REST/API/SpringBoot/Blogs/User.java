@@ -29,16 +29,25 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Follow> followers;
 
+    @JsonProperty("email")
+    @JsonIgnore
+    private String email;
+
     public User() {
 
     }
 
-    public User(String userName) {
+    public User(String userName, String email) {
         this.userName = userName;
+        this.email = email;
     }
 
     public void setID(int id) {
         this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setBlogs(List<Blog> blogs) {
@@ -51,6 +60,10 @@ public class User {
 
     public int getId() {
         return this.id;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
     public List<Blog> getBlogs() {

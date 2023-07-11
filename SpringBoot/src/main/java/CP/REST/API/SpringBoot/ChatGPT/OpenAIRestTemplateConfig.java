@@ -1,5 +1,6 @@
 package CP.REST.API.SpringBoot.ChatGPT;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +13,7 @@ public class OpenAIRestTemplateConfig {
     private String openaiApiKey;
 
     @Bean
+    @Qualifier("openaiRestTemplate")
     public RestTemplate openaiRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add((request, body, execution) -> {

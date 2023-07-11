@@ -8,6 +8,7 @@ import HomePage from "./Components/HomePage/HomePage";
 function App() {
 	const [language, setLanguage] = useState("en");
 	const [user, setUser] = useState("");
+	const [email, setEmail] = useState("");
 
 	return (
 		<Context.Provider
@@ -16,6 +17,8 @@ function App() {
 				setLanguage: setLanguage,
 				user: user,
 				setUser: setUser,
+				email: email,
+				setEmail: setEmail,
 			}}
 		>
 			<Routes>
