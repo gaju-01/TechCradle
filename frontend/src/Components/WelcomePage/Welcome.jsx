@@ -32,6 +32,7 @@ const Welcome = (props) => {
 						url: "http://localhost:8080/cprestapi/users",
 						data: {
 							userName: context.user,
+							email: context.email,
 						},
 						headers: {
 							Authorization: "Basic " + window.btoa("user:pass"),
@@ -45,6 +46,10 @@ const Welcome = (props) => {
 
 	const inputChangeHandler = (event) => {
 		context.setUser(event.target.value);
+	};
+
+	const emailChangeHandler = (event) => {
+		context.setEmail(event.target.value);
 	};
 
 	useEffect(() => {
@@ -105,6 +110,14 @@ const Welcome = (props) => {
 					id="user"
 					value={context.user}
 					onChange={inputChangeHandler}
+				/>
+				<label htmlFor="email">Email</label>
+				<input
+					type="email"
+					name="email"
+					id="email"
+					value={context.email}
+					onChange={emailChangeHandler}
 				/>
 				<div style={{ marginTop: "1rem" }}>
 					<button
