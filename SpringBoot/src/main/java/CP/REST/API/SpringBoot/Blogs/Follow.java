@@ -10,44 +10,51 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Follow {
-    @JsonProperty("id")
-    @Id
-    @GeneratedValue
-    @JsonIgnore
-    private int id;
 
-    @JsonProperty("userName")
-    private String userName;
+  @JsonProperty("id")
+  @Id
+  @GeneratedValue
+  @JsonIgnore
+  private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private User user;
+  @JsonProperty("userName")
+  private String userName;
 
-    public Follow() {
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnore
+  private User user;
 
-    }
+  @JsonProperty("celeb")
+  private String celeb;
 
-    public Follow(String userName) {
-        this.userName = userName;
-    }
+  public Follow() {}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public Follow(String userName) {
+    this.userName = userName;
+  }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+  public void setUser(User user) {
+    this.user = user;
+    this.celeb = user.getUserName();
+  }
 
-    public int getId() {
-        return this.id;
-    }
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
 
-    public String getUserName() {
-        return this.userName;
-    }
+  public int getId() {
+    return this.id;
+  }
 
-    public User getUser() {
-        return this.user;
-    }
+  public String getUserName() {
+    return this.userName;
+  }
+
+  public User getUser() {
+    return this.user;
+  }
+
+  public String getCeleb() {
+    return this.celeb;
+  }
 }

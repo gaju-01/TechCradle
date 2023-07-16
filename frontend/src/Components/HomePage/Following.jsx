@@ -2,30 +2,31 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
 
-const Followers = () => {
-  const [data, setData] = useState([]);
+const Following = () => {
+  const [list, setList] = useState([]);
   const context = useContext(Context);
 
   useEffect(() => {
     axios({
-      method: "get",
-      url: `http://localhost:8080/cprestapi/followers/${context.user}`,
+      url: "http://localhost:8080/cprestapi/following",
+      params: {
+        parent: context.user,
+      },
       headers: {
         Authorization: "Basic " + window.btoa("user:pass"),
       },
     }).then((resp) => {
-      setData(resp.data);
+      setList(resp.data);
     });
-  }, []);
+  });
 
   return (
     <>
-      <h2>Followers</h2>
-      {data.map(function (info) {
-        return <p>{info.userName}</p>;
+      {list.map(function (data) {
+        return <p key={data}>{data}</p>;
       })}
     </>
   );
 };
 
-export default Followers;
+export default Following;
