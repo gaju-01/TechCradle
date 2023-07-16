@@ -22,7 +22,7 @@ const Followers = () => {
     <>
       <h2>Followers</h2>
       {data.map(function (info) {
-        return <p>{info.userName}</p>;
+        return <p key={info.userName}>{info.userName}</p>;
       })}
     </>
   );

@@ -82,7 +82,7 @@ const Blog = () => {
       <div>
         {blogs.map(function (data) {
           return (
-            <div key={data.id}>
+            <div key={data.title}>
               <p className="fs-2">{data.title}</p>
               <p>Author: {data.userName}</p>
               <button
