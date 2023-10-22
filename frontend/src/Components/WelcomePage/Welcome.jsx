@@ -30,6 +30,7 @@ const Welcome = (props) => {
 				},
 			}).then((resp) => {
 				isPresent = resp.data;
+				console.log(context.email);
 				if (isPresent === "NO") {
 					axios({
 						method: "post",

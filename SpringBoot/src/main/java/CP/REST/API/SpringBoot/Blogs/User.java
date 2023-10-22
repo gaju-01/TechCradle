@@ -30,7 +30,6 @@ public class User {
     private List<Follow> followers;
 
     @JsonProperty("email")
-    @JsonIgnore
     private String email;
 
     public User() {

@@ -1,5 +1,6 @@
 package CP.REST.API.SpringBoot.Blogs;
 
+import CP.REST.API.SpringBoot.Email.EmailSenderService;
 import CP.REST.API.SpringBoot.Exceptions.BasicUserDefinedException;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -20,11 +21,16 @@ public class UserRESTController {
 
   private UserRepo userRepo;
   private BlogRepo blogRepo;
+  private FollowRepo followRepo;
+  private EmailSenderService emailSenderService;
 
   @Autowired
-  public UserRESTController(UserRepo userRepo, BlogRepo blogRepo) {
+  public UserRESTController(UserRepo userRepo, BlogRepo blogRepo, FollowRepo followRepo,
+      EmailSenderService emailSenderService) {
     this.userRepo = userRepo;
     this.blogRepo = blogRepo;
+    this.followRepo = followRepo;
+    this.emailSenderService = emailSenderService;
   }
 
   @GetMapping(path = "/cprestapi/users")
@@ -36,35 +42,43 @@ public class UserRESTController {
   public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
     User createdUser = this.userRepo.save(user);
     URI location = ServletUriComponentsBuilder
-      .fromCurrentRequest()
-      .path("{/id}")
-      .buildAndExpand(createdUser.getId())
-      .toUri();
+        .fromCurrentRequest()
+        .path("{/id}")
+        .buildAndExpand(createdUser.getId())
+        .toUri();
     return ResponseEntity.created(location).build();
   }
 
   @PostMapping(path = "/cprestapi/users/{name}/blogs")
   public ResponseEntity<Blog> createBlog(
-    @PathVariable String name,
-    @RequestBody @Valid Blog blog
-  ) {
+      @PathVariable String name,
+      @RequestBody @Valid Blog blog) {
     Optional<User> user = this.userRepo.findByUserName(name);
     if (user.isEmpty()) {
       throw new BasicUserDefinedException("User does not exsists!!");
     }
     if (blog.getDescription().length() < 10) {
       throw new BasicUserDefinedException(
-        "Description should be minimum of 10 characters!!"
-      );
+          "Description should be minimum of 10 characters!!");
     }
 
     blog.setUser(user.get());
     Blog createdBlog = this.blogRepo.save(blog);
     URI location = ServletUriComponentsBuilder
-      .fromCurrentRequest()
-      .path("{/id}")
-      .buildAndExpand(createdBlog.getId())
-      .toUri();
+        .fromCurrentRequest()
+        .path("{/id}")
+        .buildAndExpand(createdBlog.getId())
+        .toUri();
+
+    Optional<User> me = this.userRepo.findByUserName(name);
+    List<Follow> list = this.followRepo.findByUser(me.get());
+    list.forEach(it -> {
+      User follower = this.userRepo.findByUserName(it.getUserName()).get();
+      String email = follower.getEmail();
+      String text = name + " has contrributed a new blog\n Follow the link: http://localhost:3000/home/blog";
+      emailSenderService.sendEmail(email, "Blog Alert!!", text);
+    });
+
     return ResponseEntity.created(location).build();
   }
 
