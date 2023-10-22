@@ -7,12 +7,25 @@ const CreateBlog = () => {
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
 	const [mess, setMess] = useState("The title is available");
+	const [price, setPrice] = useState(0);
+	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
+
+	const handlePrice = (event) => {
+		setPrice(event.target.value);
+	};
+
+	const handleSDesc = (event) => {
+		setSDesc(event.target.value);
+	};
 
 	const submitHandler = (event) => {
 		event.preventDefault();
 		let mess = "";
-
+		if (price < 0) {
+			setMess("Enter the valid price");
+			return;
+		}
 		axios({
 			method: "get",
 			url: `http://localhost:8080/cprestapi/blogs/findblog`,
@@ -32,6 +45,8 @@ const CreateBlog = () => {
 						data: {
 							title: title,
 							description: text,
+							price: price,
+							sDesc: sDesc,
 						},
 						headers: {
 							"Content-Type": "application/json",
@@ -49,6 +64,8 @@ const CreateBlog = () => {
 
 		setTitle("");
 		setText("");
+		setSDesc("");
+		setPrice(0);
 	};
 
 	const inputChangeHandler = (event) => {
@@ -104,12 +121,35 @@ const CreateBlog = () => {
 					></textarea>
 				</div>
 				<div className="mb-3">
+					<label htmlFor="price" className="form-label">
+						Enter the Price
+					</label>
+					<input
+						id="price"
+						value={price}
+						onChange={handlePrice}
+						className="form-control"
+						type="number"
+					/>
+				</div>
+				<div className="mb-3">
+					<label htmlFor="number" className="form-label">
+						Enter the Short Description
+					</label>
+					<input
+						className="form-control"
+						id="sd"
+						value={sDesc}
+						onChange={handleSDesc}
+					/>
+				</div>
+				<div className="mb-3">
 					<button type="submit" className="btn btn-success">
 						Submit
 					</button>
 				</div>
 			</form>
-			<p>{mess}</p>
+			<p style={{ color: "red" }}>{mess}</p>
 		</div>
 	);
 };

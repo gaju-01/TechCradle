@@ -12,6 +12,10 @@ const Welcome = (props) => {
 		context.setLanguage(event.target.value);
 	};
 
+	const currencyHandler = (event) => {
+		context.setCurrency(event.target.value);
+	};
+
 	const clickHandler = () => {
 		if (context.user !== "" && context.user !== null) {
 			let isPresent = "YES";
@@ -101,6 +105,18 @@ const Welcome = (props) => {
 						</option>
 						<option value="fr">French</option>
 						<option value="de">Dutch</option>
+					</select>
+				</div>
+				<div>
+					<select
+						className="form-select"
+						value={props.currency}
+						onChange={currencyHandler}
+					>
+						<option defaultValue value="usd">
+							USD
+						</option>
+						<option value="inr">INR</option>
 					</select>
 				</div>
 				<label htmlFor="user">User name</label>

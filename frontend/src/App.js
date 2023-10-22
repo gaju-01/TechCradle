@@ -9,6 +9,7 @@ function App() {
 	const [language, setLanguage] = useState("en");
 	const [user, setUser] = useState("");
 	const [email, setEmail] = useState("");
+	const [currency, setCurrency] = useState("usd");
 
 	return (
 		<Context.Provider
@@ -19,13 +20,21 @@ function App() {
 				setUser: setUser,
 				email: email,
 				setEmail: setEmail,
+				currency: currency,
+				setCurrency: setCurrency,
 			}}
 		>
 			<Routes>
 				<Route path="/home/:id" element={<HomePage />} />
 				<Route
 					path="/"
-					element={<Welcome language={language} setLanguage={setLanguage} />}
+					element={
+						<Welcome
+							language={language}
+							setLanguage={setLanguage}
+							currency={currency}
+						/>
+					}
 				/>
 			</Routes>
 		</Context.Provider>

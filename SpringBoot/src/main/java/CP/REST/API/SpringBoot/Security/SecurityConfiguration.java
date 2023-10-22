@@ -22,7 +22,7 @@ public class SecurityConfiguration {
         .authenticated()
     );
     http.httpBasic(withDefaults());
-    http.headers().frameOptions().disable();
+    // http.headers().frameOptions().disable();
     http.sessionManagement(session ->
       session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     );

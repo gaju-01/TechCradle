@@ -3,30 +3,31 @@ import axios from "axios";
 import Context from "../ContextProvider/Context";
 
 const Following = () => {
-  const [list, setList] = useState([]);
-  const context = useContext(Context);
+	const [list, setList] = useState([]);
+	const context = useContext(Context);
 
-  useEffect(() => {
-    axios({
-      url: "http://localhost:8080/cprestapi/following",
-      params: {
-        parent: context.user,
-      },
-      headers: {
-        Authorization: "Basic " + window.btoa("user:pass"),
-      },
-    }).then((resp) => {
-      setList(resp.data);
-    });
-  });
+	useEffect(() => {
+		axios({
+			url: "http://localhost:8080/cprestapi/following",
+			params: {
+				parent: context.user,
+			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
+		}).then((resp) => {
+			setList(resp.data);
+		});
+	});
 
-  return (
-    <>
-      {list.map(function (data) {
-        return <p key={data}>{data}</p>;
-      })}
-    </>
-  );
+	return (
+		<>
+			<h2>Following</h2>
+			{list.map(function (data) {
+				return <p key={data}>{data}</p>;
+			})}
+		</>
+	);
 };
 
 export default Following;

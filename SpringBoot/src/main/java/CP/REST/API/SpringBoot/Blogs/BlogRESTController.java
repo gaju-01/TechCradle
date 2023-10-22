@@ -55,12 +55,14 @@ public class BlogRESTController {
         Blog myBlog = optionalBlog.get();
         if (myBlog.getUserName().equals(name)) {
             myBlog.setDescription(blog.getDescription());
+            myBlog.setPrice(blog.getPrice());
+            myBlog.setsDesc(blog.getsDesc());
             this.repo.save(myBlog);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(myBlog.getId())
                     .toUri();
             return ResponseEntity.created(location).build();
         } else {
-            throw new BasicUserDefinedException("You are not the author of this blog!! So you cannot modiy the blog!!");
+            throw new BasicUserDefinedException("You are not the author of this blog!! So you cannot modify the blog!!");
         }
     }
 

@@ -1,6 +1,7 @@
 package CP.REST.API.SpringBoot.Blogs;
 
 import java.time.LocalTime;
+
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +30,12 @@ public class Blog {
     @JsonProperty("lastmodified")
     private LocalTime lastmodified;
 
+    @JsonProperty("price")
+    private long price;
+
+    @JsonProperty("sDesc")
+    private String sDesc;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private User user;
@@ -39,10 +46,12 @@ public class Blog {
 
     }
 
-    public Blog(String title, String description) {
+    public Blog(String title, String description, long price, String sDesc) {
         this.title = title;
         this.description = description;
         this.lastmodified = LocalTime.now();
+        this.price = price;
+        this.sDesc = sDesc;
     }
 
     public void setID(int id) {
@@ -59,7 +68,15 @@ public class Blog {
         this.title = title;
         this.lastmodified = LocalTime.now();
     }
+    public void setPrice(long price) {
+        this.price = price;
+        this.lastmodified = LocalTime.now();
+    }
 
+    public void setsDesc(String sDesc) {
+        this.sDesc = sDesc;
+        this.lastmodified = LocalTime.now();
+    }
     public void setDescription(String description) {
         this.description = description;
         this.lastmodified = LocalTime.now();
@@ -87,5 +104,12 @@ public class Blog {
 
     public String getUserName() {
         return this.userName;
+    }
+
+    public long getPrice() {
+        return this.price;
+    }
+    public String getsDesc() {
+        return this.sDesc;
     }
 }

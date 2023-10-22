@@ -43,6 +43,7 @@ public class TitlesIntl {
     rec.add(
       this.messageSource.getMessage("title.navbar.select", null, null, locale)
     );
+    rec.add(this.messageSource.getMessage("title.navbar.welcome",null,null, locale));
     rec.add(
       this.messageSource.getMessage("title.navbar.blog", null, null, locale)
     );

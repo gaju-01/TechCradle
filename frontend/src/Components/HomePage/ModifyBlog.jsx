@@ -7,7 +7,16 @@ const ModifyBlog = () => {
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
 	const [mess, setMess] = useState("Blog with this title does not exsist");
+	const [price, setPrice] = useState(0);
+	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
+
+	const handlePrice = (event) => {
+		setPrice(event.target.value);
+	};
+	const handleSDesc = (event) => {
+		setSDesc(event.target.value);
+	};
 
 	const inputChangeHandler = (event) => {
 		setTitle(event.target.value);
@@ -83,6 +92,8 @@ const ModifyBlog = () => {
 						data: {
 							title: title,
 							description: text,
+							price: price,
+							sDesc: sDesc,
 						},
 						headers: {
 							"Content-Type": "application/json",
@@ -153,6 +164,29 @@ const ModifyBlog = () => {
 					></textarea>
 				</div>
 				<div className="mb-3">
+					<label htmlFor="price" className="form-label">
+						Enter the Price
+					</label>
+					<input
+						id="price"
+						value={price}
+						onChange={handlePrice}
+						className="form-control"
+						type="number"
+					/>
+				</div>
+				<div className="mb-3">
+					<label htmlFor="number" className="form-label">
+						Enter the Short Description
+					</label>
+					<input
+						className="form-control"
+						id="sd"
+						value={sDesc}
+						onChange={handleSDesc}
+					/>
+				</div>
+				<div className="mb-3">
 					<button type="submit" className="btn btn-success">
 						Submit
 					</button>
@@ -161,7 +195,7 @@ const ModifyBlog = () => {
 			<button onClick={deleteHandler} type="submit" className="btn btn-success">
 				Delete
 			</button>
-			<p>{mess}</p>
+			<p style={{ color: "red" }}>{mess}</p>
 		</div>
 	);
 };
