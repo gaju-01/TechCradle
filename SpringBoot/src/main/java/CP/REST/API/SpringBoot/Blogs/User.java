@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,7 +19,7 @@ public class User {
     private int id;
 
     @JsonProperty("userName")
-    @Size(min = 2, message = "Enter the valid user name")
+    @Size(min = 2, message = "Length of the user name must be greater than 1")
     private String userName;
 
     @JsonProperty("posts")
@@ -30,6 +31,7 @@ public class User {
     private List<Follow> followers;
 
     @JsonProperty("email")
+    @Email(message = "Enter a valid Email")
     private String email;
 
     public User() {

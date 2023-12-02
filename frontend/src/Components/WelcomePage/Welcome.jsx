@@ -6,6 +6,7 @@ import Context from "../ContextProvider/Context";
 const Welcome = (props) => {
 	const navigate = useNavigate();
 	const context = useContext(Context);
+	const [message, setMessage] = useState("");
 	const [welcome, setWelcome] = useState("Message Cannot be Dispalyed");
 
 	const languageHandler = (event) => {
@@ -17,21 +18,28 @@ const Welcome = (props) => {
 	};
 
 	const clickHandler = () => {
-		if (context.user !== "" && context.user !== null) {
+		if (
+			context.user !== "" &&
+			context.user !== null &&
+			context.email !== "" &&
+			context.email !== null
+		) {
 			let isPresent = "YES";
+			let myMessage = "";
 			axios({
 				method: "get",
 				url: "http://localhost:8080/cprestapi/users/checkuser",
 				params: {
 					user: context.user,
+					email: context.email,
 				},
 				headers: {
 					Authorization: "Basic " + window.btoa("user:pass"),
 				},
 			}).then((resp) => {
 				isPresent = resp.data;
-				console.log(context.email);
 				if (isPresent === "NO") {
+					setMessage("");
 					axios({
 						method: "post",
 						url: "http://localhost:8080/cprestapi/users",
@@ -42,10 +50,22 @@ const Welcome = (props) => {
 						headers: {
 							Authorization: "Basic " + window.btoa("user:pass"),
 						},
-					});
+					})
+						.then((resp) => {
+							setMessage("");
+							navigate("/home/blog");
+						})
+						.catch((e) => {
+							myMessage = e.response.data.errors[0].defaultMessage;
+							setMessage(myMessage);
+						});
+				} else if (isPresent === "OK") {
+					setMessage("");
+					navigate("/home/blog");
+				} else {
+					setMessage("Enter the valid user name and email");
 				}
 			});
-			navigate("/home/blog");
 		}
 	};
 
@@ -146,6 +166,7 @@ const Welcome = (props) => {
 					</button>
 				</div>
 			</div>
+			{message && <p style={{ marginLeft: "38%", color: "red" }}>{message}</p>}
 		</>
 	);
 };
