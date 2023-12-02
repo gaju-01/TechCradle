@@ -77,7 +77,7 @@ public class UserRESTController {
       User follower = this.userRepo.findByUserName(it.getUserName()).get();
       String email = follower.getEmail();
       String link = "http://localhost:3000/home/blog/";
-      String text = name + " has contributed a new blog\n Follow the link: "  + link + "\n id of the blog is" + id;
+      String text = name + " has contributed a new blog\n Follow the link: "  + link + "\n title of the blog is" + id;
       emailSenderService.sendEmail(email, "Blog Alert!!", text);
     });
 
