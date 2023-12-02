@@ -72,10 +72,12 @@ public class UserRESTController {
 
     Optional<User> me = this.userRepo.findByUserName(name);
     List<Follow> list = this.followRepo.findByUser(me.get());
+    String id = createdBlog.getTitle();
     list.forEach(it -> {
       User follower = this.userRepo.findByUserName(it.getUserName()).get();
       String email = follower.getEmail();
-      String text = name + " has contrributed a new blog\n Follow the link: http://localhost:3000/home/blog";
+      String link = "http://localhost:3000/home/blog/";
+      String text = name + " has contributed a new blog\n Follow the link: "  + link + "\n id of the blog is" + id;
       emailSenderService.sendEmail(email, "Blog Alert!!", text);
     });
 
