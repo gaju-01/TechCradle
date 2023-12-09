@@ -3,8 +3,6 @@ package CP.REST.API.SpringBoot.ValidationToken;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import CP.REST.API.SpringBoot.Blogs.User;
-import org.springframework.stereotype.Component;
-
 import java.util.Random;
 
 @Entity(name = "validation_token")
