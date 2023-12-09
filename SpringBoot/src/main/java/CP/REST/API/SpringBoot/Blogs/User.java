@@ -1,10 +1,9 @@
 package CP.REST.API.SpringBoot.Blogs;
 
 import java.util.List;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
+import CP.REST.API.SpringBoot.ValidationToken.ValidationToken;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,6 +32,10 @@ public class User {
     @JsonProperty("email")
     @Email(message = "Enter a valid Email")
     private String email;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    ValidationToken vToken;
 
     public User() {
 

@@ -18,7 +18,7 @@ const Following = () => {
 		}).then((resp) => {
 			setList(resp.data);
 		});
-	});
+	}, []);
 
 	return (
 		<>

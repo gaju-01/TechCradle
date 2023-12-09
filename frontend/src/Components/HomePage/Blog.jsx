@@ -79,6 +79,7 @@ const Blog = () => {
 			setMessage(`You are now following ${user}`);
 		}
 	};
+	console.log(blogs);
 
 	return (
 		<div>

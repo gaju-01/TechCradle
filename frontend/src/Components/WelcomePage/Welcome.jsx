@@ -8,6 +8,7 @@ const Welcome = (props) => {
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
 	const [welcome, setWelcome] = useState("Message Cannot be Dispalyed");
+	const [otp, setOTP] = useState("");
 
 	const languageHandler = (event) => {
 		context.setLanguage(event.target.value);
@@ -53,7 +54,17 @@ const Welcome = (props) => {
 					})
 						.then((resp) => {
 							setMessage("");
-							navigate("/home/blog");
+							axios({
+								method: "get",
+								url: "http://localhost:8080/cprestapi/validate/gt",
+								params: {
+									email: context.email,
+									userName: context.user,
+								},
+								headers: {
+									Authorization: "Basic " + window.btoa("user:pass"),
+								},
+							});
 						})
 						.catch((e) => {
 							myMessage = e.response.data.errors[0].defaultMessage;
@@ -61,12 +72,44 @@ const Welcome = (props) => {
 						});
 				} else if (isPresent === "OK") {
 					setMessage("");
-					navigate("/home/blog");
+					axios({
+						method: "get",
+						url: "http://localhost:8080/cprestapi/validate/gt",
+						params: {
+							email: context.email,
+							userName: context.user,
+						},
+						headers: {
+							Authorization: "Basic " + window.btoa("user:pass"),
+						},
+					}).then((resp) => {
+						setMessage("OTP sent your mail!!");
+					});
 				} else {
 					setMessage("Enter the valid user name and email");
 				}
 			});
 		}
+	};
+
+	const verifyOTP = () => {
+		axios({
+			method: "get",
+			url: "http://localhost:8080/cprestapi/verify/gt",
+			params: {
+				otp: otp,
+				userName: context.user,
+			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
+		})
+			.then((resp) => {
+				navigate("/home/blog");
+			})
+			.catch((resp) => {
+				setMessage(resp.response.data.message);
+			});
 	};
 
 	const inputChangeHandler = (event) => {
@@ -156,13 +199,28 @@ const Welcome = (props) => {
 					value={context.email}
 					onChange={emailChangeHandler}
 				/>
+				<label htmlFor="otp">Enter your OTP</label>
+				<input
+					name="OTP"
+					id="OTP"
+					value={otp}
+					onChange={(event) => setOTP(event.target.value)}
+				/>
 				<div style={{ marginTop: "1rem" }}>
 					<button
 						type="button"
 						className="btn btn-light"
 						onClick={clickHandler}
 					>
-						Get Started
+						Generate OTP
+					</button>
+					<button
+						style={{ marginLeft: "10px" }}
+						type="button"
+						className="btn btn-light"
+						onClick={verifyOTP}
+					>
+						Verify OTP
 					</button>
 				</div>
 			</div>

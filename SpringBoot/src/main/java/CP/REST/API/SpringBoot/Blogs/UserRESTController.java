@@ -59,10 +59,6 @@ public class UserRESTController {
         if (user.isEmpty()) {
             throw new BasicUserDefinedException("User does not exsists!!");
         }
-        if (blog.getDescription().length() < 10) {
-            throw new BasicUserDefinedException(
-                    "Description should be minimum of 10 characters!!");
-        }
 
         blog.setUser(user.get());
         Blog createdBlog = this.blogRepo.save(blog);
