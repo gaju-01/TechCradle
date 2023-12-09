@@ -17,7 +17,7 @@ const NavBar = () => {
 	useEffect(() => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/navbar",
+			url: `${context.serverURL}/cprestapi/intl/navbar`,
 			headers: {
 				"Accept-Language": context.language,
 				Authorization: "Basic " + window.btoa("user:pass"),

@@ -20,9 +20,10 @@ const Blog = () => {
 	}, [context.currency]);
 
 	useEffect(() => {
+		console.log("serverURL", context.serverURL);
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/title/title.blog",
+			url: `${context.serverURL}/cprestapi/intl/title/title.blog`,
 			headers: {
 				"Accept-Language": context.language,
 				Authorization: "Basic " + window.btoa("user:pass"),
@@ -35,7 +36,7 @@ const Blog = () => {
 	useEffect(() => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/blogs",
+			url: `${context.serverURL}/cprestapi/blogs`,
 			headers: {
 				Authorization: "Basic " + window.btoa("user:pass"),
 			},
@@ -50,7 +51,7 @@ const Blog = () => {
 		} else {
 			axios({
 				method: "get",
-				url: "http://localhost:8080/cprestapi/followers/check",
+				url: `${context.serverURL}/cprestapi/followers/check`,
 				params: {
 					parent: user,
 					child: context.user,
@@ -62,7 +63,7 @@ const Blog = () => {
 				if (resp.data === "NO") {
 					axios({
 						method: "post",
-						url: `http://localhost:8080/cprestapi/followers`,
+						url: `${context.serverURL}/cprestapi/followers`,
 						data: {
 							userName: context.user,
 						},

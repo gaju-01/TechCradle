@@ -31,7 +31,7 @@ const ModifyBlog = () => {
 		let mess = "";
 		axios({
 			method: "get",
-			url: `http://localhost:8080/cprestapi/blogs/findblog`,
+			url: `${context.serverURL}/cprestapi/blogs/findblog`,
 			params: {
 				title: title,
 			},
@@ -44,7 +44,7 @@ const ModifyBlog = () => {
 				if (mess === "The title is not available") {
 					axios({
 						method: "delete",
-						url: `http://localhost:8080/cprestapi/${context.user}/blogs/deleteblog`,
+						url: `${context.serverURL}/cprestapi/${context.user}/blogs/deleteblog`,
 						params: {
 							title: title,
 						},
@@ -75,7 +75,7 @@ const ModifyBlog = () => {
 		let mess = "";
 		axios({
 			method: "get",
-			url: `http://localhost:8080/cprestapi/blogs/findblog`,
+			url: `${context.serverURL}/cprestapi/blogs/findblog`,
 			params: {
 				title: title,
 			},
@@ -88,7 +88,7 @@ const ModifyBlog = () => {
 				if (mess === "The title is not available") {
 					axios({
 						method: "patch",
-						url: `http://localhost:8080/cprestapi/${context.user}/blogs/updateblog`,
+						url: `${context.serverURL}/cprestapi/${context.user}/blogs/updateblog`,
 						data: {
 							title: title,
 							description: text,
@@ -122,7 +122,7 @@ const ModifyBlog = () => {
 	useEffect(() => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/title/title.modify.blog",
+			url: `${context.serverURL}/cprestapi/intl/title/title.modify.blog`,
 			headers: {
 				"Accept-Language": context.language,
 				Authorization: "Basic " + window.btoa("user:pass"),

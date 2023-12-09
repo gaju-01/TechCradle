@@ -8,7 +8,7 @@ const Following = () => {
 
 	useEffect(() => {
 		axios({
-			url: "http://localhost:8080/cprestapi/following",
+			url: `${context.serverURL}/cprestapi/following`,
 			params: {
 				parent: context.user,
 			},

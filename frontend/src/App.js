@@ -22,6 +22,7 @@ function App() {
 				setEmail: setEmail,
 				currency: currency,
 				setCurrency: setCurrency,
+				serverURL: "http://localhost:8080",
 			}}
 		>
 			<Routes>

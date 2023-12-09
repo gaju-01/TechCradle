@@ -10,7 +10,7 @@ const Followers = () => {
 		if (context.user) {
 			axios({
 				method: "get",
-				url: `http://localhost:8080/cprestapi/followers/${context.user}`,
+				url: `${context.serverURL}/cprestapi/followers/${context.user}`,
 				headers: {
 					Authorization: "Basic " + window.btoa("user:pass"),
 				},

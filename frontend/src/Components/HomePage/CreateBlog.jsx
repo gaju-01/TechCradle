@@ -28,7 +28,7 @@ const CreateBlog = () => {
 		}
 		axios({
 			method: "get",
-			url: `http://localhost:8080/cprestapi/blogs/findblog`,
+			url: `${context.serverURL}/cprestapi/blogs/findblog`,
 			params: {
 				title: title,
 			},
@@ -41,7 +41,7 @@ const CreateBlog = () => {
 				if (mess === "The title is available") {
 					axios({
 						method: "post",
-						url: `http://localhost:8080/cprestapi/users/${context.user}/blogs`,
+						url: `${context.serverURL}/cprestapi/users/${context.user}/blogs`,
 						data: {
 							title: title,
 							description: text,
@@ -79,7 +79,7 @@ const CreateBlog = () => {
 	useEffect(() => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/title/title.create.blog",
+			url: `${context.serverURL}/cprestapi/intl/title/title.create.blog`,
 			headers: {
 				"Accept-Language": context.language,
 				Authorization: "Basic " + window.btoa("user:pass"),

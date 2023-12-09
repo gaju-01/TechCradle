@@ -29,7 +29,7 @@ const Welcome = (props) => {
 			let myMessage = "";
 			axios({
 				method: "get",
-				url: "http://localhost:8080/cprestapi/users/checkuser",
+				url: `${context.serverURL}/cprestapi/users/checkuser`,
 				params: {
 					user: context.user,
 					email: context.email,
@@ -43,7 +43,7 @@ const Welcome = (props) => {
 					setMessage("");
 					axios({
 						method: "post",
-						url: "http://localhost:8080/cprestapi/users",
+						url: `${context.serverURL}/cprestapi/users`,
 						data: {
 							userName: context.user,
 							email: context.email,
@@ -56,7 +56,7 @@ const Welcome = (props) => {
 							setMessage("");
 							axios({
 								method: "get",
-								url: "http://localhost:8080/cprestapi/validate/gt",
+								url: `${context.serverURL}/cprestapi/validate/gt`,
 								params: {
 									email: context.email,
 									userName: context.user,
@@ -74,7 +74,7 @@ const Welcome = (props) => {
 					setMessage("");
 					axios({
 						method: "get",
-						url: "http://localhost:8080/cprestapi/validate/gt",
+						url: `${context.serverURL}/cprestapi/validate/gt`,
 						params: {
 							email: context.email,
 							userName: context.user,
@@ -95,7 +95,7 @@ const Welcome = (props) => {
 	const verifyOTP = () => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/verify/gt",
+			url: `${context.serverURL}/cprestapi/verify/gt`,
 			params: {
 				otp: otp,
 				userName: context.user,
@@ -123,7 +123,7 @@ const Welcome = (props) => {
 	useEffect(() => {
 		axios({
 			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/title/title.welcome",
+			url: `${context.serverURL}/cprestapi/intl/title/title.welcome`,
 			headers: {
 				"Accept-Language": props.language,
 				Authorization: "Basic " + window.btoa("user:pass"),

@@ -5,6 +5,7 @@ const Context = React.createContext({
 	user: "",
 	email: "",
 	currency: "usd",
+	serverURL: "",
 	setCurrency: () => {},
 	setLanguage: () => {},
 	setUser: (param) => {},
