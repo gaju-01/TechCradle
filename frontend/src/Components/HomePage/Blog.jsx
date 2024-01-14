@@ -6,8 +6,10 @@ const Blog = () => {
 	const context = useContext(Context);
 	const [blogs, setBlogs] = useState([]);
 	const [title, setTitle] = useState("Blogs");
-	const [message, setMessage] = useState("");
+	const [messages, setMessages] = useState([]);
 	const [currencyRelated, setCurrencyRelated] = useState({});
+	const [searchTitle, setSearchTitle] = useState("");
+	const [filteredBlogs, setFilteredBlogs] = useState([]);
 
 	useEffect(() => {
 		axios
@@ -31,7 +33,7 @@ const Blog = () => {
 		}).then((response) => {
 			setTitle(response.data);
 		});
-	}, [context.language]);
+	}, [context.language, context.serverURL]);
 
 	useEffect(() => {
 		axios({
@@ -42,12 +44,16 @@ const Blog = () => {
 			},
 		}).then((response) => {
 			setBlogs(response.data);
+			setFilteredBlogs(response.data);
 		});
-	}, []);
+	}, [context.serverURL]);
 
 	const followHandler = (user) => {
 		if (user === context.user) {
-			setMessage("You cannot follow yourself");
+			setMessages((prev) => [
+				...prev,
+				{ length: prev.length, value: "You cannot follow yourself" },
+			]);
 		} else {
 			axios({
 				method: "get",
@@ -77,22 +83,72 @@ const Blog = () => {
 					});
 				}
 			});
-			setMessage(`You are now following ${user}`);
+			setMessages((prev) => [
+				...prev,
+				{ length: prev.length, value: `You are now following ${user}` },
+			]);
 		}
+	};
+
+	const titleChangeHandler = (event) => {
+		setSearchTitle(event.target.value);
+	};
+
+	const submitSearchTitleHandler = (event) => {
+		if (searchTitle === "" || !searchTitle) {
+			setFilteredBlogs(blogs);
+		} else {
+			const temp = blogs.filter((ele) =>
+				ele.title.toLowerCase().includes(searchTitle.toLowerCase())
+			);
+			setFilteredBlogs(temp);
+		}
+	};
+
+	const messagesHandler = (index) => {
+		var temp = messages;
+		const arr1 = temp.slice(0, index);
+		for (var i = index + 1; i < temp.length; i++) {
+			temp[i].length = temp[i].length - 1;
+		}
+		const arr2 = temp.slice(index + 1, temp.length);
+		const arr3 = [...arr1, ...arr2];
+		setMessages(arr3);
 	};
 
 	return (
 		<div>
-			{message !== "" && (
-				<div className="alert alert-success" role="alert">
-					{message}
+			{messages.length > 0 && (
+				<div>
+					{messages.map(function (data) {
+						return (
+							<div
+								className="alert alert-success"
+								role="alert"
+								key={data.length.toString()}
+							>
+								<p key={data.length.toString()}>{data.value}</p>
+								<button
+									type="button"
+									class="btn-close"
+									aria-label="Close"
+									key={data.length.toString()}
+									onClick={() => messagesHandler(data.length)}
+								></button>
+							</div>
+						);
+					})}
 				</div>
 			)}
+			<div>
+				<input type="text" onChange={titleChangeHandler} value={searchTitle} />
+				<button onClick={submitSearchTitleHandler}>Search</button>
+			</div>
 			<div>
 				<p className="fs-1">{title}</p>
 			</div>
 			<div>
-				{blogs.map(function (data) {
+				{filteredBlogs.map(function (data) {
 					return (
 						<div key={data.title}>
 							<p className="fs-2">{data.title}</p>

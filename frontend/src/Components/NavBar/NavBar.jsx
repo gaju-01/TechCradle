@@ -27,6 +27,14 @@ const NavBar = () => {
 		});
 	}, [context.language]);
 
+	const languageHandler = (event) => {
+		context.setLanguage(event.target.value);
+	};
+
+	const currencyHandler = (event) => {
+		context.setCurrency(event.target.value);
+	};
+
 	return (
 		<>
 			<nav className="navbar bg-body-tertiary">
@@ -76,6 +84,25 @@ const NavBar = () => {
 							</Link>
 						</li>
 					</ul>
+				</div>
+				<div>
+					<select
+						aria-label="Default select example"
+						value={context.language}
+						onChange={languageHandler}
+					>
+						<option defaultValue value="en">
+							English
+						</option>
+						<option value="fr">French</option>
+						<option value="de">Dutch</option>
+					</select>
+					<select value={context.currency} onChange={currencyHandler}>
+						<option defaultValue value="usd">
+							USD
+						</option>
+						<option value="inr">INR</option>
+					</select>
 				</div>
 			</nav>
 		</>
