@@ -4,6 +4,7 @@ import Context from "../ContextProvider/Context";
 
 const Followers = () => {
 	const [data, setData] = useState([]);
+	const [title, setTitle] = useState("Followers");
 	const context = useContext(Context);
 
 	useEffect(() => {
@@ -20,9 +21,23 @@ const Followers = () => {
 		}
 	}, []);
 
+	useEffect(() => {
+		console.log("serverURL", context.serverURL);
+		axios({
+			method: "get",
+			url: `${context.serverURL}/cprestapi/intl/title/title.followers`,
+			headers: {
+				"Accept-Language": context.language,
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
+		}).then((response) => {
+			setTitle(response.data);
+		});
+	}, [context.language, context.serverURL]);
+
 	return (
 		<>
-			<h2>Followers</h2>
+			<h2>{title}</h2>
 			{data.map(function (info) {
 				return <p key={info.userName}>{info.userName}</p>;
 			})}

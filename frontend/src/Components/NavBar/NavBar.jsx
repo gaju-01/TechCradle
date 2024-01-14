@@ -9,7 +9,6 @@ const NavBar = () => {
 		"Blogs",
 		"Create Blogs",
 		"Modify Blog",
-		"Compiler",
 		"Followers",
 		"Following",
 	]);
@@ -66,11 +65,6 @@ const NavBar = () => {
 						<li>
 							<Link className="dropdown-item" to="/home/modifyblog">
 								{navTitles[4]}
-							</Link>
-						</li>
-						<li>
-							<Link className="dropdown-item" to="/home/compiler">
-								{navTitles[5]}
 							</Link>
 						</li>
 						<li>

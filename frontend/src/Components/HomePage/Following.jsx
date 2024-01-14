@@ -4,6 +4,7 @@ import Context from "../ContextProvider/Context";
 
 const Following = () => {
 	const [list, setList] = useState([]);
+	const [title, setTitle] = useState("Following");
 	const context = useContext(Context);
 
 	useEffect(() => {
@@ -20,9 +21,23 @@ const Following = () => {
 		});
 	}, []);
 
+	useEffect(() => {
+		console.log("serverURL", context.serverURL);
+		axios({
+			method: "get",
+			url: `${context.serverURL}/cprestapi/intl/title/title.following`,
+			headers: {
+				"Accept-Language": context.language,
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
+		}).then((response) => {
+			setTitle(response.data);
+		});
+	}, [context.language, context.serverURL]);
+
 	return (
 		<>
-			<h2>Following</h2>
+			<h2>{title}</h2>
 			{list.map(function (data) {
 				return <p key={data}>{data}</p>;
 			})}
