@@ -26,7 +26,7 @@ public class Follow {
 
   @JsonProperty("celeb")
   private String celeb;
-
+  
   public Follow() {}
 
   public Follow(String userName) {

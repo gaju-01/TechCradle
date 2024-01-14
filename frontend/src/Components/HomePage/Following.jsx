@@ -35,11 +35,42 @@ const Following = () => {
 		});
 	}, [context.language, context.serverURL]);
 
+	const clickHandler = (data) => {
+		axios({
+			method: "delete",
+			url: `${context.serverURL}/cprestapi/removeUser`,
+			params: {
+				child: context.user,
+				parent: data,
+			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
+		}).then((resp) => {
+			axios({
+				url: `${context.serverURL}/cprestapi/following`,
+				params: {
+					parent: context.user,
+				},
+				headers: {
+					Authorization: "Basic " + window.btoa("user:pass"),
+				},
+			}).then((resp) => {
+				setList(resp.data);
+			});
+		});
+	};
+
 	return (
 		<>
 			<h2>{title}</h2>
 			{list.map(function (data) {
-				return <p key={data}>{data}</p>;
+				return (
+					<div key={data}>
+						<p>{data}</p>
+						<button onClick={() => clickHandler(data)}>Unfollow</button>
+					</div>
+				);
 			})}
 		</>
 	);

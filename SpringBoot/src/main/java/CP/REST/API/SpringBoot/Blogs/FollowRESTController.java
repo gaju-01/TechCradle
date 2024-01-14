@@ -4,13 +4,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
@@ -73,5 +70,15 @@ public class FollowRESTController {
       ans.add(x.getCeleb());
     }
     return ans;
+  }
+
+  @DeleteMapping("/cprestapi/removeUser")
+  public String removeFollower(@RequestParam(name="parent") String parent, @RequestParam(name="child") String child) {
+    Optional<User> opUser = this.userRepo.findByUserName(parent);
+    User user = opUser.get();
+    List<Follow> opFollowUser = this.followRepo.findByUserNameAndUser(user, child);
+    Follow follow = opFollowUser.get(0);
+    this.followRepo.delete(follow);
+    return "OK";
   }
 }

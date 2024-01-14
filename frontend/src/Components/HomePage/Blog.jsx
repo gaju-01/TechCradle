@@ -10,6 +10,45 @@ const Blog = () => {
 	const [currencyRelated, setCurrencyRelated] = useState({});
 	const [searchTitle, setSearchTitle] = useState("");
 	const [filteredBlogs, setFilteredBlogs] = useState([]);
+	const [following, setFollowing] = useState(new Set());
+
+	const resetFollowing = (user) => {
+		axios({
+			url: `${context.serverURL}/cprestapi/following`,
+			params: {
+				parent: context.user,
+			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
+		}).then((resp) => {
+			const set = new Set();
+			const data = resp.data;
+			data.forEach((element) => {
+				set.add(element);
+			});
+			setFollowing(set);
+		});
+	};
+
+	useEffect(() => {
+		axios({
+			url: `${context.serverURL}/cprestapi/following`,
+			params: {
+				parent: context.user,
+			},
+			headers: {
+				Authorization: "Basic " + window.btoa("user:pass"),
+			},
+		}).then((resp) => {
+			const set = new Set();
+			const data = resp.data;
+			data?.forEach((element) => {
+				set.add(element);
+			});
+			setFollowing(set);
+		});
+	}, [context.serverURL]);
 
 	useEffect(() => {
 		axios
@@ -55,38 +94,60 @@ const Blog = () => {
 				{ length: prev.length, value: "You cannot follow yourself" },
 			]);
 		} else {
-			axios({
-				method: "get",
-				url: `${context.serverURL}/cprestapi/followers/check`,
-				params: {
-					parent: user,
-					child: context.user,
-				},
-				headers: {
-					Authorization: "Basic " + window.btoa("user:pass"),
-				},
-			}).then((resp) => {
-				if (resp.data === "NO") {
-					axios({
-						method: "post",
-						url: `${context.serverURL}/cprestapi/followers`,
-						data: {
-							userName: context.user,
-						},
-						params: {
-							user: user,
-						},
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: "Basic " + window.btoa("user:pass"),
-						},
-					});
-				}
-			});
-			setMessages((prev) => [
-				...prev,
-				{ length: prev.length, value: `You are now following ${user}` },
-			]);
+			if (!following.has(user)) {
+				axios({
+					method: "get",
+					url: `${context.serverURL}/cprestapi/followers/check`,
+					params: {
+						parent: user,
+						child: context.user,
+					},
+					headers: {
+						Authorization: "Basic " + window.btoa("user:pass"),
+					},
+				}).then((resp) => {
+					if (resp.data === "NO") {
+						axios({
+							method: "post",
+							url: `${context.serverURL}/cprestapi/followers`,
+							data: {
+								userName: context.user,
+							},
+							params: {
+								user: user,
+							},
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: "Basic " + window.btoa("user:pass"),
+							},
+						}).then((resp) => {
+							resetFollowing(user);
+						});
+					}
+				});
+				setMessages((prev) => [
+					...prev,
+					{ length: prev.length, value: `You are now following ${user}` },
+				]);
+			} else {
+				axios({
+					method: "delete",
+					url: `${context.serverURL}/cprestapi/removeUser`,
+					params: {
+						child: context.user,
+						parent: user,
+					},
+					headers: {
+						Authorization: "Basic " + window.btoa("user:pass"),
+					},
+				}).then((resp) => {
+					resetFollowing();
+					setMessages((prev) => [
+						...prev,
+						{ length: prev.length, value: `You have unfollowed ${user}` },
+					]);
+				});
+			}
 		}
 	};
 
@@ -161,7 +222,7 @@ const Blog = () => {
 									followHandler(data.userName);
 								}}
 							>
-								Follow
+								{following.has(data.userName) ? "Unfollow" : "Follow"}
 							</button>
 							<p>
 								<b>Short Description:</b> {data.sDesc}
