@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Context from "../ContextProvider/Context";
 const NavBar = () => {
 	const context = useContext(Context);
+	const nav = useNavigate();
 	const [navTitles, setNavTitles] = useState([
 		"Select Here",
 		"Blogs",
@@ -24,7 +25,7 @@ const NavBar = () => {
 		}).then((resp) => {
 			setNavTitles(resp.data);
 		});
-	}, [context.language]);
+	}, [context.language, context.serverURL]);
 
 	const languageHandler = (event) => {
 		context.setLanguage(event.target.value);
@@ -34,6 +35,9 @@ const NavBar = () => {
 		context.setCurrency(event.target.value);
 	};
 
+	const profileHandler = () => {
+		nav("/home/profile");
+	};
 	return (
 		<>
 			<nav className="navbar bg-body-tertiary">
@@ -97,6 +101,14 @@ const NavBar = () => {
 						</option>
 						<option value="inr">INR</option>
 					</select>
+					<button
+						style={{ marginLeft: "10px", borderRadius: "50%" }}
+						type="button"
+						class="btn btn-primary"
+						onClick={profileHandler}
+					>
+						P
+					</button>
 				</div>
 			</nav>
 		</>

@@ -48,7 +48,7 @@ const Blog = () => {
 			});
 			setFollowing(set);
 		});
-	}, [context.serverURL]);
+	}, [context.serverURL, context.user]);
 
 	useEffect(() => {
 		axios

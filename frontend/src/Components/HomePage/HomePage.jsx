@@ -5,6 +5,7 @@ import CreateBlog from "./CreateBlog";
 import ModifyBlog from "./ModifyBlog";
 import Followers from "./Followers";
 import Following from "./Following";
+import Profile from "./Profile";
 const HomePage = () => {
 	const params = useParams();
 
@@ -19,6 +20,8 @@ const HomePage = () => {
 		Component = <Followers />;
 	} else if (params.id === "following") {
 		Component = <Following />;
+	} else if (params.id === "profile") {
+		Component = <Profile />;
 	}
 
 	return (

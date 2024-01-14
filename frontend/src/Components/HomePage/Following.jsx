@@ -19,7 +19,7 @@ const Following = () => {
 		}).then((resp) => {
 			setList(resp.data);
 		});
-	}, []);
+	}, [context.serverURL, context.user]);
 
 	useEffect(() => {
 		console.log("serverURL", context.serverURL);
