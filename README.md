@@ -5,3 +5,5 @@ CPRESTAPI is a Java-based project showcasing a content management system for a b
 1. git clone [url]: Clone (download) a repository that already exists on GitHub, including all of the files, branches, and commits.
 2. From the root of the project cd into SpringBoot and run the server side.
 3. From the root of the project cd into frontend npm start [-- args]: This runs a predefined command specified in the "start" property of a package's "scripts" object. If the "scripts" object does not define a "start" property, npm will run node server.js.Note that this is different from the default node behavior of running the file specified in a package's "main" attribute when evoking with node .As of npm@2.0.0, you can use custom arguments when executing scripts.
+
+# Pre-release version: https://github.com/gaju-01/CPRESTAPI/releases/tag/0.0.0
