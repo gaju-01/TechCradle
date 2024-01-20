@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
 
-const Blog = () => {
+const Blog = (props) => {
 	const context = useContext(Context);
 	const [blogs, setBlogs] = useState([]);
 	const [title, setTitle] = useState("Blogs");
@@ -61,7 +61,6 @@ const Blog = () => {
 	}, [context.currency]);
 
 	useEffect(() => {
-		console.log("serverURL", context.serverURL);
 		axios({
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.blog`,
@@ -83,7 +82,14 @@ const Blog = () => {
 			},
 		}).then((response) => {
 			setBlogs(response.data);
-			setFilteredBlogs(response.data);
+			const temp = response.data.filter(
+				(ele) =>
+					ele.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+					(props.author === null ||
+						props.author === undefined ||
+						props.author === ele.userName)
+			);
+			setFilteredBlogs(temp);
 		});
 	}, [context.serverURL]);
 
@@ -157,10 +163,20 @@ const Blog = () => {
 
 	const submitSearchTitleHandler = (event) => {
 		if (searchTitle === "" || !searchTitle) {
-			setFilteredBlogs(blogs);
+			const temp = blogs.filter(
+				(ele) =>
+					props.author === null ||
+					props.author === undefined ||
+					props.author === ele.userName
+			);
+			setFilteredBlogs(temp);
 		} else {
-			const temp = blogs.filter((ele) =>
-				ele.title.toLowerCase().includes(searchTitle.toLowerCase())
+			const temp = blogs.filter(
+				(ele) =>
+					ele.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+					(props.author === null ||
+						props.author === undefined ||
+						props.author === ele.userName)
 			);
 			setFilteredBlogs(temp);
 		}

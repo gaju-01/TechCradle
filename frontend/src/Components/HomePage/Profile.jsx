@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import Context from "../ContextProvider/Context";
+import Blog from "./Blog";
 
 const Profile = () => {
 	const context = useContext(Context);
@@ -15,39 +16,43 @@ const Profile = () => {
 
 	return (
 		<div>
-			{src && (
-				<div>
-					<img
-						src={src}
-						style={{ borderRadius: "50%", width: "5rem", height: "5rem" }}
-						alt="error"
-					/>
-				</div>
-			)}
-			{!src && (
-				<div>
-					<button
-						style={{
-							borderRadius: "50%",
-							backgroundColor: "skyblue",
-							width: "6rem",
-							height: "6rem",
-							color: "white",
-							fontSize: "60px",
-						}}
-					>
-						{context.user.slice(0, 1).toUpperCase()}
-					</button>
-				</div>
-			)}
-			<button type="submit" class="btn btn-danger" onClick={deleteProfilePic}>
-				delete
-			</button>
-			<input type="file" onChange={ppHandler} />
 			<div>
-				<p>user: {context.user}</p>
-				<p>email: {context.email}</p>
+				{src && (
+					<div>
+						<img
+							src={src}
+							style={{ borderRadius: "50%", width: "5rem", height: "5rem" }}
+							alt="error"
+						/>
+					</div>
+				)}
+				{!src && (
+					<div>
+						<button
+							style={{
+								borderRadius: "50%",
+								backgroundColor: "skyblue",
+								width: "6rem",
+								height: "6rem",
+								color: "white",
+								fontSize: "60px",
+							}}
+						>
+							{context.user.slice(0, 1).toUpperCase()}
+						</button>
+					</div>
+				)}
+				<button type="submit" class="btn btn-danger" onClick={deleteProfilePic}>
+					delete
+				</button>
+				<input type="file" onChange={ppHandler} />
+				<div>
+					<p>user: {context.user}</p>
+					<p>email: {context.email}</p>
+				</div>
 			</div>
+			<hr></hr>
+			<Blog author={context.user} />
 		</div>
 	);
 };
