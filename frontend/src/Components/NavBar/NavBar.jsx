@@ -28,16 +28,19 @@ const NavBar = () => {
 	}, [context.language, context.serverURL]);
 
 	const languageHandler = (event) => {
+		sessionStorage.setItem("language", event.target.value);
 		context.setLanguage(event.target.value);
 	};
 
 	const currencyHandler = (event) => {
+		sessionStorage.setItem("currency", event.target.value);
 		context.setCurrency(event.target.value);
 	};
 
 	const profileHandler = () => {
 		nav("/home/profile");
 	};
+
 	return (
 		<>
 			<nav className="navbar bg-body-tertiary">
@@ -107,7 +110,7 @@ const NavBar = () => {
 						class="btn btn-primary"
 						onClick={profileHandler}
 					>
-						P
+						{context.user.slice(0, 1).toUpperCase()}
 					</button>
 				</div>
 			</nav>

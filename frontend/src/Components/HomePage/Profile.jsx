@@ -19,10 +19,9 @@ const Profile = () => {
 				<div>
 					<img
 						src={src}
-						style={{ borderRadius: "50%", width: "20rem" }}
+						style={{ borderRadius: "50%", width: "5rem", height: "5rem" }}
 						alt="error"
 					/>
-					<input type="file" onChange={ppHandler} />
 				</div>
 			)}
 			{!src && (
@@ -39,12 +38,12 @@ const Profile = () => {
 					>
 						{context.user.slice(0, 1).toUpperCase()}
 					</button>
-					<input type="file" onChange={ppHandler} />
 				</div>
 			)}
 			<button type="submit" class="btn btn-danger" onClick={deleteProfilePic}>
 				delete
 			</button>
+			<input type="file" onChange={ppHandler} />
 			<div>
 				<p>user: {context.user}</p>
 				<p>email: {context.email}</p>

@@ -11,10 +11,12 @@ const Welcome = (props) => {
 	const [otp, setOTP] = useState("");
 
 	const languageHandler = (event) => {
+		sessionStorage.setItem("language", event.target.value);
 		context.setLanguage(event.target.value);
 	};
 
 	const currencyHandler = (event) => {
+		sessionStorage.setItem("currency", event.target.value);
 		context.setCurrency(event.target.value);
 	};
 
@@ -70,6 +72,8 @@ const Welcome = (props) => {
 							myMessage = e.response.data.errors[0].defaultMessage;
 							setMessage(myMessage);
 						});
+					sessionStorage.setItem("userName", context.user);
+					sessionStorage.setItem("email", context.email);
 				} else if (isPresent === "OK") {
 					setMessage("");
 					axios({
@@ -85,6 +89,8 @@ const Welcome = (props) => {
 					}).then((resp) => {
 						setMessage("OTP sent your mail!!");
 					});
+					sessionStorage.setItem("userName", context.user);
+					sessionStorage.setItem("email", context.email);
 				} else {
 					setMessage("Enter the valid user name and email");
 				}
@@ -132,6 +138,13 @@ const Welcome = (props) => {
 			setWelcome(resp.data);
 		});
 	}, [props.language]);
+
+	useEffect(() => {
+		sessionStorage.removeItem("userName");
+		sessionStorage.removeItem("email");
+		sessionStorage.setItem("currency", "usd");
+		sessionStorage.setItem("language", "en");
+	}, []);
 
 	return (
 		<>

@@ -232,7 +232,7 @@ const Blog = () => {
 							</p>
 							<p>
 								<b>Price:</b> {currencyRelated[context.currency] * data.price}{" "}
-								{context.currency}
+								{context.currency.toUpperCase()}
 							</p>
 							{(data.price === 0 || context.user === data.userName) && (
 								<p>

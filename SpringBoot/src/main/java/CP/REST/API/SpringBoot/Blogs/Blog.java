@@ -1,5 +1,6 @@
 package CP.REST.API.SpringBoot.Blogs;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import jakarta.persistence.Id;
@@ -28,7 +29,7 @@ public class Blog {
     private String description;
 
     @JsonProperty("lastmodified")
-    private LocalTime lastmodified;
+    private LocalDate lastmodified;
 
     @JsonProperty("price")
     private long price;
@@ -49,14 +50,14 @@ public class Blog {
     public Blog(String title, String description, long price, String sDesc) {
         this.title = title;
         this.description = description;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
         this.price = price;
         this.sDesc = sDesc;
     }
 
     public void setID(int id) {
         this.id = id;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
     }
 
     public void setUser(User user) {
@@ -66,20 +67,20 @@ public class Blog {
 
     public void setTitle(String title) {
         this.title = title;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
     }
     public void setPrice(long price) {
         this.price = price;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
     }
 
     public void setsDesc(String sDesc) {
         this.sDesc = sDesc;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
     }
     public void setDescription(String description) {
         this.description = description;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
     }
 
     public int getId() {
@@ -94,7 +95,7 @@ public class Blog {
         return this.title;
     }
 
-    public LocalTime getLastModified() {
+    public LocalDate getLastModified() {
         return this.lastmodified;
     }
 

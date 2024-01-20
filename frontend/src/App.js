@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Welcome from "./Components/WelcomePage/Welcome";
 import Context from "./Components/ContextProvider/Context";
@@ -10,6 +10,17 @@ function App() {
 	const [user, setUser] = useState("");
 	const [email, setEmail] = useState("");
 	const [currency, setCurrency] = useState("usd");
+
+	useEffect(() => {
+		const userName = sessionStorage.getItem("userName");
+		const email = sessionStorage.getItem("email");
+		const currency = sessionStorage.getItem("currency");
+		const language = sessionStorage.getItem("language");
+		setUser(userName);
+		setEmail(email);
+		setCurrency(currency);
+		setLanguage(language);
+	}, []);
 
 	return (
 		<Context.Provider
