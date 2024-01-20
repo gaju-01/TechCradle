@@ -234,13 +234,15 @@ const Blog = () => {
 								<b>Price:</b> {currencyRelated[context.currency] * data.price}{" "}
 								{context.currency}
 							</p>
-							{data.price === 0 && (
+							{(data.price === 0 || context.user === data.userName) && (
 								<p>
 									<b>Content: </b>
 									{data.description}
 								</p>
 							)}
-							{data.price !== 0 && <button type="submit">Buy</button>}
+							{data.price !== 0 && context.user !== data.userName && (
+								<button type="submit">Buy</button>
+							)}
 							<hr></hr>
 						</div>
 					);
