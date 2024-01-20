@@ -168,11 +168,11 @@ const Blog = () => {
 
 	const messagesHandler = (index) => {
 		var temp = messages;
-		const arr1 = temp.slice(0, index);
+		const arr1 = temp?.slice(0, index);
 		for (var i = index + 1; i < temp.length; i++) {
 			temp[i].length = temp[i].length - 1;
 		}
-		const arr2 = temp.slice(index + 1, temp.length);
+		const arr2 = temp?.slice(index + 1, temp.length);
 		const arr3 = [...arr1, ...arr2];
 		setMessages(arr3);
 	};
