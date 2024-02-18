@@ -8,3 +8,4 @@ CPRESTAPI is a Java-based project showcasing a content management system for a b
 
 # Pre-Release/Prototype version: 
 Check https://github.com/gaju-01/CPRESTAPI/releases/tag/0.0.0 to download the .zip and .tarz prototype/pre-release version of the application.
+Check https://github.com/gaju-01/CPRESTAPI/releases/tag/0.0.1 to download the .zip and .tarz prototype/pre-release version of the application. This version contains fully functional profile section that an handle the image data(i.e., profile picture) for multiple users efficiently.
