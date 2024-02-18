@@ -67,7 +67,6 @@ public class ProfileRESTController {
         Optional<Profile> opProfile = this.profileRepo.findByUser(user);
         if (opProfile.isPresent()) {
             Profile profile = opProfile.get();
-            System.out.println("This is delete,  userName"  + profile.getUser().getUserName());
             this.profileRepo.delete(profile);
         }
         return ResponseEntity.ok("Profile picture deleted successfully");
@@ -80,7 +79,6 @@ public class ProfileRESTController {
         User user = opUser.get();
         Optional<Profile> opProfile = this.profileRepo.findByUser(user);
         if(opProfile.isPresent()) {
-            System.out.println("Fetched image successfully" + opProfile.get().getUser().getUserName());
             String filePath = FOLDER_PATH + "\\" + opProfile.get().getFileName();
             Path path = Path.of(filePath);
             File file = path.toFile();

@@ -67,7 +67,7 @@ const Profile = () => {
 					},
 				})
 				.then((resp) => {
-					if (resp.data.byteLength != 0) {
+					if (resp.data.byteLength !== 0) {
 						const blob = new Blob([resp.data]);
 						const url = URL.createObjectURL(blob);
 						setSrc(url);
