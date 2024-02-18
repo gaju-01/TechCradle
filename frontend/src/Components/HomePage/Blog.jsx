@@ -207,7 +207,7 @@ const Blog = (props) => {
 								<p key={data.length.toString()}>{data.value}</p>
 								<button
 									type="button"
-									class="btn-close"
+									className="btn-close"
 									aria-label="Close"
 									key={data.length.toString()}
 									onClick={() => messagesHandler(data.length)}

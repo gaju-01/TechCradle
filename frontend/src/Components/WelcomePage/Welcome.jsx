@@ -66,6 +66,8 @@ const Welcome = (props) => {
 								headers: {
 									Authorization: "Basic " + window.btoa("user:pass"),
 								},
+							}).then((resp) => {
+								setMessage("OTP sent your mail!!");
 							});
 						})
 						.catch((e) => {

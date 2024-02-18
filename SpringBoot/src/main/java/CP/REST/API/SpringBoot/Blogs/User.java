@@ -15,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue
     @JsonIgnore
-    private int id;
+    private long id;
 
     @JsonProperty("userName")
     @Size(min = 2, message = "Length of the user name must be greater than 1")
@@ -37,6 +37,8 @@ public class User {
     @JsonIgnore
     ValidationToken vToken;
 
+    @OneToOne(mappedBy = "user")
+    Profile profile;
     public User() {
 
     }
@@ -46,7 +48,7 @@ public class User {
         this.email = email;
     }
 
-    public void setID(int id) {
+    public void setID(long id) {
         this.id = id;
     }
 
@@ -62,7 +64,7 @@ public class User {
         this.followers = followers;
     }
 
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 

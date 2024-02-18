@@ -107,7 +107,7 @@ const NavBar = () => {
 					<button
 						style={{ marginLeft: "10px", borderRadius: "50%" }}
 						type="button"
-						class="btn btn-primary"
+						className="btn btn-primary"
 						onClick={profileHandler}
 					>
 						{context.user.slice(0, 1).toUpperCase()}
