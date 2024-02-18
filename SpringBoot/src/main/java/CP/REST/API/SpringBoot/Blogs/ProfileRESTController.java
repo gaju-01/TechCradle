@@ -11,13 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Optional;
 
 @RestController
 public class ProfileRESTController {
     private final String FOLDER_PATH = "G:\\CPRESTAPIData\\Profile";
-    private final String ACT_FOLDER_PATH = "G:/CPRESTAPIData/Profile";
     private final String MESSAGE = "Error uploading the image";
     private final String DEL_MESS = "Error deleting the image";
     private ProfileRepo profileRepo;
