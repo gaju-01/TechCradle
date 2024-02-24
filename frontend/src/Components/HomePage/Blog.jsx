@@ -247,7 +247,8 @@ const Blog = (props) => {
 								<b>LastModified:</b> {data.lastModified}
 							</p>
 							<p>
-								<b>Price:</b> {currencyRelated[context.currency] * data.price}{" "}
+								<b>Price:</b>
+								{Math.ceil(currencyRelated[context.currency] * data.price)}{" "}
 								{context.currency.toUpperCase()}
 							</p>
 							{(data.price === 0 || context.user === data.userName) && (

@@ -165,7 +165,7 @@ const ModifyBlog = () => {
 				</div>
 				<div className="mb-3">
 					<label htmlFor="price" className="form-label">
-						Enter the Price
+						Enter the Price(in USD)
 					</label>
 					<input
 						id="price"
