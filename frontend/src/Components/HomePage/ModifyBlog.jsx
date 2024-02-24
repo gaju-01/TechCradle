@@ -130,7 +130,7 @@ const ModifyBlog = () => {
 		}).then((resp) => {
 			setHead(resp.data);
 		});
-	}, [context.language]);
+	}, [context.language, context.serverURL]);
 
 	return (
 		<div>

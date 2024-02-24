@@ -22,7 +22,6 @@ const Followers = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log("serverURL", context.serverURL);
 		axios({
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.followers`,

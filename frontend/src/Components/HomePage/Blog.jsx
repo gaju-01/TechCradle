@@ -91,7 +91,7 @@ const Blog = (props) => {
 			);
 			setFilteredBlogs(temp);
 		});
-	}, [context.serverURL]);
+	}, [context.serverURL, props.author, searchTitle]);
 
 	const followHandler = (user) => {
 		if (user === context.user) {
