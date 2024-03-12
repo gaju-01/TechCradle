@@ -56,8 +56,8 @@ public class SecurityConfiguration {
     var dev = User.withUsername("dev").password("{noop}111").roles("DEV").build();
     var admin = User.withUsername("admin").password("{noop}111").roles("ADMIN").build();
     var test = User.withUsername("test").password("{noop}111").roles("TEST").build();
-    var dbManager = User.withUsername("dbmanager").password("{noop}111").roles("DBMANAGER").build();
-    var backend = User.withUsername("backend").password("{noop}111").roles("BACKEND").build();
+    var dbManager = User.withUsername("dbm").password("{noop}111").roles("DBMANAGER").build();
+    var backend = User.withUsername("bend").password("{noop}111").roles("BACKEND").build();
     return new InMemoryUserDetailsManager(user, dev, admin, test, dbManager, backend);
   }
 }
