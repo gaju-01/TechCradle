@@ -53,7 +53,7 @@ const Blog = (props) => {
 	useEffect(() => {
 		axios
 			.get(
-				`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json`
+				`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024-03-02/v1/currencies/usd.json`
 			)
 			.then((res) => {
 				setCurrencyRelated(res.data["usd"]);
@@ -197,14 +197,14 @@ const Blog = (props) => {
 		<div>
 			{messages.length > 0 && (
 				<div>
-					{messages.map(function (data) {
+					{messages.map(function (data, cnt) {
 						return (
 							<div
 								className="alert alert-success"
 								role="alert"
-								key={data.length.toString()}
+								key={cnt.toString()}
 							>
-								<p key={data.length.toString()}>{data.value}</p>
+								<p>{data.value}</p>
 								<button
 									type="button"
 									className="btn-close"

@@ -14,8 +14,13 @@ function App() {
 	useEffect(() => {
 		const userName = sessionStorage.getItem("userName");
 		const email = sessionStorage.getItem("email");
-		const currency = sessionStorage.getItem("currency");
-		const language = sessionStorage.getItem("language");
+		const currency = sessionStorage.getItem("currency")
+			? sessionStorage.getItem("currency")
+			: "usd";
+		const language = sessionStorage.getItem("language")
+			? sessionStorage.getItem("language")
+			: "en";
+
 		setUser(userName);
 		setEmail(email);
 		setCurrency(currency);
