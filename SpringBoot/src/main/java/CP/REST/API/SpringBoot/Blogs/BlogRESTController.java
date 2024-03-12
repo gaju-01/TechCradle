@@ -3,7 +3,10 @@ package CP.REST.API.SpringBoot.Blogs;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+
+import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 import CP.REST.API.SpringBoot.Exceptions.BasicUserDefinedException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+/**
+ * @RestController is used to indicate that the class contain the controller methods that interact handling
+ * the HTTP requests.
+ * @EnableWebSecurity  is used to enable the authorization semantics annotations such as,
+ * @Secured
+ * @PreAuthorize
+ * @PostAuthorize
+ * And,
+ * @AllowAccessForResource is a custom annotation that is used for pre-authorization at method level.
+ * These annotations helps users to access the resources based on their assigned roles and
+ * maintain separation of  concerns.
+ */
 @RestController
+@EnableMethodSecurity
 public class BlogRESTController {
     private BlogRepo repo;
 
@@ -24,11 +40,13 @@ public class BlogRESTController {
         this.repo = repo;
     }
 
+    @AllowAccessForResource
     @GetMapping(path = "/cprestapi/blogs")
     public List<Blog> getAllBlogs() {
         return this.repo.findAll();
     }
 
+    @AllowAccessForResource
     @GetMapping(path = "/cprestapi/blogs/findblog")
     public String findBlog(@RequestParam(name = "title") String title) throws BasicUserDefinedException {
         System.out.println("My title is:" + title);
@@ -45,6 +63,7 @@ public class BlogRESTController {
         }
     }
 
+    @AllowAccessForResource
     @PatchMapping(path = "/cprestapi/{name}/blogs/updateblog")
     public ResponseEntity<Blog> updateBlog(@PathVariable String name, @RequestBody Blog blog) {
         Optional<Blog> optionalBlog = this.repo.findByTitle(blog.getTitle());
@@ -66,6 +85,7 @@ public class BlogRESTController {
         }
     }
 
+    @AllowAccessForResource
     @DeleteMapping(path = "/cprestapi/{name}/blogs/deleteblog")
     public void deleteBlog(@PathVariable String name, @RequestParam(name = "title") String title) {
         Optional<Blog> optionalBlog = this.repo.findByTitle(title);

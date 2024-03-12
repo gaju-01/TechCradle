@@ -2,6 +2,7 @@ package CP.REST.API.SpringBoot.Blogs;
 
 import CP.REST.API.SpringBoot.Email.EmailSenderService;
 import CP.REST.API.SpringBoot.Exceptions.BasicUserDefinedException;
+import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
 import jakarta.validation.Valid;
 
 import java.net.URI;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +21,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+/**
+ * @RestController is used to indicate that the class contain the controller methods that interact handling
+ * the HTTP requests.
+ * @EnableWebSecurity  is used to enable the authorization semantics annotations such as,
+ * @Secured
+ * @PreAuthorize
+ * @PostAuthorize
+ * And,
+ * @AllowAccessForResource is a custom annotation that is used for pre-authorization at method level.
+ * These annotations helps users to access the resources based on their assigned roles and
+ * maintain separation of  concerns.
+ */
 @RestController
+@EnableMethodSecurity
 public class UserRESTController {
 
     private UserRepo userRepo;
@@ -36,11 +51,13 @@ public class UserRESTController {
         this.emailSenderService = emailSenderService;
     }
 
+    @AllowAccessForResource
     @GetMapping(path = "/cprestapi/users")
     public List<User> getAllUsers() {
         return this.userRepo.findAll();
     }
 
+    @AllowAccessForResource
     @PostMapping(path = "/cprestapi/users")
     public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
         User createdUser = this.userRepo.save(user);
@@ -52,6 +69,7 @@ public class UserRESTController {
         return ResponseEntity.created(location).build();
     }
 
+    @AllowAccessForResource
     @PostMapping(path = "/cprestapi/users/{name}/blogs")
     public ResponseEntity<Blog> createBlog(
             @PathVariable String name,
@@ -83,6 +101,7 @@ public class UserRESTController {
         return ResponseEntity.created(location).build();
     }
 
+    @AllowAccessForResource
     @GetMapping(path = "/cprestapi/users/checkuser")
     public String checkUser(@RequestParam(name = "user") String user, @RequestParam(name = "email") String email) {
         Optional<User> opUser = this.userRepo.findByUserName(user);

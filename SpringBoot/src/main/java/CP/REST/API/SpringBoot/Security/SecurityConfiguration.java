@@ -1,8 +1,6 @@
 package CP.REST.API.SpringBoot.Security;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
-import org.apache.catalina.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -46,9 +45,19 @@ public class SecurityConfiguration {
     return http.build();
   }
 
-//  @Bean
-//  public UserDetailsService userDetailsService() {
-//    User.withUserName()
-//    return new InMemoryUserDetailsManager();
-//  }
+  /**
+   *  The following bean is responsible for role based authorization for the Spring Boot Application.
+   *  The privileges and access are different based on roles.
+   * @return UserDetailsService - contains the different roles
+   */
+  @Bean
+  public UserDetailsService userDetailsService() {
+    var user = User.withUsername("user").password("{noop}pass").roles("USER").build();
+    var dev = User.withUsername("dev").password("{noop}111").roles("DEV").build();
+    var admin = User.withUsername("admin").password("{noop}111").roles("ADMIN").build();
+    var test = User.withUsername("test").password("{noop}111").roles("TEST").build();
+    var dbManager = User.withUsername("dbmanager").password("{noop}111").roles("DBMANAGER").build();
+    var backend = User.withUsername("backend").password("{noop}111").roles("BACKEND").build();
+    return new InMemoryUserDetailsManager(user, dev, admin, test, dbManager, backend);
+  }
 }
