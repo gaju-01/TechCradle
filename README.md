@@ -3,8 +3,10 @@ CPRESTAPI is a Java-based project showcasing a content management system for a b
 
 # How to start the application
 1. git clone [url]: Clone (download) a repository that already exists on GitHub, including all of the files, branches, and commits.
-2. From the root of the project cd into SpringBoot and run the server side.
-3. From the root of the project cd into frontend npm start [-- args]: This runs a predefined command specified in the "start" property of a package's "scripts" object. If the "scripts" object does not define a "start" property, npm will run node server.js.Note that this is different from the default node behavior of running the file specified in a package's "main" attribute when evoking with node .As of npm@2.0.0, you can use custom arguments when executing scripts.
+2. From the root of the project cd into SpringBoot.
+3. Run the cmd mvn clean install. This cmd recreates the JAR file, that contains all the depencies, generated classes etc.
+4. Run the cmd mvn spring-boot:run. This cmd executes the JAR file and hosts the application at the default port 8080.
+5. Again from the root of the project cd into frontend npm start [-- args]: This runs a predefined command specified in the "start" property of a package's "scripts" object. If the "scripts" object does not define a "start" property, npm will run node server.js.Note that this is different from the default node behavior of running the file specified in a package's "main" attribute when evoking with node .As of npm@2.0.0, you can use custom arguments when executing scripts.
 
 # Pre-Release/Prototype version: 
 1. Check https://github.com/gaju-01/CPRESTAPI/releases/tag/0.0.0 to download the .zip and .tarz prototype/pre-release version of the application.
