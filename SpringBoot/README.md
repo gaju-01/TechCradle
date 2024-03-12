@@ -4,10 +4,5 @@
 3. H2-Console: http://localhost:8080/h2-console <br>
 
 # Roles supported 
-Sl ROLE        USERNAME  PASSWORD
-1. ADMIN         admin     111
-2. USER          user      pass
-3. BACKEND       bend      111
-4. DEV           dev       111
-5. TEST          test      111
-6. DBMANAGER     dbm       111
+![Screenshot 2024-03-12 175852](https://github.com/gaju-01/CPRESTAPI/assets/55205513/0982d599-43ee-4c32-ac36-c8dfd5d75101)
+
