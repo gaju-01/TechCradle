@@ -69,6 +69,7 @@ public class Blog {
         this.title = title;
         this.lastmodified = LocalDate.now();
     }
+
     public void setPrice(long price) {
         this.price = price;
         this.lastmodified = LocalDate.now();
@@ -78,6 +79,7 @@ public class Blog {
         this.sDesc = sDesc;
         this.lastmodified = LocalDate.now();
     }
+
     public void setDescription(String description) {
         this.description = description;
         this.lastmodified = LocalDate.now();
@@ -110,6 +112,7 @@ public class Blog {
     public long getPrice() {
         return this.price;
     }
+
     public String getsDesc() {
         return this.sDesc;
     }

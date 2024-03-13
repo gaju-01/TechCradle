@@ -3,6 +3,7 @@ package CP.REST.API.SpringBoot.ValidationToken;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import CP.REST.API.SpringBoot.Blogs.User;
+
 import java.util.Random;
 
 @Entity(name = "validation_token")
@@ -14,16 +15,17 @@ public class ValidationToken {
     @JsonIgnore
     User user;
 
-    @Column(name="userName")
+    @Column(name = "userName")
     private String userName;
 
     @Column(name = "otp")
     @JsonIgnore
     private long otp;
 
-    public ValidationToken () {
+    public ValidationToken() {
 
     }
+
     public ValidationToken(User user) {
         this.user = user;
         this.userName = user.getUserName();

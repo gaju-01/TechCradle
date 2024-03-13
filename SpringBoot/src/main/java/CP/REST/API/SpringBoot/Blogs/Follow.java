@@ -11,50 +11,51 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Follow {
 
-  @JsonProperty("id")
-  @Id
-  @GeneratedValue
-  @JsonIgnore
-  private int id;
+    @JsonProperty("id")
+    @Id
+    @GeneratedValue
+    @JsonIgnore
+    private int id;
 
-  @JsonProperty("userName")
-  private String userName;
+    @JsonProperty("userName")
+    private String userName;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnore
-  private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private User user;
 
-  @JsonProperty("celeb")
-  private String celeb;
-  
-  public Follow() {}
+    @JsonProperty("celeb")
+    private String celeb;
 
-  public Follow(String userName) {
-    this.userName = userName;
-  }
+    public Follow() {
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-    this.celeb = user.getUserName();
-  }
+    public Follow(String userName) {
+        this.userName = userName;
+    }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
+    public void setUser(User user) {
+        this.user = user;
+        this.celeb = user.getUserName();
+    }
 
-  public int getId() {
-    return this.id;
-  }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-  public String getUserName() {
-    return this.userName;
-  }
+    public int getId() {
+        return this.id;
+    }
 
-  public User getUser() {
-    return this.user;
-  }
+    public String getUserName() {
+        return this.userName;
+    }
 
-  public String getCeleb() {
-    return this.celeb;
-  }
+    public User getUser() {
+        return this.user;
+    }
+
+    public String getCeleb() {
+        return this.celeb;
+    }
 }

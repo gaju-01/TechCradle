@@ -36,9 +36,11 @@ public class Profile {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
     public void setType(String fileType) {
         this.type = fileType;
     }
@@ -46,6 +48,7 @@ public class Profile {
     public String getFileName() {
         return this.fileName;
     }
+
     public long getId() {
         return this.id;
     }

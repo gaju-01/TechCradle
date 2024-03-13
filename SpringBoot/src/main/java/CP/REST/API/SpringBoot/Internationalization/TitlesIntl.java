@@ -3,6 +3,7 @@ package CP.REST.API.SpringBoot.Internationalization;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -15,11 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @RestController is used to indicate that the class contain the controller methods that interact handling
  * the HTTP requests.
- * @EnableWebSecurity  is used to enable the authorization semantics annotations such as,
+ * @EnableWebSecurity is used to enable the authorization semantics annotations such as,
  * @Secured
  * @PreAuthorize
- * @PostAuthorize
- * And,
+ * @PostAuthorize And,
  * @AllowAccessForResource is a custom annotation that is used for pre-authorization at method level.
  * These annotations helps users to access the resources based on their assigned roles and
  * maintain separation of  concerns.

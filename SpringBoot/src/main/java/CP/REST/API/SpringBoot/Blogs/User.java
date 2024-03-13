@@ -39,6 +39,7 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     Profile profile;
+
     public User() {
 
     }

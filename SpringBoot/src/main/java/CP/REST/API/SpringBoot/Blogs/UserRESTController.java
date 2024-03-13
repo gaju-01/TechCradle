@@ -3,6 +3,7 @@ package CP.REST.API.SpringBoot.Blogs;
 import CP.REST.API.SpringBoot.Email.EmailSenderService;
 import CP.REST.API.SpringBoot.Exceptions.BasicUserDefinedException;
 import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
+import CP.REST.API.SpringBoot.Security.AllowAccessForResourceV2;
 import jakarta.validation.Valid;
 
 import java.net.URI;
@@ -24,13 +25,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 /**
  * @RestController is used to indicate that the class contain the controller methods that interact handling
  * the HTTP requests.
- * @EnableWebSecurity  is used to enable the authorization semantics annotations such as,
+ * @EnableWebSecurity is used to enable the authorization semantics annotations such as,
  * @Secured
  * @PreAuthorize
- * @PostAuthorize
- * And,
- * @AllowAccessForResource is a custom annotation that is used for pre-authorization at method level.
- * These annotations helps users to access the resources based on their assigned roles and
+ * @PostAuthorize And,
+ * @AllowAccessForResource and @AllowAccessForResourceV2 are custom annotation that are used for pre-authorization at method level.
+ * These annotations help users to access the resources based on their assigned roles and
  * maintain separation of  concerns.
  */
 @RestController
@@ -51,13 +51,13 @@ public class UserRESTController {
         this.emailSenderService = emailSenderService;
     }
 
-    @AllowAccessForResource
+    @AllowAccessForResourceV2
     @GetMapping(path = "/cprestapi/users")
     public List<User> getAllUsers() {
         return this.userRepo.findAll();
     }
 
-    @AllowAccessForResource
+    @AllowAccessForResourceV2
     @PostMapping(path = "/cprestapi/users")
     public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
         User createdUser = this.userRepo.save(user);
@@ -101,7 +101,7 @@ public class UserRESTController {
         return ResponseEntity.created(location).build();
     }
 
-    @AllowAccessForResource
+    @AllowAccessForResourceV2
     @GetMapping(path = "/cprestapi/users/checkuser")
     public String checkUser(@RequestParam(name = "user") String user, @RequestParam(name = "email") String email) {
         Optional<User> opUser = this.userRepo.findByUserName(user);

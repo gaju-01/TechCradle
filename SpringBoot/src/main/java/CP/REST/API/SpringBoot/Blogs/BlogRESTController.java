@@ -21,11 +21,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 /**
  * @RestController is used to indicate that the class contain the controller methods that interact handling
  * the HTTP requests.
- * @EnableWebSecurity  is used to enable the authorization semantics annotations such as,
+ * @EnableWebSecurity is used to enable the authorization semantics annotations such as,
  * @Secured
  * @PreAuthorize
- * @PostAuthorize
- * And,
+ * @PostAuthorize And,
  * @AllowAccessForResource is a custom annotation that is used for pre-authorization at method level.
  * These annotations helps users to access the resources based on their assigned roles and
  * maintain separation of  concerns.

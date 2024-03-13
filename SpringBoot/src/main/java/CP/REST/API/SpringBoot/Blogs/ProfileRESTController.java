@@ -18,11 +18,10 @@ import java.util.Optional;
 /**
  * @RestController is used to indicate that the class contain the controller methods that interact handling
  * the HTTP requests.
- * @EnableWebSecurity  is used to enable the authorization semantics annotations such as,
+ * @EnableWebSecurity is used to enable the authorization semantics annotations such as,
  * @Secured
  * @PreAuthorize
- * @PostAuthorize
- * And,
+ * @PostAuthorize And,
  * @AllowAccessForResource is a custom annotation that is used for pre-authorization at method level.
  * These annotations helps users to access the resources based on their assigned roles and
  * maintain separation of  concerns.
@@ -94,13 +93,13 @@ public class ProfileRESTController {
         Optional<User> opUser = this.userRepo.findByUserName(userName);
         User user = opUser.get();
         Optional<Profile> opProfile = this.profileRepo.findByUser(user);
-        if(opProfile.isPresent()) {
+        if (opProfile.isPresent()) {
             String filePath = FOLDER_PATH + "\\" + opProfile.get().getFileName();
             Path path = Path.of(filePath);
             File file = path.toFile();
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
-                byte[] arr = new byte[(int)file.length()];
+                byte[] arr = new byte[(int) file.length()];
                 fileInputStream.read(arr);
                 fileInputStream.close();
                 return arr;

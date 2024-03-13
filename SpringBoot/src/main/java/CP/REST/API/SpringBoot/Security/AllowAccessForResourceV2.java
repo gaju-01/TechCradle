@@ -1,7 +1,8 @@
 package CP.REST.API.SpringBoot.Security;
 
-import java.lang.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import java.lang.annotation.*;
 
 /**
  * The below @interface is used for pre-authorization when accessing the resource.
@@ -17,11 +18,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * @PreFilter
  * @PostFliter
  */
-@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_BACKEND')")
+@PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface AllowAccessForResource {
+public @interface AllowAccessForResourceV2 {
 
 }
