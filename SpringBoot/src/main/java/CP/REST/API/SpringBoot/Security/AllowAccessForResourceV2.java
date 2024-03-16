@@ -24,5 +24,5 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface AllowAccessForResourceV2 {
-
+    
 }
