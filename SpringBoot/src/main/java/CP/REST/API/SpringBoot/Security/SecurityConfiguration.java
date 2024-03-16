@@ -97,11 +97,11 @@ public class SecurityConfiguration {
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
         var user = User.withUsername("user").password("pass").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("USER").build();
-        var dev = User.withUsername("dev").password("{noop}111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("DEV").build();
-        var admin = User.withUsername("admin").password("{noop}111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("ADMIN").build();
-        var test = User.withUsername("test").password("{noop}111").roles("TEST").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).build();
-        var dbManager = User.withUsername("dbm").password("{noop}111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("DBMANAGER").build();
-        var backend = User.withUsername("bend").password("{noop}111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("BACKEND").build();
+        var dev = User.withUsername("dev").password("111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("DEV").build();
+        var admin = User.withUsername("admin").password("111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("ADMIN").build();
+        var test = User.withUsername("test").password("111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("TESTER").build();
+        var dbManager = User.withUsername("dbm").password("111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("DBMANAGER").build();
+        var backend = User.withUsername("bend").password("111").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("BACKEND").build();
         var detailersManager = new JdbcUserDetailsManager(dataSource);
         detailersManager.createUser(user);
         detailersManager.createUser(dev);
