@@ -16,7 +16,7 @@ const Profile = () => {
 			.post(`${context.serverURL}/cprestapi/uploadPic`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: "Basic " + window.btoa("user:pass"),
+					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
 				params: {
 					userName: context.user,
@@ -32,7 +32,7 @@ const Profile = () => {
 		axios
 			.delete(`${context.serverURL}/cprestapi/deletePic`, {
 				headers: {
-					Authorization: "Basic " + window.btoa("user:pass"),
+					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
 				params: {
 					userName: context.user,
@@ -60,7 +60,7 @@ const Profile = () => {
 				.get(`${context.serverURL}/cprestapi/getPic`, {
 					responseType: "arraybuffer",
 					headers: {
-						Authorization: "Basic " + window.btoa("user:pass"),
+						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 					},
 					params: {
 						userName: context.user,

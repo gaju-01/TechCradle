@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * maintain separation of  concerns.
  */
 @RestController
-@EnableMethodSecurity
+// @EnableMethodSecurity
 public class TitlesIntl {
 
     private MessageSource messageSource;
@@ -35,15 +36,10 @@ public class TitlesIntl {
         this.messageSource = messageSource;
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping(path = "cprestapi/intl/title/{intlTitle}")
     public String welcomeIntl(@PathVariable String intlTitle) {
         Locale locale = LocaleContextHolder.getLocale();
-        System.out.println(
-                "...................................\nThe locale language is " +
-                        locale +
-                        "\n..................................."
-        );
         return this.messageSource.getMessage(
                 intlTitle,
                 null,
@@ -52,7 +48,7 @@ public class TitlesIntl {
         );
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping(path = "/cprestapi/intl/navbar")
     public List<String> navBarInt() {
         List<String> rec = new ArrayList<>();

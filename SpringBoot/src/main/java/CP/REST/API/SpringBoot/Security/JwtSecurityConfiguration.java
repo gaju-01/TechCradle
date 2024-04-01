@@ -1,7 +1,10 @@
 package CP.REST.API.SpringBoot.Security;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,22 +19,25 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
 
-/**
- * @EnableWebSecurity allows Spring to find (it's a @Configuration and, therefore, @Component ) and
- * automatically apply the class to the global WebSecurity.
- * @Configuration helps Spring to identify a class as Configuration class and applies the configuration
- * provided in the following class.
- */
-// Currently JWT with OAuth2 tokens are used for authorization instead of Basic Auth.
-// @Configuration
-// @EnableWebSecurity
-public class SecurityConfiguration {
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
+import java.util.UUID;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+@Configuration
+@EnableWebSecurity
+public class JwtSecurityConfiguration {
     /**
      * Any request that is made by the client has to pass through the security chains,
      * 1. Authorize all kind of HTTP requests.
@@ -48,28 +54,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated());
         http.sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.httpBasic(withDefaults());
+        http.httpBasic(withDefaults()) ;
         http.headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         http.csrf(AbstractHttpConfigurer::disable);
+        http.oauth2ResourceServer(OAuth2ResourceServerConfigurer -> OAuth2ResourceServerConfigurer.jwt(withDefaults()));
         return http.build();
     }
-
-//    /** The following code is only used for test
-//     * The following bean is responsible for role based authorization for the Spring Boot Application.
-//     * The privileges and access are different based on roles.
-//     *
-//     * @return UserDetailsService - contains the different roles
-//     */
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        var user = User.withUsername("user").password("{noop}pass").roles("USER").build();
-//        var dev = User.withUsername("dev").password("{noop}111").roles("DEV").build();
-//        var admin = User.withUsername("admin").password("{noop}111").roles("ADMIN").build();
-//        var test = User.withUsername("test").password("{noop}111").roles("TEST").build();
-//        var dbManager = User.withUsername("dbm").password("{noop}111").roles("DBMANAGER").build();
-//        var backend = User.withUsername("bend").password("{noop}111").roles("BACKEND").build();
-//        return new InMemoryUserDetailsManager(user, dev, admin, test, dbManager, backend);
-//    }
 
     /**
      * The following bean creates the Embedded Database(DefaultResourceLoader) with database type as H2.
@@ -120,5 +110,43 @@ public class SecurityConfiguration {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public KeyPair  keyPair() {
+        try {
+            var keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            return keyPairGenerator.generateKeyPair();
+        } catch(NoSuchAlgorithmException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Bean
+    public RSAKey rsaKey(KeyPair keyPair) {
+        return new RSAKey
+                .Builder((RSAPublicKey) keyPair.getPublic())
+                .privateKey(keyPair.getPrivate())
+                .keyID(UUID.randomUUID().toString())
+                .build();
+    }
+
+    @Bean
+    public JWKSource<SecurityContext> jwkSource(RSAKey rsaKey) {
+        var jwkSet = new JWKSet(rsaKey);
+        return ((jwkSelector, securityContext) -> jwkSelector.select(jwkSet));
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder(RSAKey rsaKey) throws JOSEException {
+        return NimbusJwtDecoder
+                .withPublicKey(rsaKey.toRSAPublicKey())
+                .build();
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
+        return new NimbusJwtEncoder(jwkSource);
     }
 }

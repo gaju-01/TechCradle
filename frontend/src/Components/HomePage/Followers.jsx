@@ -13,7 +13,7 @@ const Followers = () => {
 				method: "get",
 				url: `${context.serverURL}/cprestapi/followers/${context.user}`,
 				headers: {
-					Authorization: "Basic " + window.btoa("user:pass"),
+					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
 			}).then((resp) => {
 				setData(resp.data);
@@ -27,7 +27,7 @@ const Followers = () => {
 			url: `${context.serverURL}/cprestapi/intl/title/title.followers`,
 			headers: {
 				"Accept-Language": context.language,
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((response) => {
 			setTitle(response.data);

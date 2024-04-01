@@ -24,7 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * maintain separation of  concerns.
  */
 @RestController
-@EnableMethodSecurity
+// @EnableMethodSecurity
 public class FollowRESTController {
 
     private FollowRepo followRepo;
@@ -35,7 +35,7 @@ public class FollowRESTController {
         this.userRepo = userRepo;
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @PostMapping("/cprestapi/followers")
     public ResponseEntity<Follow> makeFollowers(
             @RequestParam(name = "user") String user,
@@ -53,7 +53,7 @@ public class FollowRESTController {
         return ResponseEntity.created(location).build();
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping("/cprestapi/followers/{user}")
     public List<Follow> getFollowers(@PathVariable String user) {
         Optional<User> opUser = this.userRepo.findByUserName(user);
@@ -62,7 +62,7 @@ public class FollowRESTController {
         return getList;
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping("/cprestapi/followers/check")
     public String checkIsPresent(
             @RequestParam(name = "parent") String parent,
@@ -79,7 +79,7 @@ public class FollowRESTController {
         return "NO";
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping("/cprestapi/following")
     public List<String> following(@RequestParam(name = "parent") String parent) {
         List<Follow> getList = this.followRepo.findByUserName(parent);
@@ -90,7 +90,7 @@ public class FollowRESTController {
         return ans;
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @DeleteMapping("/cprestapi/removeUser")
     public String removeFollower(@RequestParam(name = "parent") String parent, @RequestParam(name = "child") String child) {
         Optional<User> opUser = this.userRepo.findByUserName(parent);

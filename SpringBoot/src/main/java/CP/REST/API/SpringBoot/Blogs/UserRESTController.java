@@ -34,7 +34,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * maintain separation of  concerns.
  */
 @RestController
-@EnableMethodSecurity
+// @EnableMethodSecurity
 public class UserRESTController {
 
     private UserRepo userRepo;
@@ -51,13 +51,13 @@ public class UserRESTController {
         this.emailSenderService = emailSenderService;
     }
 
-    @AllowAccessForResourceV2
+    // @AllowAccessForResourceV2
     @GetMapping(path = "/cprestapi/users")
     public List<User> getAllUsers() {
         return this.userRepo.findAll();
     }
 
-    @AllowAccessForResourceV2
+    // @AllowAccessForResourceV2
     @PostMapping(path = "/cprestapi/users")
     public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
         User createdUser = this.userRepo.save(user);
@@ -69,7 +69,7 @@ public class UserRESTController {
         return ResponseEntity.created(location).build();
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @PostMapping(path = "/cprestapi/users/{name}/blogs")
     public ResponseEntity<Blog> createBlog(
             @PathVariable String name,
@@ -101,7 +101,7 @@ public class UserRESTController {
         return ResponseEntity.created(location).build();
     }
 
-    @AllowAccessForResourceV2
+    // @AllowAccessForResourceV2
     @GetMapping(path = "/cprestapi/users/checkuser")
     public String checkUser(@RequestParam(name = "user") String user, @RequestParam(name = "email") String email) {
         Optional<User> opUser = this.userRepo.findByUserName(user);

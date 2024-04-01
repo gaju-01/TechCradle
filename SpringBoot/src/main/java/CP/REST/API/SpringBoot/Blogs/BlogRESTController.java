@@ -30,7 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * maintain separation of  concerns.
  */
 @RestController
-@EnableMethodSecurity
+// @EnableMethodSecurity
 public class BlogRESTController {
     private BlogRepo repo;
 
@@ -39,13 +39,13 @@ public class BlogRESTController {
         this.repo = repo;
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping(path = "/cprestapi/blogs")
     public List<Blog> getAllBlogs() {
         return this.repo.findAll();
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping(path = "/cprestapi/blogs/findblog")
     public String findBlog(@RequestParam(name = "title") String title) throws BasicUserDefinedException {
         System.out.println("My title is:" + title);
@@ -62,7 +62,7 @@ public class BlogRESTController {
         }
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @PatchMapping(path = "/cprestapi/{name}/blogs/updateblog")
     public ResponseEntity<Blog> updateBlog(@PathVariable String name, @RequestBody Blog blog) {
         Optional<Blog> optionalBlog = this.repo.findByTitle(blog.getTitle());
@@ -84,7 +84,7 @@ public class BlogRESTController {
         }
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @DeleteMapping(path = "/cprestapi/{name}/blogs/deleteblog")
     public void deleteBlog(@PathVariable String name, @RequestParam(name = "title") String title) {
         Optional<Blog> optionalBlog = this.repo.findByTitle(title);

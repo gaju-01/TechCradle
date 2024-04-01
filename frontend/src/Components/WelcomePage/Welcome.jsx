@@ -113,6 +113,7 @@ const Welcome = (props) => {
 			},
 		})
 			.then((resp) => {
+				sessionStorage.setItem("jwt", resp.data);
 				navigate("/home/blog");
 			})
 			.catch((resp) => {
@@ -139,7 +140,7 @@ const Welcome = (props) => {
 		}).then((resp) => {
 			setWelcome(resp.data);
 		});
-	}, [props.language]);
+	}, [props.language, context.serverURL]);
 
 	useEffect(() => {
 		sessionStorage.removeItem("userName");

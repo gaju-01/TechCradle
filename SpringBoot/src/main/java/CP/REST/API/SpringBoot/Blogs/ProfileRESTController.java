@@ -27,7 +27,7 @@ import java.util.Optional;
  * maintain separation of  concerns.
  */
 @RestController
-@EnableMethodSecurity
+// @EnableMethodSecurity
 public class ProfileRESTController {
     private final String FOLDER_PATH = "G:\\CPRESTAPIData\\Profile";
     private final String MESSAGE = "Error uploading the image";
@@ -41,7 +41,7 @@ public class ProfileRESTController {
         this.userRepo = userRepo;
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @PostMapping(path = "/cprestapi/uploadPic", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Profile> uploadProfilePic(@RequestPart MultipartFile profilePic, @RequestParam(name = "userName") String userName) throws IllegalStateException, IOException {
         if (profilePic.getContentType() == null || profilePic.getOriginalFilename() == null) {
@@ -73,7 +73,7 @@ public class ProfileRESTController {
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @DeleteMapping(path = "/cprestapi/deletePic")
     public ResponseEntity<String> deleteProfilePic(@RequestParam(name = "userName") String userName) {
         Optional<User> opUser = this.userRepo.findByUserName(userName);
@@ -86,7 +86,7 @@ public class ProfileRESTController {
         return ResponseEntity.ok("Profile picture deleted successfully");
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping(path = "/cprestapi/getPic", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
     public byte[] getProflePic(@RequestParam(name = "userName") String userName) {

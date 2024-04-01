@@ -3,7 +3,9 @@ package CP.REST.API.SpringBoot.ValidationToken;
 import CP.REST.API.SpringBoot.Email.EmailSenderService;
 import CP.REST.API.SpringBoot.Exceptions.BasicUserDefinedException;
 import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
+import CP.REST.API.SpringBoot.Security.JwtAuthenticationResource;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,22 +32,23 @@ public class ValidationTokenRESTController {
     private final ValidationRepo validationRepo;
     private final EmailSenderService emailSenderService;
 
-    public ValidationTokenRESTController(UserRepo userRepo, ValidationRepo validationRepo, EmailSenderService emailSenderService) {
+    private final JwtAuthenticationResource jwtAuthenticationResource;
+
+    public ValidationTokenRESTController(UserRepo userRepo, ValidationRepo validationRepo, EmailSenderService emailSenderService, JwtAuthenticationResource jwtAuthenticationResource) {
         this.userRepo = userRepo;
         this.validationRepo = validationRepo;
         this.emailSenderService = emailSenderService;
+        this.jwtAuthenticationResource = jwtAuthenticationResource;
     }
 
-    @AllowAccessForResource
+    // @AllowAccessForResource
     @GetMapping(path = "/cprestapi/validate/gt")
     public String generateToken(@RequestParam(name = "userName") String userName, @RequestParam(name = "email") String email) {
         Optional<User> opUser = this.userRepo.findByUserName(userName);
         User user = opUser.get();
         Optional<ValidationToken> opVToken = this.validationRepo.findByUserName(userName);
         String text;
-        if (opVToken.isPresent()) {
-            this.validationRepo.deleteById(opVToken.get().getId());
-        }
+        opVToken.ifPresent(validationToken -> this.validationRepo.deleteById(validationToken.getId()));
         ValidationToken vToken = new ValidationToken(user);
         vToken.setOTP();
         this.validationRepo.save(vToken);
@@ -54,9 +57,9 @@ public class ValidationTokenRESTController {
         return "OK";
     }
 
-    @AllowAccessForResource
+   // @AllowAccessForResource
     @GetMapping(path = "/cprestapi/verify/gt")
-    public String verifyToken(@RequestParam(name = "otp") String otp, @RequestParam(name = "userName") String userName) {
+    public String verifyToken(@RequestParam(name = "otp") String otp, @RequestParam(name = "userName") String userName, Authentication authentication) {
         if (otp == null || otp.length() != 6) {
             throw new BasicUserDefinedException("Enter the valid otp");
         }
@@ -65,7 +68,7 @@ public class ValidationTokenRESTController {
         if (opVToken.isPresent()) {
             if (myOTP != 0 && opVToken.get().getOTP() == myOTP) {
                 this.validationRepo.deleteById(opVToken.get().getId());
-                return "YES";
+                return this.jwtAuthenticationResource.createToken(authentication);
             } else {
                 this.validationRepo.deleteById(opVToken.get().getId());
                 throw new BasicUserDefinedException("Enter the valid otp");

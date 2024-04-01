@@ -14,7 +14,7 @@ const Following = () => {
 				parent: context.user,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((resp) => {
 			setList(resp.data);
@@ -27,7 +27,7 @@ const Following = () => {
 			url: `${context.serverURL}/cprestapi/intl/title/title.following`,
 			headers: {
 				"Accept-Language": context.language,
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((response) => {
 			setTitle(response.data);
@@ -43,7 +43,7 @@ const Following = () => {
 				parent: data,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((resp) => {
 			axios({
@@ -52,7 +52,7 @@ const Following = () => {
 					parent: context.user,
 				},
 				headers: {
-					Authorization: "Basic " + window.btoa("user:pass"),
+					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
 			}).then((resp) => {
 				setList(resp.data);

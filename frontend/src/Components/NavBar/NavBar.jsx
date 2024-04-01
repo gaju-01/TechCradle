@@ -20,7 +20,7 @@ const NavBar = () => {
 			url: `${context.serverURL}/cprestapi/intl/navbar`,
 			headers: {
 				"Accept-Language": context.language,
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((resp) => {
 			setNavTitles(resp.data);

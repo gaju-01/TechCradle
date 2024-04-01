@@ -33,7 +33,7 @@ const CreateBlog = () => {
 				title: title,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
 			.then((resp) => {
@@ -50,7 +50,7 @@ const CreateBlog = () => {
 						},
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: "Basic " + window.btoa("user:pass"),
+							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 						},
 					}).catch((error) => {
 						setMess("Description should be minimum of 10 characters!!");
@@ -82,7 +82,7 @@ const CreateBlog = () => {
 			url: `${context.serverURL}/cprestapi/intl/title/title.create.blog`,
 			headers: {
 				"Accept-Language": context.language,
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((resp) => {
 			setHead(resp.data);

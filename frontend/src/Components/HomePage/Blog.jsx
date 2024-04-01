@@ -19,7 +19,7 @@ const Blog = (props) => {
 				parent: context.user,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((resp) => {
 			const set = new Set();
@@ -38,7 +38,7 @@ const Blog = (props) => {
 				parent: context.user,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((resp) => {
 			const set = new Set();
@@ -66,7 +66,7 @@ const Blog = (props) => {
 			url: `${context.serverURL}/cprestapi/intl/title/title.blog`,
 			headers: {
 				"Accept-Language": context.language,
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((response) => {
 			setTitle(response.data);
@@ -78,7 +78,7 @@ const Blog = (props) => {
 			method: "get",
 			url: `${context.serverURL}/cprestapi/blogs`,
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((response) => {
 			setBlogs(response.data);
@@ -109,7 +109,7 @@ const Blog = (props) => {
 						child: context.user,
 					},
 					headers: {
-						Authorization: "Basic " + window.btoa("user:pass"),
+						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 					},
 				}).then((resp) => {
 					if (resp.data === "NO") {
@@ -124,7 +124,7 @@ const Blog = (props) => {
 							},
 							headers: {
 								"Content-Type": "application/json",
-								Authorization: "Basic " + window.btoa("user:pass"),
+								Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 							},
 						}).then((resp) => {
 							resetFollowing(user);
@@ -144,7 +144,7 @@ const Blog = (props) => {
 						parent: user,
 					},
 					headers: {
-						Authorization: "Basic " + window.btoa("user:pass"),
+						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 					},
 				}).then((resp) => {
 					resetFollowing();

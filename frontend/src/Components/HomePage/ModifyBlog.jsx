@@ -36,7 +36,7 @@ const ModifyBlog = () => {
 				title: title,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
 			.then((resp) => {
@@ -49,7 +49,7 @@ const ModifyBlog = () => {
 							title: title,
 						},
 						headers: {
-							Authorization: "Basic " + window.btoa("user:pass"),
+							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 						},
 					})
 						.then((resp) => {
@@ -80,7 +80,7 @@ const ModifyBlog = () => {
 				title: title,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
 			.then((resp) => {
@@ -97,7 +97,7 @@ const ModifyBlog = () => {
 						},
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: "Basic " + window.btoa("user:pass"),
+							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 						},
 					})
 						.then((resp) => {
@@ -125,7 +125,7 @@ const ModifyBlog = () => {
 			url: `${context.serverURL}/cprestapi/intl/title/title.modify.blog`,
 			headers: {
 				"Accept-Language": context.language,
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		}).then((resp) => {
 			setHead(resp.data);
