@@ -11,6 +11,7 @@ const Blog = (props) => {
 	const [searchTitle, setSearchTitle] = useState("");
 	const [filteredBlogs, setFilteredBlogs] = useState([]);
 	const [following, setFollowing] = useState(new Set());
+	const [message, setMessage] = useState("");
 
 	const resetFollowing = (user) => {
 		axios({
@@ -21,14 +22,18 @@ const Blog = (props) => {
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((resp) => {
-			const set = new Set();
-			const data = resp.data;
-			data.forEach((element) => {
-				set.add(element);
+		})
+			.then((resp) => {
+				const set = new Set();
+				const data = resp.data;
+				data.forEach((element) => {
+					set.add(element);
+				});
+				setFollowing(set);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
 			});
-			setFollowing(set);
-		});
 	};
 
 	useEffect(() => {
@@ -40,14 +45,18 @@ const Blog = (props) => {
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((resp) => {
-			const set = new Set();
-			const data = resp.data;
-			data?.forEach((element) => {
-				set.add(element);
+		})
+			.then((resp) => {
+				const set = new Set();
+				const data = resp.data;
+				data?.forEach((element) => {
+					set.add(element);
+				});
+				setFollowing(set);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
 			});
-			setFollowing(set);
-		});
 	}, [context.serverURL, context.user]);
 
 	useEffect(() => {
@@ -57,6 +66,9 @@ const Blog = (props) => {
 			)
 			.then((res) => {
 				setCurrencyRelated(res.data["usd"]);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
 			});
 	}, [context.currency]);
 
@@ -68,9 +80,13 @@ const Blog = (props) => {
 				"Accept-Language": context.language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((response) => {
-			setTitle(response.data);
-		});
+		})
+			.then((response) => {
+				setTitle(response.data);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [context.language, context.serverURL]);
 
 	useEffect(() => {
@@ -80,17 +96,21 @@ const Blog = (props) => {
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((response) => {
-			setBlogs(response.data);
-			const temp = response.data.filter(
-				(ele) =>
-					ele.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
-					(props.author === null ||
-						props.author === undefined ||
-						props.author === ele.userName)
-			);
-			setFilteredBlogs(temp);
-		});
+		})
+			.then((response) => {
+				setBlogs(response.data);
+				const temp = response.data.filter(
+					(ele) =>
+						ele.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+						(props.author === null ||
+							props.author === undefined ||
+							props.author === ele.userName)
+				);
+				setFilteredBlogs(temp);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [context.serverURL, props.author, searchTitle]);
 
 	const followHandler = (user) => {
@@ -111,26 +131,34 @@ const Blog = (props) => {
 					headers: {
 						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 					},
-				}).then((resp) => {
-					if (resp.data === "NO") {
-						axios({
-							method: "post",
-							url: `${context.serverURL}/cprestapi/followers`,
-							data: {
-								userName: context.user,
-							},
-							params: {
-								user: user,
-							},
-							headers: {
-								"Content-Type": "application/json",
-								Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-							},
-						}).then((resp) => {
-							resetFollowing(user);
-						});
-					}
-				});
+				})
+					.then((resp) => {
+						if (resp.data === "NO") {
+							axios({
+								method: "post",
+								url: `${context.serverURL}/cprestapi/followers`,
+								data: {
+									userName: context.user,
+								},
+								params: {
+									user: user,
+								},
+								headers: {
+									"Content-Type": "application/json",
+									Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+								},
+							})
+								.then((resp) => {
+									resetFollowing(user);
+								})
+								.catch((resp) => {
+									setMessage("Error fetching data, try again");
+								});
+						}
+					})
+					.catch((resp) => {
+						setMessage("Error fetching data, try again");
+					});
 				setMessages((prev) => [
 					...prev,
 					{ length: prev.length, value: `You are now following ${user}` },
@@ -146,13 +174,17 @@ const Blog = (props) => {
 					headers: {
 						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 					},
-				}).then((resp) => {
-					resetFollowing();
-					setMessages((prev) => [
-						...prev,
-						{ length: prev.length, value: `You have unfollowed ${user}` },
-					]);
-				});
+				})
+					.then((resp) => {
+						resetFollowing();
+						setMessages((prev) => [
+							...prev,
+							{ length: prev.length, value: `You have unfollowed ${user}` },
+						]);
+					})
+					.catch((resp) => {
+						setMessage("Error fetching data, try again");
+					});
 			}
 		}
 	};
@@ -224,6 +256,7 @@ const Blog = (props) => {
 			<div>
 				<p className="fs-1">{title}</p>
 			</div>
+			<p style={{ color: "red" }}>{message}</p>
 			<div>
 				{filteredBlogs.map(function (data) {
 					return (

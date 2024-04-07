@@ -6,6 +6,7 @@ const Followers = () => {
 	const [data, setData] = useState([]);
 	const [title, setTitle] = useState("Followers");
 	const context = useContext(Context);
+	const [message, setMessage] = useState("");
 
 	useEffect(() => {
 		if (context.user) {
@@ -15,9 +16,13 @@ const Followers = () => {
 				headers: {
 					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
-			}).then((resp) => {
-				setData(resp.data);
-			});
+			})
+				.then((resp) => {
+					setData(resp.data);
+				})
+				.catch((resp) => {
+					setMessage("Error fetching data, try again");
+				});
 		}
 	}, []);
 
@@ -29,14 +34,19 @@ const Followers = () => {
 				"Accept-Language": context.language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((response) => {
-			setTitle(response.data);
-		});
+		})
+			.then((response) => {
+				setTitle(response.data);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [context.language, context.serverURL]);
 
 	return (
 		<>
 			<h2>{title}</h2>
+			<p style={{ color: "red" }}>{message}</p>
 			{data.map(function (info) {
 				return <p key={info.userName}>{info.userName}</p>;
 			})}

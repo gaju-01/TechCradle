@@ -7,12 +7,15 @@ const NavBar = () => {
 	const nav = useNavigate();
 	const [navTitles, setNavTitles] = useState([
 		"Select Here",
+		"Welcome",
 		"Blogs",
 		"Create Blogs",
 		"Modify Blog",
+		"Compiler",
 		"Followers",
 		"Following",
 	]);
+	const [message, setMessage] = useState("");
 
 	useEffect(() => {
 		axios({
@@ -22,9 +25,13 @@ const NavBar = () => {
 				"Accept-Language": context.language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((resp) => {
-			setNavTitles(resp.data);
-		});
+		})
+			.then((resp) => {
+				setNavTitles(resp.data);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [context.language, context.serverURL]);
 
 	const languageHandler = (event) => {
@@ -114,6 +121,7 @@ const NavBar = () => {
 					</button>
 				</div>
 			</nav>
+			<p style={{ color: "red" }}>{message}</p>
 		</>
 	);
 };

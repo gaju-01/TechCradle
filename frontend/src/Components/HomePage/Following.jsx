@@ -6,6 +6,7 @@ const Following = () => {
 	const [list, setList] = useState([]);
 	const [title, setTitle] = useState("Following");
 	const context = useContext(Context);
+	const [message, setMessage] = useState("");
 
 	useEffect(() => {
 		axios({
@@ -16,9 +17,13 @@ const Following = () => {
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((resp) => {
-			setList(resp.data);
-		});
+		})
+			.then((resp) => {
+				setList(resp.data);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [context.serverURL, context.user]);
 
 	useEffect(() => {
@@ -29,9 +34,13 @@ const Following = () => {
 				"Accept-Language": context.language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((response) => {
-			setTitle(response.data);
-		});
+		})
+			.then((response) => {
+				setTitle(response.data);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [context.language, context.serverURL]);
 
 	const clickHandler = (data) => {
@@ -45,24 +54,33 @@ const Following = () => {
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((resp) => {
-			axios({
-				url: `${context.serverURL}/cprestapi/following`,
-				params: {
-					parent: context.user,
-				},
-				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-				},
-			}).then((resp) => {
-				setList(resp.data);
+		})
+			.then((resp) => {
+				axios({
+					url: `${context.serverURL}/cprestapi/following`,
+					params: {
+						parent: context.user,
+					},
+					headers: {
+						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+					},
+				})
+					.then((resp) => {
+						setList(resp.data);
+					})
+					.catch((resp) => {
+						setMessage("Error fetching data, try again");
+					});
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
 			});
-		});
 	};
 
 	return (
 		<>
 			<h2>{title}</h2>
+			<p style={{ color: "red" }}>{message}</p>
 			{list.map(function (data) {
 				return (
 					<div key={data}>

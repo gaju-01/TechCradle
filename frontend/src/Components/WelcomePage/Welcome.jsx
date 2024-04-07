@@ -39,64 +39,76 @@ const Welcome = (props) => {
 				headers: {
 					Authorization: "Basic " + window.btoa("user:pass"),
 				},
-			}).then((resp) => {
-				isPresent = resp.data;
-				if (isPresent === "NO") {
-					setMessage("");
-					axios({
-						method: "post",
-						url: `${context.serverURL}/cprestapi/users`,
-						data: {
-							userName: context.user,
-							email: context.email,
-						},
-						headers: {
-							Authorization: "Basic " + window.btoa("user:pass"),
-						},
-					})
-						.then((resp) => {
-							setMessage("");
-							axios({
-								method: "get",
-								url: `${context.serverURL}/cprestapi/validate/gt`,
-								params: {
-									email: context.email,
-									userName: context.user,
-								},
-								headers: {
-									Authorization: "Basic " + window.btoa("user:pass"),
-								},
-							}).then((resp) => {
-								setMessage("OTP sent your mail!!");
-							});
+			})
+				.then((resp) => {
+					isPresent = resp.data;
+					if (isPresent === "NO") {
+						setMessage("");
+						axios({
+							method: "post",
+							url: `${context.serverURL}/cprestapi/users`,
+							data: {
+								userName: context.user,
+								email: context.email,
+							},
+							headers: {
+								Authorization: "Basic " + window.btoa("user:pass"),
+							},
 						})
-						.catch((e) => {
-							myMessage = e.response.data.errors[0].defaultMessage;
-							setMessage(myMessage);
-						});
-					sessionStorage.setItem("userName", context.user);
-					sessionStorage.setItem("email", context.email);
-				} else if (isPresent === "OK") {
-					setMessage("");
-					axios({
-						method: "get",
-						url: `${context.serverURL}/cprestapi/validate/gt`,
-						params: {
-							email: context.email,
-							userName: context.user,
-						},
-						headers: {
-							Authorization: "Basic " + window.btoa("user:pass"),
-						},
-					}).then((resp) => {
-						setMessage("OTP sent your mail!!");
-					});
-					sessionStorage.setItem("userName", context.user);
-					sessionStorage.setItem("email", context.email);
-				} else {
-					setMessage("Enter the valid user name and email");
-				}
-			});
+							.then((resp) => {
+								setMessage("");
+								axios({
+									method: "get",
+									url: `${context.serverURL}/cprestapi/validate/gt`,
+									params: {
+										email: context.email,
+										userName: context.user,
+									},
+									headers: {
+										Authorization: "Basic " + window.btoa("user:pass"),
+									},
+								})
+									.then((resp) => {
+										setMessage("OTP sent your mail!!");
+									})
+									.catch((resp) => {
+										setMessage("Error fetching data, try again");
+									});
+							})
+							.catch((e) => {
+								myMessage = e.response.data.errors[0].defaultMessage;
+								setMessage(myMessage);
+							});
+						sessionStorage.setItem("userName", context.user);
+						sessionStorage.setItem("email", context.email);
+					} else if (isPresent === "OK") {
+						setMessage("");
+						axios({
+							method: "get",
+							url: `${context.serverURL}/cprestapi/validate/gt`,
+							params: {
+								email: context.email,
+								userName: context.user,
+							},
+							headers: {
+								Authorization: "Basic " + window.btoa("user:pass"),
+							},
+						})
+							.then((resp) => {
+								setMessage("OTP sent your mail!!");
+							})
+							.catch((resp) => {
+								setMessage("Error fetching data, try again");
+							});
+						sessionStorage.setItem("userName", context.user);
+						sessionStorage.setItem("email", context.email);
+					} else {
+						setMessage("Enter the valid user name and email");
+					}
+				})
+				.catch((resp) => {
+					setMessage("Error fetching data, try again");
+				});
 		}
 	};
 
@@ -137,9 +149,13 @@ const Welcome = (props) => {
 				"Accept-Language": props.language,
 				Authorization: "Basic " + window.btoa("user:pass"),
 			},
-		}).then((resp) => {
-			setWelcome(resp.data);
-		});
+		})
+			.then((resp) => {
+				setWelcome(resp.data);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [props.language, context.serverURL]);
 
 	useEffect(() => {

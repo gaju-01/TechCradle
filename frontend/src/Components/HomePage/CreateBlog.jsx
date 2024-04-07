@@ -10,6 +10,7 @@ const CreateBlog = () => {
 	const [price, setPrice] = useState(0);
 	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
+	const [message, setMessage] = useState("");
 
 	const handlePrice = (event) => {
 		setPrice(event.target.value);
@@ -84,9 +85,13 @@ const CreateBlog = () => {
 				"Accept-Language": context.language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
-		}).then((resp) => {
-			setHead(resp.data);
-		});
+		})
+			.then((resp) => {
+				setHead(resp.data);
+			})
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	}, [context.language, context.serverURL]);
 
 	return (
@@ -150,6 +155,7 @@ const CreateBlog = () => {
 				</div>
 			</form>
 			<p style={{ color: "red" }}>{mess}</p>
+			<p style={{ color: "red" }}>{message}</p>
 		</div>
 	);
 };

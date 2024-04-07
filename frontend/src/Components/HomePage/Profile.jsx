@@ -6,6 +6,7 @@ import axios from "axios";
 const Profile = () => {
 	const context = useContext(Context);
 	const [src, setSrc] = useState("");
+	const [message, setMessage] = useState("");
 
 	const ppHandler = (e) => {
 		let profilePic = e.target.files[0];
@@ -25,7 +26,9 @@ const Profile = () => {
 			.then((resp) => {
 				setSrc(URL.createObjectURL(profilePic));
 			})
-			.catch((e) => {});
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	};
 
 	const deleteProfilePic = () => {
@@ -41,7 +44,9 @@ const Profile = () => {
 			.then((resp) => {
 				setSrc("");
 			})
-			.catch((e) => {});
+			.catch((resp) => {
+				setMessage("Error fetching data, try again");
+			});
 	};
 	useEffect(() => {
 		const userName = sessionStorage.getItem("userName");
@@ -73,7 +78,9 @@ const Profile = () => {
 						setSrc(url);
 					}
 				})
-				.catch((e) => {});
+				.catch((resp) => {
+					setMessage("Error fetching data, try again");
+				});
 		}
 	}, [context.user, context.serverURL]);
 
@@ -121,6 +128,7 @@ const Profile = () => {
 						<input type="file" onChange={ppHandler} />
 					</div>
 				)}
+				<p style={{ color: "red" }}>{message}</p>
 				<div>
 					<p>user: {context.user}</p>
 					<p>email: {context.email}</p>
