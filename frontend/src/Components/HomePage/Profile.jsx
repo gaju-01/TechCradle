@@ -7,6 +7,12 @@ const Profile = () => {
 	const context = useContext(Context);
 	const [src, setSrc] = useState("");
 	const [message, setMessage] = useState("");
+	const email = sessionStorage.getItem("email")
+		? sessionStorage.getItem("email")
+		: "";
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
 
 	const ppHandler = (e) => {
 		let profilePic = e.target.files[0];
@@ -20,7 +26,7 @@ const Profile = () => {
 					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
 				params: {
-					userName: context.user,
+					userName: user,
 				},
 			})
 			.then((resp) => {
@@ -38,7 +44,7 @@ const Profile = () => {
 					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
 				params: {
-					userName: context.user,
+					userName: user,
 				},
 			})
 			.then((resp) => {
@@ -48,19 +54,9 @@ const Profile = () => {
 				setMessage("Error fetching data, try again");
 			});
 	};
-	useEffect(() => {
-		const userName = sessionStorage.getItem("userName");
-		const email = sessionStorage.getItem("email");
-		const currency = sessionStorage.getItem("currency");
-		const language = sessionStorage.getItem("language");
-		context.setUser(userName);
-		context.setEmail(email);
-		context.setCurrency(currency);
-		context.setLanguage(language);
-	}, []);
 
 	useEffect(() => {
-		if (context.user) {
+		if (user) {
 			axios
 				.get(`${context.serverURL}/cprestapi/getPic`, {
 					responseType: "arraybuffer",
@@ -68,7 +64,7 @@ const Profile = () => {
 						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 					},
 					params: {
-						userName: context.user,
+						userName: user,
 					},
 				})
 				.then((resp) => {
@@ -82,7 +78,7 @@ const Profile = () => {
 					setMessage("Error fetching data, try again");
 				});
 		}
-	}, [context.user, context.serverURL]);
+	}, [user, context.serverURL]);
 
 	return (
 		<div>
@@ -116,7 +112,7 @@ const Profile = () => {
 								fontSize: "60px",
 							}}
 						>
-							{context.user.slice(0, 1).toUpperCase()}
+							{user.slice(0, 1).toUpperCase()}
 						</button>
 						<button
 							type="submit"
@@ -130,12 +126,12 @@ const Profile = () => {
 				)}
 				<p style={{ color: "red" }}>{message}</p>
 				<div>
-					<p>user: {context.user}</p>
-					<p>email: {context.email}</p>
+					<p>user: {user}</p>
+					<p>email: {email}</p>
 				</div>
 			</div>
 			<hr></hr>
-			<Blog author={context.user} />
+			<Blog author={user} />
 		</div>
 	);
 };

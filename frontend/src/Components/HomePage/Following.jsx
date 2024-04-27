@@ -7,12 +7,18 @@ const Following = () => {
 	const [title, setTitle] = useState("Following");
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
+	const language = sessionStorage.getItem("language")
+		? sessionStorage.getItem("language")
+		: "en";
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
 
 	useEffect(() => {
 		axios({
 			url: `${context.serverURL}/cprestapi/following`,
 			params: {
-				parent: context.user,
+				parent: user,
 			},
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
@@ -24,14 +30,14 @@ const Following = () => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.serverURL, context.user]);
+	}, [context.serverURL, user]);
 
 	useEffect(() => {
 		axios({
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.following`,
 			headers: {
-				"Accept-Language": context.language,
+				"Accept-Language": language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
@@ -41,14 +47,14 @@ const Following = () => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.language, context.serverURL]);
+	}, [language, context.serverURL]);
 
 	const clickHandler = (data) => {
 		axios({
 			method: "delete",
 			url: `${context.serverURL}/cprestapi/removeUser`,
 			params: {
-				child: context.user,
+				child: user,
 				parent: data,
 			},
 			headers: {
@@ -59,7 +65,7 @@ const Following = () => {
 				axios({
 					url: `${context.serverURL}/cprestapi/following`,
 					params: {
-						parent: context.user,
+						parent: user,
 					},
 					headers: {
 						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,

@@ -16,13 +16,26 @@ const NavBar = () => {
 		"Following",
 	]);
 	const [message, setMessage] = useState("");
+	const [currency, setCurrency] = useState(
+		sessionStorage.getItem("currency")
+			? sessionStorage.getItem("currency")
+			: "usd"
+	);
+	const [language, setLang] = useState(
+		sessionStorage.getItem("language")
+			? sessionStorage.getItem("language")
+			: "en"
+	);
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
 
 	useEffect(() => {
 		axios({
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/navbar`,
 			headers: {
-				"Accept-Language": context.language,
+				"Accept-Language": language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
@@ -32,16 +45,16 @@ const NavBar = () => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.language, context.serverURL]);
+	}, [language, context.serverURL]);
 
 	const languageHandler = (event) => {
 		sessionStorage.setItem("language", event.target.value);
-		context.setLanguage(event.target.value);
+		setLang(event.target.value);
 	};
 
 	const currencyHandler = (event) => {
 		sessionStorage.setItem("currency", event.target.value);
-		context.setCurrency(event.target.value);
+		setCurrency(event.target.value);
 	};
 
 	const profileHandler = () => {
@@ -96,7 +109,7 @@ const NavBar = () => {
 				<div>
 					<select
 						aria-label="Default select example"
-						value={context.language}
+						value={language}
 						onChange={languageHandler}
 					>
 						<option defaultValue value="en">
@@ -105,7 +118,7 @@ const NavBar = () => {
 						<option value="fr">French</option>
 						<option value="de">Dutch</option>
 					</select>
-					<select value={context.currency} onChange={currencyHandler}>
+					<select value={currency} onChange={currencyHandler}>
 						<option defaultValue value="usd">
 							USD
 						</option>
@@ -117,7 +130,7 @@ const NavBar = () => {
 						className="btn btn-primary"
 						onClick={profileHandler}
 					>
-						{context.user.slice(0, 1).toUpperCase()}
+						{user.slice(0, 1).toUpperCase()}
 					</button>
 				</div>
 			</nav>

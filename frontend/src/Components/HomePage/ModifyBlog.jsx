@@ -11,6 +11,12 @@ const ModifyBlog = () => {
 	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
+	const language = sessionStorage.getItem("language")
+		? sessionStorage.getItem("language")
+		: "en";
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
 
 	const handlePrice = (event) => {
 		setPrice(event.target.value);
@@ -45,7 +51,7 @@ const ModifyBlog = () => {
 				if (mess === "The title is not available") {
 					axios({
 						method: "delete",
-						url: `${context.serverURL}/cprestapi/${context.user}/blogs/deleteblog`,
+						url: `${context.serverURL}/cprestapi/${user}/blogs/deleteblog`,
 						params: {
 							title: title,
 						},
@@ -89,7 +95,7 @@ const ModifyBlog = () => {
 				if (mess === "The title is not available") {
 					axios({
 						method: "patch",
-						url: `${context.serverURL}/cprestapi/${context.user}/blogs/updateblog`,
+						url: `${context.serverURL}/cprestapi/${user}/blogs/updateblog`,
 						data: {
 							title: title,
 							description: text,
@@ -125,7 +131,7 @@ const ModifyBlog = () => {
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.modify.blog`,
 			headers: {
-				"Accept-Language": context.language,
+				"Accept-Language": language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
@@ -135,7 +141,7 @@ const ModifyBlog = () => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.language, context.serverURL]);
+	}, [language, context.serverURL]);
 
 	return (
 		<div>

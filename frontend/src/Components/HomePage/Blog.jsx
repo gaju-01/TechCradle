@@ -12,12 +12,21 @@ const Blog = (props) => {
 	const [filteredBlogs, setFilteredBlogs] = useState([]);
 	const [following, setFollowing] = useState(new Set());
 	const [message, setMessage] = useState("");
+	const currency = sessionStorage.getItem("currency")
+		? sessionStorage.getItem("currency")
+		: "usd";
+	const language = sessionStorage.getItem("language")
+		? sessionStorage.getItem("language")
+		: "en";
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
 
 	const resetFollowing = (user) => {
 		axios({
 			url: `${context.serverURL}/cprestapi/following`,
 			params: {
-				parent: context.user,
+				parent: user,
 			},
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
@@ -40,7 +49,7 @@ const Blog = (props) => {
 		axios({
 			url: `${context.serverURL}/cprestapi/following`,
 			params: {
-				parent: context.user,
+				parent: user,
 			},
 			headers: {
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
@@ -57,7 +66,7 @@ const Blog = (props) => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.serverURL, context.user]);
+	}, [context.serverURL, user]);
 
 	useEffect(() => {
 		axios
@@ -70,14 +79,14 @@ const Blog = (props) => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.currency]);
+	}, [currency]);
 
 	useEffect(() => {
 		axios({
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.blog`,
 			headers: {
-				"Accept-Language": context.language,
+				"Accept-Language": language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
@@ -87,7 +96,7 @@ const Blog = (props) => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.language, context.serverURL]);
+	}, [language, context.serverURL]);
 
 	useEffect(() => {
 		axios({
@@ -114,7 +123,10 @@ const Blog = (props) => {
 	}, [context.serverURL, props.author, searchTitle]);
 
 	const followHandler = (user) => {
-		if (user === context.user) {
+		if (
+			user ===
+			(sessionStorage.getItem("user") ? sessionStorage.getItem("user") : "")
+		) {
 			setMessages((prev) => [
 				...prev,
 				{ length: prev.length, value: "You cannot follow yourself" },
@@ -126,7 +138,9 @@ const Blog = (props) => {
 					url: `${context.serverURL}/cprestapi/followers/check`,
 					params: {
 						parent: user,
-						child: context.user,
+						child: sessionStorage.getItem("user")
+							? sessionStorage.getItem("user")
+							: "",
 					},
 					headers: {
 						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
@@ -138,7 +152,9 @@ const Blog = (props) => {
 								method: "post",
 								url: `${context.serverURL}/cprestapi/followers`,
 								data: {
-									userName: context.user,
+									userName: sessionStorage.getItem("user")
+										? sessionStorage.getItem("user")
+										: "",
 								},
 								params: {
 									user: user,
@@ -168,7 +184,9 @@ const Blog = (props) => {
 					method: "delete",
 					url: `${context.serverURL}/cprestapi/removeUser`,
 					params: {
-						child: context.user,
+						child: sessionStorage.getItem("user")
+							? sessionStorage.getItem("user")
+							: "",
 						parent: user,
 					},
 					headers: {
@@ -281,18 +299,22 @@ const Blog = (props) => {
 							</p>
 							<p>
 								<b>Price:</b>
-								{Math.ceil(currencyRelated[context.currency] * data.price)}{" "}
-								{context.currency.toUpperCase()}
+								{Math.ceil(currencyRelated[currency] * data.price)}{" "}
+								{currency.toUpperCase()}
 							</p>
-							{(data.price === 0 || context.user === data.userName) && (
+							{(data.price === 0 ||
+								(sessionStorage.getItem("user")
+									? sessionStorage.getItem("user")
+									: "") === data.userName) && (
 								<p>
 									<b>Content: </b>
 									{data.description}
 								</p>
 							)}
-							{data.price !== 0 && context.user !== data.userName && (
-								<button type="submit">Buy</button>
-							)}
+							{data.price !== 0 &&
+								(sessionStorage.getItem("user")
+									? sessionStorage.getItem("user")
+									: "") !== data.userName && <button type="submit">Buy</button>}
 							<hr></hr>
 						</div>
 					);

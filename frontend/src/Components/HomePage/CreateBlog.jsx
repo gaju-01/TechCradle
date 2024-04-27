@@ -11,6 +11,12 @@ const CreateBlog = () => {
 	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
+	const language = sessionStorage.getItem("language")
+		? sessionStorage.getItem("language")
+		: "en";
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
 
 	const handlePrice = (event) => {
 		setPrice(event.target.value);
@@ -42,7 +48,7 @@ const CreateBlog = () => {
 				if (mess === "The title is available") {
 					axios({
 						method: "post",
-						url: `${context.serverURL}/cprestapi/users/${context.user}/blogs`,
+						url: `${context.serverURL}/cprestapi/users/${user}/blogs`,
 						data: {
 							title: title,
 							description: text,
@@ -82,7 +88,7 @@ const CreateBlog = () => {
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.create.blog`,
 			headers: {
-				"Accept-Language": context.language,
+				"Accept-Language": language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
@@ -92,7 +98,7 @@ const CreateBlog = () => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.language, context.serverURL]);
+	}, [language, context.serverURL]);
 
 	return (
 		<div>

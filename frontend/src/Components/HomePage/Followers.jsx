@@ -7,12 +7,18 @@ const Followers = () => {
 	const [title, setTitle] = useState("Followers");
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
+	const language = sessionStorage.getItem("language")
+		? sessionStorage.getItem("language")
+		: "en";
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
 
 	useEffect(() => {
-		if (context.user) {
+		if (user) {
 			axios({
 				method: "get",
-				url: `${context.serverURL}/cprestapi/followers/${context.user}`,
+				url: `${context.serverURL}/cprestapi/followers/${user}`,
 				headers: {
 					Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 				},
@@ -24,14 +30,14 @@ const Followers = () => {
 					setMessage("Error fetching data, try again");
 				});
 		}
-	}, []);
+	}, [context.serverURL, user]);
 
 	useEffect(() => {
 		axios({
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.followers`,
 			headers: {
-				"Accept-Language": context.language,
+				"Accept-Language": language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
@@ -41,7 +47,7 @@ const Followers = () => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [context.language, context.serverURL]);
+	}, [language, context.serverURL]);
 
 	return (
 		<>

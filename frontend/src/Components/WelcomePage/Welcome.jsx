@@ -3,38 +3,45 @@ import { useContext, useEffect, useState } from "react";
 import WelcomeStyle from "./Welcome.module.css";
 import { useNavigate } from "react-router-dom";
 import Context from "../ContextProvider/Context";
-const Welcome = (props) => {
+const Welcome = () => {
 	const navigate = useNavigate();
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
 	const [welcome, setWelcome] = useState("Message Cannot be Dispalyed");
 	const [otp, setOTP] = useState("");
+	const [currency, setCurrency] = useState(
+		sessionStorage.getItem("currency")
+			? sessionStorage.getItem("currency")
+			: "usd"
+	);
+	const [language, setLang] = useState(
+		sessionStorage.getItem("language")
+			? sessionStorage.getItem("language")
+			: "en"
+	);
+	const [email, setEmail] = useState(sessionStorage.getItem("email"));
+	const [user, setUser] = useState(sessionStorage.getItem("user"));
 
 	const languageHandler = (event) => {
+		setLang(event.target.value);
 		sessionStorage.setItem("language", event.target.value);
-		context.setLanguage(event.target.value);
 	};
 
 	const currencyHandler = (event) => {
+		setCurrency(event.target.value);
 		sessionStorage.setItem("currency", event.target.value);
-		context.setCurrency(event.target.value);
 	};
 
 	const clickHandler = () => {
-		if (
-			context.user !== "" &&
-			context.user !== null &&
-			context.email !== "" &&
-			context.email !== null
-		) {
+		if (user !== "" && user !== null && email !== "" && email !== null) {
 			let isPresent = "YES";
 			let myMessage = "";
 			axios({
 				method: "get",
 				url: `${context.serverURL}/cprestapi/users/checkuser`,
 				params: {
-					user: context.user,
-					email: context.email,
+					user: user,
+					email: email,
 				},
 				headers: {
 					Authorization: "Basic " + window.btoa("user:pass"),
@@ -48,8 +55,8 @@ const Welcome = (props) => {
 							method: "post",
 							url: `${context.serverURL}/cprestapi/users`,
 							data: {
-								userName: context.user,
-								email: context.email,
+								userName: user,
+								email: email,
 							},
 							headers: {
 								Authorization: "Basic " + window.btoa("user:pass"),
@@ -61,8 +68,8 @@ const Welcome = (props) => {
 									method: "get",
 									url: `${context.serverURL}/cprestapi/validate/gt`,
 									params: {
-										email: context.email,
-										userName: context.user,
+										email: email,
+										userName: user,
 									},
 									headers: {
 										Authorization: "Basic " + window.btoa("user:pass"),
@@ -79,16 +86,18 @@ const Welcome = (props) => {
 								myMessage = e.response.data.errors[0].defaultMessage;
 								setMessage(myMessage);
 							});
-						sessionStorage.setItem("userName", context.user);
-						sessionStorage.setItem("email", context.email);
+						sessionStorage.setItem("user", user);
+						sessionStorage.setItem("email", email);
+						setEmail(email);
+						setUser(user);
 					} else if (isPresent === "OK") {
 						setMessage("");
 						axios({
 							method: "get",
 							url: `${context.serverURL}/cprestapi/validate/gt`,
 							params: {
-								email: context.email,
-								userName: context.user,
+								email: email,
+								userName: user,
 							},
 							headers: {
 								Authorization: "Basic " + window.btoa("user:pass"),
@@ -100,8 +109,10 @@ const Welcome = (props) => {
 							.catch((resp) => {
 								setMessage("Error fetching data, try again");
 							});
-						sessionStorage.setItem("userName", context.user);
-						sessionStorage.setItem("email", context.email);
+						sessionStorage.setItem("user", user);
+						sessionStorage.setItem("email", email);
+						setUser(user);
+						setEmail(email);
 					} else {
 						setMessage("Enter the valid user name and email");
 					}
@@ -118,7 +129,7 @@ const Welcome = (props) => {
 			url: `${context.serverURL}/cprestapi/verify/gt`,
 			params: {
 				otp: otp,
-				userName: context.user,
+				userName: user,
 			},
 			headers: {
 				Authorization: "Basic " + window.btoa("user:pass"),
@@ -134,11 +145,13 @@ const Welcome = (props) => {
 	};
 
 	const inputChangeHandler = (event) => {
-		context.setUser(event.target.value);
+		sessionStorage.setItem("user", event.target.value);
+		setUser(event.target.value);
 	};
 
 	const emailChangeHandler = (event) => {
-		context.setEmail(event.target.value);
+		sessionStorage.setItem("email", event.target.value);
+		setEmail(event.target.value);
 	};
 
 	useEffect(() => {
@@ -146,7 +159,7 @@ const Welcome = (props) => {
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/title/title.welcome`,
 			headers: {
-				"Accept-Language": props.language,
+				"Accept-Language": language,
 				Authorization: "Basic " + window.btoa("user:pass"),
 			},
 		})
@@ -156,14 +169,7 @@ const Welcome = (props) => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [props.language, context.serverURL]);
-
-	useEffect(() => {
-		sessionStorage.removeItem("userName");
-		sessionStorage.removeItem("email");
-		sessionStorage.setItem("currency", "usd");
-		sessionStorage.setItem("language", "en");
-	}, []);
+	}, [language, context.serverURL]);
 
 	return (
 		<>
@@ -193,7 +199,7 @@ const Welcome = (props) => {
 					<select
 						className="form-select"
 						aria-label="Default select example"
-						value={props.language}
+						value={language}
 						onChange={languageHandler}
 					>
 						<option defaultValue value="en">
@@ -206,7 +212,7 @@ const Welcome = (props) => {
 				<div>
 					<select
 						className="form-select"
-						value={props.currency}
+						value={currency}
 						onChange={currencyHandler}
 					>
 						<option defaultValue value="usd">
@@ -220,7 +226,7 @@ const Welcome = (props) => {
 					type="text"
 					name="user"
 					id="user"
-					value={context.user}
+					value={user}
 					onChange={inputChangeHandler}
 				/>
 				<label htmlFor="email">Email</label>
@@ -228,7 +234,7 @@ const Welcome = (props) => {
 					type="email"
 					name="email"
 					id="email"
-					value={context.email}
+					value={email}
 					onChange={emailChangeHandler}
 				/>
 				<label htmlFor="otp">Enter your OTP</label>
