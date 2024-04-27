@@ -48,9 +48,7 @@ public class BlogRESTController {
     // @AllowAccessForResource
     @GetMapping(path = "/cprestapi/blogs/findblog")
     public String findBlog(@RequestParam(name = "title") String title) throws BasicUserDefinedException {
-        System.out.println("My title is:" + title);
         if (title == null || title.equals("")) {
-            System.out.println("Title is null Exception is thrown!!");
             throw new BasicUserDefinedException("Title should be minimum of 2 characters!!");
         }
 

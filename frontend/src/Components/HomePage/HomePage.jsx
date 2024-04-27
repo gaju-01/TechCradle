@@ -8,7 +8,7 @@ import Following from "./Following";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
 import Welcome from "../WelcomePage/Welcome";
-const HomePage = () => {
+const HomePage = (props) => {
 	const params = useParams();
 	const [Component, setComponent] = useState(<Welcome />);
 	const navigate = useNavigate();
@@ -38,7 +38,12 @@ const HomePage = () => {
 
 	return (
 		<>
-			<NavBar />
+			<NavBar
+				currency={props.currency}
+				language={props.language}
+				setCurrency={props.setCurrency}
+				setLang={props.setLang}
+			/>
 			{Component}
 		</>
 	);

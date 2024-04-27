@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Context from "../ContextProvider/Context";
-const NavBar = () => {
+const NavBar = (props) => {
 	const context = useContext(Context);
 	const nav = useNavigate();
 	const [navTitles, setNavTitles] = useState([
@@ -16,16 +16,6 @@ const NavBar = () => {
 		"Following",
 	]);
 	const [message, setMessage] = useState("");
-	const [currency, setCurrency] = useState(
-		sessionStorage.getItem("currency")
-			? sessionStorage.getItem("currency")
-			: "usd"
-	);
-	const [language, setLang] = useState(
-		sessionStorage.getItem("language")
-			? sessionStorage.getItem("language")
-			: "en"
-	);
 	const user = sessionStorage.getItem("user")
 		? sessionStorage.getItem("user")
 		: "";
@@ -35,7 +25,7 @@ const NavBar = () => {
 			method: "get",
 			url: `${context.serverURL}/cprestapi/intl/navbar`,
 			headers: {
-				"Accept-Language": language,
+				"Accept-Language": props.language,
 				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
@@ -45,16 +35,16 @@ const NavBar = () => {
 			.catch((resp) => {
 				setMessage("Error fetching data, try again");
 			});
-	}, [language, context.serverURL]);
+	}, [props.language, context.serverURL]);
 
 	const languageHandler = (event) => {
 		sessionStorage.setItem("language", event.target.value);
-		setLang(event.target.value);
+		props.setLang(event.target.value);
 	};
 
 	const currencyHandler = (event) => {
 		sessionStorage.setItem("currency", event.target.value);
-		setCurrency(event.target.value);
+		props.setCurrency(event.target.value);
 	};
 
 	const profileHandler = () => {
@@ -109,7 +99,7 @@ const NavBar = () => {
 				<div>
 					<select
 						aria-label="Default select example"
-						value={language}
+						value={props.language}
 						onChange={languageHandler}
 					>
 						<option defaultValue value="en">
@@ -118,7 +108,7 @@ const NavBar = () => {
 						<option value="fr">French</option>
 						<option value="de">Dutch</option>
 					</select>
-					<select value={currency} onChange={currencyHandler}>
+					<select value={props.currency} onChange={currencyHandler}>
 						<option defaultValue value="usd">
 							USD
 						</option>
