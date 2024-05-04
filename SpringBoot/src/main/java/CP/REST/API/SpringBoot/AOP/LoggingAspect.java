@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.hibernate.mapping.Join;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -99,7 +98,7 @@ public class LoggingAspect {
      * @param throwss
      */
     @AfterThrowing(pointcut = "execution(* CP.REST.API.SpringBoot.ValidationToken.*.*( . . ))", throwing = "throwss")
-    public void loggingAfterThrowingVToken(JoinPoint joinPoint, Object throwss) {
+    public void loggingAfterThrowingVToken(JoinPoint joinPoint, Exception throwss) {
         logger.info(aspects[2]);
         logger.info("Package: {}", arr[0]);
         logger.info("Method Call Details: {}", joinPoint);
@@ -109,7 +108,7 @@ public class LoggingAspect {
     }
 
     @AfterThrowing(pointcut = "execution(* CP.REST.API.SpringBoot.Security.*.*( . . ))", throwing = "throwss")
-    public void loggingAfterThrowingSecurity(JoinPoint joinPoint, Object throwss) {
+    public void loggingAfterThrowingSecurity(JoinPoint joinPoint, Exception throwss) {
         logger.info(aspects[2]);
         logger.info("Package: {}", arr[1]);
         logger.info("Method Call Details: {}", joinPoint);
@@ -118,7 +117,7 @@ public class LoggingAspect {
         logger.info("{} is thrown", throwss);
     }
     @AfterThrowing(pointcut = "execution(* CP.REST.API.SpringBoot.Email.*.*( . . ))", throwing = "throwss")
-    public void loggingAfterThrowingEmail(JoinPoint joinPoint, Object throwss) {
+    public void loggingAfterThrowingEmail(JoinPoint joinPoint, Exception throwss) {
         logger.info(aspects[2]);
         logger.info("Package: {}", arr[2]);
         logger.info("Method Call Details: {}", joinPoint);
