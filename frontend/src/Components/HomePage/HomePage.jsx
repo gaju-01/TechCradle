@@ -34,7 +34,7 @@ const HomePage = (props) => {
 		} else {
 			navigate("/");
 		}
-	}, [user, params.id]);
+	}, [user, params.id, navigate]);
 
 	return (
 		<>
