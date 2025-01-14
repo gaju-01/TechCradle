@@ -18,7 +18,7 @@ public class User {
     private long id;
 
     @JsonProperty("userName")
-    @Size(min = 2, message = "Length of the user name must be greater than 1")
+    @Size(min = 2, max = 9, message = "Length of the user name must be greater than 1 and less than 10")
     private String userName;
 
     @JsonProperty("posts")

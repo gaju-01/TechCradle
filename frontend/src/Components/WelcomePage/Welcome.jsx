@@ -7,18 +7,10 @@ const Welcome = () => {
 	const navigate = useNavigate();
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
-	const [welcome, setWelcome] = useState("Message Cannot be Dispalyed");
+	const [welcome, setWelcome] = useState("Welcome");
 	const [otp, setOTP] = useState("");
-	const [currency, setCurrency] = useState(
-		sessionStorage.getItem("currency")
-			? sessionStorage.getItem("currency")
-			: "usd"
-	);
-	const [language, setLang] = useState(
-		sessionStorage.getItem("language")
-			? sessionStorage.getItem("language")
-			: "en"
-	);
+	const [currency, setCurrency] = useState(sessionStorage.getItem("currency") ? sessionStorage.getItem("currency"): "usd");
+	const [language, setLang] = useState(sessionStorage.getItem("language") ? sessionStorage.getItem("language") : "en");
 	const [email, setEmail] = useState(sessionStorage.getItem("email"));
 	const [user, setUser] = useState(sessionStorage.getItem("user"));
 
@@ -36,9 +28,7 @@ const Welcome = () => {
 		if (user !== "" && user !== null && email !== "" && email !== null) {
 			let isPresent = "YES";
 			let myMessage = "";
-			axios({
-				method: "get",
-				url: `${context.serverURL}/cprestapi/users/checkuser`,
+			axios({ method: "get", url: `${context.serverURL}/cprestapi/users/checkuser`,
 				params: {
 					user: user,
 					email: email,
@@ -76,7 +66,7 @@ const Welcome = () => {
 									},
 								})
 									.then((resp) => {
-										setMessage("OTP sent your mail!!");
+										setMessage("OTP sent your mail");
 									})
 									.catch((resp) => {
 										setMessage("Error fetching data, try again");
@@ -104,7 +94,7 @@ const Welcome = () => {
 							},
 						})
 							.then((resp) => {
-								setMessage("OTP sent your mail!!");
+								setMessage("OTP sent your mail");
 							})
 							.catch((resp) => {
 								setMessage("Error fetching data, try again");
@@ -172,98 +162,30 @@ const Welcome = () => {
 	}, [language, context.serverURL]);
 
 	return (
-		<>
-			<div
-				className={`${WelcomeStyle["align-welcome-page"]} card text-bg-primary mb-3 align-welcome-page`}
-				style={{ maxWidth: "40rem" }}
-			>
-				<div
-					style={{ backgroundColor: "white", color: "black" }}
-					className="card-header"
-				>
-					{welcome}
-				</div>
-				<div className="card-body">
-					<p className="card-text">
-						Every computer device you have ever used, from your school computers
-						to your calculator, has been using algorithms to tell it how to do
-						whatever it was doing. Algorithms are a very important topic in
-						Computer Science because they help software developers create
-						efficient and error free programs. The most important thing to
-						remember about algorithms is that there can be many different
-						algorithms for the same problem, but some are much better than
-						others!
-					</p>
-				</div>
+			<div className={`${WelcomeStyle["align-welcome-page"]} card`} style={{border:"none"}}>
+				<div className={`${WelcomeStyle["decorate-welcome-div"]}`}>{welcome}</div>
 				<div>
-					<select
-						className="form-select"
-						aria-label="Default select example"
-						value={language}
-						onChange={languageHandler}
-					>
-						<option defaultValue value="en">
-							English
-						</option>
+					<select className={`${WelcomeStyle["decorate-welcome-dropdown"]}`} value={language} onChange={languageHandler}>
+						<option defaultValue value="en">English</option>
 						<option value="fr">French</option>
-						<option value="de">Dutch</option>
+						<option value="de">Dutch</option>	
 					</select>
 				</div>
 				<div>
-					<select
-						className="form-select"
-						value={currency}
-						onChange={currencyHandler}
-					>
-						<option defaultValue value="usd">
-							USD
-						</option>
+					<select className={`${WelcomeStyle["decorate-welcome-dropdown"]}`} value={currency} onChange={currencyHandler}>
+						<option defaultValue value="usd">USD</option>
 						<option value="inr">INR</option>
 					</select>
 				</div>
-				<label htmlFor="user">User name</label>
-				<input
-					type="text"
-					name="user"
-					id="user"
-					value={user}
-					onChange={inputChangeHandler}
-				/>
-				<label htmlFor="email">Email</label>
-				<input
-					type="email"
-					name="email"
-					id="email"
-					value={email}
-					onChange={emailChangeHandler}
-				/>
-				<label htmlFor="otp">Enter your OTP</label>
-				<input
-					name="OTP"
-					id="OTP"
-					value={otp}
-					onChange={(event) => setOTP(event.target.value)}
-				/>
+				<input placeholder="Enter your username" className={`${WelcomeStyle["decorate-welcome-input"]}`} type="text" name="user" id="user" value={user} onChange={inputChangeHandler}/>
+				<input placeholder="Enter your Email" className={`${WelcomeStyle["decorate-welcome-input"]}`} type="email" name="email" id="email" value={email} onChange={emailChangeHandler}/>
+				<input placeholder="Enter your OTP" className={`${WelcomeStyle["decorate-welcome-input"]}`} type="text" name="OTP" id="OTP" value={otp} onChange={(event) => setOTP(event.target.value)}/>
 				<div style={{ marginTop: "1rem" }}>
-					<button
-						type="button"
-						className="btn btn-light"
-						onClick={clickHandler}
-					>
-						Generate OTP
-					</button>
-					<button
-						style={{ marginLeft: "10px" }}
-						type="button"
-						className="btn btn-light"
-						onClick={verifyOTP}
-					>
-						Verify OTP
-					</button>
+					<button type="button" className={`${WelcomeStyle["decorate-welcome-button"]}`} onClick={clickHandler} >Generate OTP</button>
+					<button type="button" className={`${WelcomeStyle["decorate-welcome-button"]}`} onClick={verifyOTP}> Verify OTP</button>
 				</div>
+				{message && <p className={`${WelcomeStyle["decorate-welcome-err-message"]}`}>{message}!</p>}
 			</div>
-			{message && <p style={{ marginLeft: "38%", color: "red" }}>{message}</p>}
-		</>
 	);
 };
 export default Welcome;
