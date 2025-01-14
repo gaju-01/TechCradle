@@ -2,20 +2,20 @@
 CPRESTAPI is a Java-based project that showcases a robust content management system designed for a blogging website, developed using the powerful Spring Framework and its associated technologies.
 
 # Key Features
-1. OTP based authentication
-2. User based resource access(temporarily disabled)
-3. JWT token based authorization
-4. Supports English, French and Duth Language
-5. Allows CRUD operations on Documents/Blogs
-6. Allows users to follow/unfollow others
+* OTP based authentication
+*  User based resource access(temporarily disabled)
+* JWT token based authorization
+* Supports English, French and Duth Language
+* Allows CRUD operations on Documents/Blogs
+* Allows users to follow/unfollow others
 
 # How to start the application
-1. Use ```git clone``` to clone the repository that already exists on GitHub, including all of the files, branches, and commits.
-2. From the root of the project cd into ```SpringBoot``` folder.
-3. Use ```mvn clean install``` to create the JAR file, that contains all the depencies, generated classes etc.
-4. Use ```mvn spring-boot:run```  to execute the JAR file and hosts the application at the default port 8080.
-5. From the root of the project cd into ```frontend```.
-6. Use ```npm start [-- args]``` to run the frontend React project.
+* Use ```git clone``` to clone the repository that already exists on GitHub, including all of the files, branches, and commits.
+* From the root of the project cd into ```SpringBoot``` folder.
+* Use ```mvn clean install``` to create the JAR file, that contains all the depencies, generated classes etc.
+* Use ```mvn spring-boot:run```  to execute the JAR file and hosts the application at the default port 8080.
+* From the root of the project cd into ```frontend```.
+* Use ```npm start [-- args]``` to run the frontend React project.
 
 # Getting Started with Create React App
 
