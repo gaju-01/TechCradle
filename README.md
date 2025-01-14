@@ -1,6 +1,14 @@
 # CPRESTAPI
 CPRESTAPI is a Java-based project that showcases a robust content management system designed for a blogging website, developed using the powerful Spring Framework and its associated technologies.
 
+# Key Features
+1. OTP based authentication
+2. User based resource access(temporarily disabled)
+3. JWT token based authorization
+4. Supports English, French and Duth Language
+5. Allows CRUD operations on Documents/Blogs
+6. Allows users to follow/unfollow others
+
 # How to start the application
 1. Use ```git clone``` to clone the repository that already exists on GitHub, including all of the files, branches, and commits.
 2. From the root of the project cd into ```SpringBoot``` folder.
