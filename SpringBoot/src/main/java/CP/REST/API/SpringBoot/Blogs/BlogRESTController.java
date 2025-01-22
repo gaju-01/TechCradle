@@ -3,10 +3,8 @@ package CP.REST.API.SpringBoot.Blogs;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-
-import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -95,4 +93,9 @@ public class BlogRESTController {
         }
     }
 
+    @GetMapping(path = "/cprestapi/{name}/blogs/getblogtitles")
+    public ResponseEntity<List<String>> getBlogTitles(@PathVariable String name) {
+        List<String> blogs = this.repo.findBlogTitlesByUserName(name);
+        return new ResponseEntity<>(blogs, HttpStatus.OK);
+    }
 }

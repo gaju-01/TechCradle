@@ -53,48 +53,15 @@ public class TitlesIntl {
     public List<String> navBarInt() {
         List<String> rec = new ArrayList<>();
         Locale locale = LocaleContextHolder.getLocale();
-        rec.add(
-                this.messageSource.getMessage("title.navbar.select", null, null, locale)
-        );
+        rec.add(this.messageSource.getMessage("title.navbar.select", null, null, locale));
         rec.add(this.messageSource.getMessage("title.navbar.welcome", null, null, locale));
-        rec.add(
-                this.messageSource.getMessage("title.navbar.blog", null, null, locale)
-        );
-        rec.add(
-                this.messageSource.getMessage(
-                        "title.navbar.create.blog",
-                        null,
-                        null,
-                        locale
-                )
-        );
-        rec.add(
-                this.messageSource.getMessage(
-                        "title.navbar.modify.blog",
-                        null,
-                        null,
-                        locale
-                )
-        );
-        rec.add(
-                this.messageSource.getMessage("title.navbar.compiler", null, null, locale)
-        );
-        rec.add(
-                this.messageSource.getMessage(
-                        "title.navbar.followers",
-                        null,
-                        null,
-                        locale
-                )
-        );
-        rec.add(
-                this.messageSource.getMessage(
-                        "title.navbar.following",
-                        null,
-                        null,
-                        locale
-                )
-        );
+        rec.add(this.messageSource.getMessage("title.navbar.blog", null, null, locale));
+        rec.add(this.messageSource.getMessage("title.navbar.create.blog", null, null, locale));
+        rec.add(this.messageSource.getMessage("title.navbar.modify.blog", null, null, locale));
+        rec.add(this.messageSource.getMessage("title.navbar.compiler", null, null, locale));
+        rec.add(this.messageSource.getMessage("title.navbar.followers", null, null, locale));
+        rec.add(this.messageSource.getMessage("title.navbar.following", null, null,locale));
+        rec.add(this.messageSource.getMessage("title.navbar.profile", null, null, locale));
         return rec;
     }
 }

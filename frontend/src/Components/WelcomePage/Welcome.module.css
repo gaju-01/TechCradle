@@ -22,11 +22,11 @@
     height: 40px;
     border-bottom: 1px solid black;
     font-size: 15px;
-    font-family: sans-serif;
+    font-family: cursive;
+    font-weight: bold;
 }
 
 .decorate-welcome-input:focus   {
-    font-weight: bolder;
     border-bottom: 2px solid green;
 }
     
@@ -53,7 +53,7 @@
     background-color: green;
     font-family: sans-serif;
     font-size: 12px;
-    width: 130px;
+    width: 65px;
     height: 25px;
     border-radius: 10px;
 }

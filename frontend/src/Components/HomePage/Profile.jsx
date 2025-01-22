@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import Context from "../ContextProvider/Context";
-import Blog from "./Blog";
 import axios from "axios";
+import ProfileStyle from "./Profile.module.css";
 
 const Profile = () => {
 	const context = useContext(Context);
 	const [src, setSrc] = useState("");
 	const [message, setMessage] = useState("");
+	const [blogTitles, setBlogTitles] = useState([]);
+
 	const email = sessionStorage.getItem("email")
 		? sessionStorage.getItem("email")
 		: "";
@@ -80,58 +82,39 @@ const Profile = () => {
 		}
 	}, [user, context.serverURL]);
 
+	useEffect(() => {
+		if(user) {
+			axios.get(`${context.serverURL}/cprestapi/${user}/blogs/getblogtitles`, 
+			{ headers: {Authorization: `Bearer ${sessionStorage.getItem("jwt")}`} })
+			.then((resp) => {setBlogTitles(resp.data); console.log(resp.data);});
+		} 
+	}, [user, context.serverURL]);
+
 	return (
-		<div>
-			<div>
+		<div className={`${ProfileStyle["decorate-profile-main-container"]}`}>
+			<div className = {`${ProfileStyle["decorate-profile-personal"]}`}>
 				{src && (
 					<div>
-						<img
-							src={src}
-							style={{ borderRadius: "50%", width: "5rem", height: "5rem" }}
-							alt="error"
-						/>
-						<button
-							type="submit"
-							className="btn btn-danger"
-							onClick={deleteProfilePic}
-						>
-							delete
-						</button>
-						<input type="file" onChange={ppHandler} />
+						<img src={src} alt="error"/>
+						<p>User: <b>{user}</b></p>
 					</div>
 				)}
 				{!src && (
 					<div>
-						<button
-							style={{
-								borderRadius: "50%",
-								backgroundColor: "skyblue",
-								width: "6rem",
-								height: "6rem",
-								color: "white",
-								fontSize: "60px",
-							}}
-						>
-							{user.slice(0, 1).toUpperCase()}
-						</button>
-						<button
-							type="submit"
-							className="btn btn-danger"
-							onClick={deleteProfilePic}
-						>
-							delete
-						</button>
-						<input type="file" onChange={ppHandler} />
+						<button className={`${ProfileStyle["decorate-profile-container"]}`}>{user.slice(0, 1).toUpperCase()}</button>
+						<p>{user}</p>
 					</div>
 				)}
-				<p style={{ color: "red" }}>{message}</p>
-				<div>
-					<p>user: {user}</p>
-					<p>email: {email}</p>
-				</div>
+				<p className={`${ProfileStyle["decorate-profile-message"]}`}>{message}</p>
 			</div>
-			<hr></hr>
-			<Blog author={user} />
+			<div>
+					{blogTitles.length > 0 &&  
+						<div className={`${ProfileStyle["decorate-profile-yc"]}`}>
+							<h2>Your Contributions</h2>
+							<ul> {blogTitles.map((data) => {return <li>{data}</li>})}</ul>
+						</div>
+					}
+			</div>
 		</div>
 	);
 };

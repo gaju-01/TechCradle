@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
+import BlogStyles from "./Blog.module.css";
 
 const Blog = (props) => {
 	const context = useContext(Context);
 	const [blogs, setBlogs] = useState([]);
-	const [title, setTitle] = useState("Blogs");
 	const [messages, setMessages] = useState([]);
 	const [currencyRelated, setCurrencyRelated] = useState({});
 	const [searchTitle, setSearchTitle] = useState("");
@@ -15,9 +15,6 @@ const Blog = (props) => {
 	const currency = sessionStorage.getItem("currency")
 		? sessionStorage.getItem("currency")
 		: "usd";
-	const language = sessionStorage.getItem("language")
-		? sessionStorage.getItem("language")
-		: "en";
 	const user = sessionStorage.getItem("user")
 		? sessionStorage.getItem("user")
 		: "";
@@ -80,23 +77,6 @@ const Blog = (props) => {
 				setMessage("Error fetching data, try again");
 			});
 	}, [currency]);
-
-	useEffect(() => {
-		axios({
-			method: "get",
-			url: `${context.serverURL}/cprestapi/intl/title/title.blog`,
-			headers: {
-				"Accept-Language": language,
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((response) => {
-				setTitle(response.data);
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
-	}, [language, context.serverURL]);
 
 	useEffect(() => {
 		axios({
@@ -209,6 +189,7 @@ const Blog = (props) => {
 
 	const titleChangeHandler = (event) => {
 		setSearchTitle(event.target.value);
+		submitSearchTitleHandler(event.target.value);
 	};
 
 	const submitSearchTitleHandler = (event) => {
@@ -249,72 +230,36 @@ const Blog = (props) => {
 				<div>
 					{messages.map(function (data, cnt) {
 						return (
-							<div
-								className="alert alert-success"
-								role="alert"
-								key={cnt.toString()}
-							>
+							<div className="alert alert-success" role="alert" key={cnt.toString()}>
 								<p>{data.value}</p>
-								<button
-									type="button"
-									className="btn-close"
-									aria-label="Close"
-									key={data.length.toString()}
-									onClick={() => messagesHandler(data.length)}
-								></button>
+								<button type="button" className="btn-close" aria-label="Close" key={data.length.toString()} onClick={() => messagesHandler(data.length)}></button>
 							</div>
 						);
 					})}
 				</div>
 			)}
 			<div>
-				<input type="text" onChange={titleChangeHandler} value={searchTitle} />
-				<button onClick={submitSearchTitleHandler}>Search</button>
-			</div>
-			<div>
-				<p className="fs-1">{title}</p>
+				<input placeholder="Enter the title of the blog to begin your browsing" className={`${BlogStyles["decorate-blogs-searchbar"]}`} type="text" onChange={titleChangeHandler} value={searchTitle} />
 			</div>
 			<p style={{ color: "red" }}>{message}</p>
 			<div>
 				{filteredBlogs.map(function (data) {
 					return (
 						<div key={data.title}>
-							<p className="fs-2">{data.title}</p>
-							<p>
-								<b>Author:</b> {data.userName}
-							</p>
-							<button
-								type="submit"
-								onClick={() => {
-									followHandler(data.userName);
-								}}
-							>
-								{following.has(data.userName) ? "Unfollow" : "Follow"}
-							</button>
-							<p>
-								<b>Short Description:</b> {data.sDesc}
-							</p>
-							<p>
-								<b>LastModified:</b> {data.lastModified}
-							</p>
-							<p>
-								<b>Price:</b>
-								{Math.ceil(currencyRelated[currency] * data.price)}{" "}
-								{currency.toUpperCase()}
-							</p>
-							{(data.price === 0 ||
-								(sessionStorage.getItem("user")
-									? sessionStorage.getItem("user")
-									: "") === data.userName) && (
-								<p>
-									<b>Content: </b>
-									{data.description}
-								</p>
-							)}
+							<h2>{data.title}</h2>
+							<div className={`${BlogStyles["decorate-blogs-author-div"]}`}>
+								<p><b>Written By</b> {data.userName}</p>
+								<button type="submit" onClick={() => { followHandler(data.userName);}}>{following.has(data.userName) ? "Unfollow" : "Follow"}</button>
+							</div>
+							<p>{data.sDesc}</p>
+							{data.price === 0 && <p>{data.description}</p>}
 							{data.price !== 0 &&
-								(sessionStorage.getItem("user")
-									? sessionStorage.getItem("user")
-									: "") !== data.userName && <button type="submit">Buy</button>}
+								<div className={`${BlogStyles["decorate-blogs-buy"]}`}>
+									<p>Please &nbsp;</p>	
+									<button>buy</button>
+									<p>&nbsp; the blog to view the content</p>
+								</div>
+							}
 							<hr></hr>
 						</div>
 					);

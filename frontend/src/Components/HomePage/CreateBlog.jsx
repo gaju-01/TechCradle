@@ -1,22 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
+import CreateBlogStyles from "./CreateBlog.module.css";
+import 'react-quill/dist/quill.snow.css';
 
 const CreateBlog = () => {
-	const [head, setHead] = useState("Create blogs");
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
 	const [mess, setMess] = useState("The title is available");
 	const [price, setPrice] = useState(0);
 	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
-	const [message, setMessage] = useState("");
-	const language = sessionStorage.getItem("language")
-		? sessionStorage.getItem("language")
-		: "en";
-	const user = sessionStorage.getItem("user")
-		? sessionStorage.getItem("user")
-		: "";
+	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user"): "";
 
 	const handlePrice = (event) => {
 		setPrice(event.target.value);
@@ -83,85 +78,38 @@ const CreateBlog = () => {
 		setText(event.target.value);
 	};
 
-	useEffect(() => {
-		axios({
-			method: "get",
-			url: `${context.serverURL}/cprestapi/intl/title/title.create.blog`,
-			headers: {
-				"Accept-Language": language,
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				setHead(resp.data);
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
-	}, [language, context.serverURL]);
-
 	return (
-		<div>
+		<div className={`${CreateBlogStyles["decorate-cb-div"]}`}>
 			<div>
-				<p className="fs-1">{head}</p>
+				<p style={{ color: "red" }}>{mess}</p>
 			</div>
-			<form onSubmit={submitHandler}>
-				<div className="mb-3">
-					<label htmlFor="exampleFormControlInput1" className="form-label">
-						Title of your blog
-					</label>
-					<input
-						type="text"
-						className="form-control"
-						id="exampleFormControlInput1"
-						placeholder="eg: Interfaces in Java"
-						onChange={inputChangeHandler}
-						value={title}
-					/>
-				</div>
-				<div className="mb-3">
-					<label htmlFor="exampleFormControlTextarea1" className="form-label">
-						Enter your description
-					</label>
-					<textarea
-						className="form-control"
-						id="exampleFormControlTextarea1"
-						rows="3"
-						value={text}
-						onChange={descChangeHandler}
-					></textarea>
-				</div>
-				<div className="mb-3">
-					<label htmlFor="price" className="form-label">
-						Enter the Price(in USD)
-					</label>
-					<input
-						id="price"
-						value={price}
-						onChange={handlePrice}
-						className="form-control"
-						type="number"
-					/>
-				</div>
-				<div className="mb-3">
-					<label htmlFor="number" className="form-label">
-						Enter the Short Description
-					</label>
-					<input
-						className="form-control"
-						id="sd"
-						value={sDesc}
-						onChange={handleSDesc}
-					/>
-				</div>
-				<div className="mb-3">
-					<button type="submit" className="btn btn-success">
-						Submit
-					</button>
-				</div>
-			</form>
-			<p style={{ color: "red" }}>{mess}</p>
-			<p style={{ color: "red" }}>{message}</p>
+			<div>
+				<label>Title</label>
+			</div>
+			<div>
+				<input type="text" id="exampleFormControlInput1" placeholder="Enter the title of the blog (eg: Interfaces in Java)" onChange={inputChangeHandler} value={title}/>
+			</div>
+			<div>
+				<label>Description</label>
+			</div>
+			<div>
+				<textarea id="exampleFormControlTextarea1" placeholder="Enter your description" rows="3" value={text} onChange={descChangeHandler}></textarea>
+			</div>
+			<div>
+				<label>Price</label>
+			</div>
+			<div>
+				<input id="price" placeholder="Enter the price" value={price} onChange={handlePrice} type="number"/>
+			</div>
+			<div>
+				<label>Short Description</label>
+			</div>
+			<div>
+				<input id="sd" placeholder="Enter the short description" value={sDesc} onChange={handleSDesc} type="text"/>
+			</div>
+			<div>
+				<button type="submit" onClick={submitHandler}>Submit</button>
+			</div>
 		</div>
 	);
 };

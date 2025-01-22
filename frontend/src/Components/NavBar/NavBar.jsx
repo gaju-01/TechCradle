@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Context from "../ContextProvider/Context";
+import NavBarStyle from "./NavBar.module.css";
+import WelcomeStyle from "../WelcomePage/Welcome.module.css";
+
 const NavBar = (props) => {
 	const context = useContext(Context);
-	const nav = useNavigate();
 	const [navTitles, setNavTitles] = useState([
 		"Select Here",
 		"Welcome",
@@ -16,9 +18,6 @@ const NavBar = (props) => {
 		"Following",
 	]);
 	const [message, setMessage] = useState("");
-	const user = sessionStorage.getItem("user")
-		? sessionStorage.getItem("user")
-		: "";
 
 	useEffect(() => {
 		axios({
@@ -47,83 +46,31 @@ const NavBar = (props) => {
 		props.setCurrency(event.target.value);
 	};
 
-	const profileHandler = () => {
-		nav("/home/profile");
-	};
 
 	return (
 		<>
-			<nav className="navbar bg-body-tertiary">
-				<div className="dropdown">
-					<button
-						className="btn btn-secondary dropdown-toggle"
-						type="button"
-						data-bs-toggle="dropdown"
-						aria-expanded="false"
-					>
-						{navTitles[0]}
-					</button>
-					<ul className="dropdown-menu">
-						<li>
-							<Link className="dropdown-item" to="/">
-								{navTitles[1]}
-							</Link>
-						</li>
-						<li>
-							<Link className="dropdown-item" to="/home/blog">
-								{navTitles[2]}
-							</Link>
-						</li>
-						<li>
-							<Link className="dropdown-item" to="/home/createblog">
-								{navTitles[3]}
-							</Link>
-						</li>
-						<li>
-							<Link className="dropdown-item" to="/home/modifyblog">
-								{navTitles[4]}
-							</Link>
-						</li>
-						<li>
-							<Link className="dropdown-item" to="/home/followers">
-								{navTitles[6]}
-							</Link>
-						</li>
-						<li>
-							<Link className="dropdown-item" to="/home/following">
-								{navTitles[7]}
-							</Link>
-						</li>
-					</ul>
-				</div>
-				<div>
-					<select
-						aria-label="Default select example"
-						value={props.language}
-						onChange={languageHandler}
-					>
-						<option defaultValue value="en">
-							English
-						</option>
+			<ul className={`${NavBarStyle["decorate-navbar"]}`}>
+				<li><Link className={`${NavBarStyle["decorate-navbar-items"]}`} to="/">{navTitles[1]}</Link></li>
+				<li><Link className={`${NavBarStyle["decorate-navbar-items"]}`} to="/home/blog">{navTitles[2]}</Link></li>
+				<li><Link className={`${NavBarStyle["decorate-navbar-items"]}`} to="/home/createblog">{navTitles[3]}</Link></li>
+				<li><Link className={`${NavBarStyle["decorate-navbar-items"]}`} to="/home/modifyblog">{navTitles[4]}</Link></li>
+				<li><Link className={`${NavBarStyle["decorate-navbar-items"]}`} to="/home/followers">{navTitles[6]}</Link></li>
+				<li><Link className={`${NavBarStyle["decorate-navbar-items"]}`} to="/home/following">{navTitles[7]}</Link></li>
+				<li><Link className={`${NavBarStyle["decorate-navbar-items"]}`} to="/home/profile">{navTitles[8]}</Link></li>
+				<li style={{float:"right", marginTop: "1rem"}}>
+					<select className={`${WelcomeStyle["decorate-welcome-dropdown"]}`} value={props.language} onChange={languageHandler}>
+						<option defaultValue value="en"> English</option>
 						<option value="fr">French</option>
 						<option value="de">Dutch</option>
 					</select>
-					<select value={props.currency} onChange={currencyHandler}>
-						<option defaultValue value="usd">
-							USD
-						</option>
+				</li>
+				<li style={{float:"right", marginTop: "1rem", marginRight:"10px"}}>
+					<select className={`${WelcomeStyle["decorate-welcome-dropdown"]}`} value={props.currency} onChange={currencyHandler}>
+						<option defaultValue value="usd">USD</option>
 						<option value="inr">INR</option>
-					</select>
-					<button
-						style={{ marginLeft: "10px", borderRadius: "50%" }}
-						type="button"
-						className="btn btn-primary"
-						onClick={profileHandler}
-					>
-						{user.slice(0, 1).toUpperCase()}
-					</button>
-				</div>
-			</nav>
+					</select>	
+				</li>
+			</ul>
 			<p style={{ color: "red" }}>{message}</p>
 		</>
 	);
