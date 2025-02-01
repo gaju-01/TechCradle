@@ -71,6 +71,7 @@ const Blog = (props) => {
 				`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024-03-02/v1/currencies/usd.json`
 			)
 			.then((res) => {
+				console.log(res.data["usd"]);
 				setCurrencyRelated(res.data["usd"]);
 			})
 			.catch((resp) => {
@@ -255,9 +256,9 @@ const Blog = (props) => {
 							{data.price === 0 && <div dangerouslySetInnerHTML={{__html: data.description}}/>}
 							{data.price !== 0 &&
 								<div className={`${BlogStyles["decorate-blogs-buy"]}`}>
-									<p>Please &nbsp;</p>	
-									<button>buy</button>
-									<p>&nbsp; the blog to view the content</p>
+									<p>Please pay &nbsp;</p>	
+									<button>{(data.price * (currency === "usd" ? 1 : currencyRelated[currency])).toFixed(2)}</button>
+									<p>&nbsp; {currency.toUpperCase()} to buy the blog</p>
 								</div>
 							}
 							<hr></hr>
