@@ -106,7 +106,7 @@ const ModifyBlog = () => {
 						})
 						.catch((error) => {
 							setMess(
-								"Enter the valid title/description or you are not the author this blog!!"
+								"Enter the valid details or you are not the author this blog!!"
 							);
 						});
 				} else {
@@ -115,7 +115,7 @@ const ModifyBlog = () => {
 			})
 			.catch((error) => {
 				setMess(
-					"Enter the valid title/description or you are not the author this blog!!"
+					"Enter the valid details or you are not the author this blog!!"
 				);
 			});
 	};

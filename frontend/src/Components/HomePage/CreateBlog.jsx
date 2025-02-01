@@ -56,7 +56,7 @@ const CreateBlog = () => {
 							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 						},
 					}).catch((error) => {
-						setMess("Enter the proper description!!");
+						setMess("Enter the proper description and price (<=1000 USD)!!");
 					});
 				}
 				setMess(mess);
@@ -93,7 +93,7 @@ const CreateBlog = () => {
 				<TextEditor value={text} onChange={setText} />
 			</div>
 			<div>
-				<label>Price</label>
+				<label>Price(in USD)</label>
 			</div>
 			<div>
 				<input id="price" placeholder="Enter the price" value={price} onChange={handlePrice} type="number"/>
