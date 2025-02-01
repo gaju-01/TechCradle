@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
 import CreateBlogStyles from "./CreateBlog.module.css";
 import 'react-quill/dist/quill.snow.css';
+import TextEditor from "../Utilities/TextEditor";
 
 const CreateBlog = () => {
 	const [title, setTitle] = useState("");
@@ -55,7 +56,7 @@ const CreateBlog = () => {
 							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 						},
 					}).catch((error) => {
-						setMess("Description should be minimum of 10 characters!!");
+						setMess("Enter the proper description!!");
 					});
 				}
 				setMess(mess);
@@ -74,10 +75,6 @@ const CreateBlog = () => {
 		setTitle(event.target.value);
 	};
 
-	const descChangeHandler = (event) => {
-		setText(event.target.value);
-	};
-
 	return (
 		<div className={`${CreateBlogStyles["decorate-cb-div"]}`}>
 			<div>
@@ -93,7 +90,7 @@ const CreateBlog = () => {
 				<label>Description</label>
 			</div>
 			<div>
-				<textarea id="exampleFormControlTextarea1" placeholder="Enter your description" rows="3" value={text} onChange={descChangeHandler}></textarea>
+				<TextEditor value={text} onChange={setText} />
 			</div>
 			<div>
 				<label>Price</label>

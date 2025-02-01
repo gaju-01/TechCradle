@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import WelcomeStyle from "./Welcome.module.css";
 import { useNavigate } from "react-router-dom";
 import Context from "../ContextProvider/Context";

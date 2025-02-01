@@ -3,12 +3,8 @@ package CP.REST.API.SpringBoot.Blogs;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import jakarta.persistence.GeneratedValue;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,7 +21,8 @@ public class Blog {
     private String title;
 
     @JsonProperty("description")
-    @Size(min = 10)
+    @Size(min = 1)
+    @Lob
     private String description;
 
     @JsonProperty("lastmodified")
