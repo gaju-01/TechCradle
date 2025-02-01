@@ -6,7 +6,7 @@ import ModifyBlog from "./ModifyBlog";
 import Followers from "./Followers";
 import Following from "./Following";
 import Profile from "./Profile";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Welcome from "../WelcomePage/Welcome";
 import NotFound from "../Utilities/NotFound";
 

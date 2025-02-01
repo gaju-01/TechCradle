@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Context from "../ContextProvider/Context";
 import axios from "axios";
 import ProfileStyle from "./Profile.module.css";

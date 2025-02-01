@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
 import BlogStyles from "./Blog.module.css";
@@ -246,13 +246,13 @@ const Blog = (props) => {
 				{filteredBlogs.map(function (data) {
 					return (
 						<div key={data.title}>
-							<h2>{data.title}</h2>
+							<h1>{data.title}</h1>
 							<div className={`${BlogStyles["decorate-blogs-author-div"]}`}>
 								<p><b>Written By</b> {data.userName}</p>
 								<button type="submit" onClick={() => { followHandler(data.userName);}}>{following.has(data.userName) ? "Unfollow" : "Follow"}</button>
 							</div>
 							<p>{data.sDesc}</p>
-							{data.price === 0 && <p>{data.description}</p>}
+							{data.price === 0 && <div dangerouslySetInnerHTML={{__html: data.description}}/>}
 							{data.price !== 0 &&
 								<div className={`${BlogStyles["decorate-blogs-buy"]}`}>
 									<p>Please &nbsp;</p>	

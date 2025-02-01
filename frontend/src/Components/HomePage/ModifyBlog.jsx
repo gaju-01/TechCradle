@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Context from "../ContextProvider/Context";
 import CreateBlogStyles from  "./CreateBlog.module.css";
+import TextEditor from "../Utilities/TextEditor";
 
 const ModifyBlog = () => {
 	const [title, setTitle] = useState("");
@@ -24,10 +25,6 @@ const ModifyBlog = () => {
 
 	const inputChangeHandler = (event) => {
 		setTitle(event.target.value);
-	};
-
-	const descChangeHandler = (event) => {
-		setText(event.target.value);
 	};
 
 	const deleteHandler = (event) => {
@@ -138,7 +135,7 @@ const ModifyBlog = () => {
 				<label htmlFor="exampleFormControlTextarea1">Description</label>
 			</div>
 			<div>
-				<textarea id="exampleFormControlTextarea1" rows="3" value={text} onChange={descChangeHandler} placeholder="Enter your description"></textarea>
+				<TextEditor value={text} onChange={setText} placeholder="Enter your description" />
 			</div>
 			<div>
 				<label htmlFor="price">Price(in USD)</label>

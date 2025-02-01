@@ -62,9 +62,6 @@ public class BlogRESTController {
     @PatchMapping(path = "/cprestapi/{name}/blogs/updateblog")
     public ResponseEntity<Blog> updateBlog(@PathVariable String name, @RequestBody Blog blog) {
         Optional<Blog> optionalBlog = this.repo.findByTitle(blog.getTitle());
-        if (blog.getDescription().length() <= 9) {
-            throw new BasicUserDefinedException("The description should be minimum of 10 characters!!");
-        }
 
         Blog myBlog = optionalBlog.get();
         if (myBlog.getUserName().equals(name)) {
