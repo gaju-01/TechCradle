@@ -8,42 +8,48 @@ import Following from "./Following";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
 import Welcome from "../WelcomePage/Welcome";
+import NotFound from "../Utilities/NotFound";
+
 const HomePage = (props) => {
 	const params = useParams();
 	const [Component, setComponent] = useState(<Welcome />);
-	const navigate = useNavigate();
-	const user = sessionStorage.getItem("user")
-		? sessionStorage.getItem("user")
-		: "";
+	const [isNotFound, setIsNotFound] = useState(false);
+	const navigate = useNavigate(); 
+	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user") : "";
 
 	useEffect(() => {
-		if (user !== "") {
+		if (user) {
 			if (params.id === "createblog") {
+				setIsNotFound(false);
 				setComponent(<CreateBlog />);
 			} else if (params.id === "blog") {
+				setIsNotFound(false);
 				setComponent(<Blog />);
 			} else if (params.id === "modifyblog") {
+				setIsNotFound(false);
 				setComponent(<ModifyBlog />);
 			} else if (params.id === "followers") {
+				setIsNotFound(false);
 				setComponent(<Followers />);
 			} else if (params.id === "following") {
+				setIsNotFound(false);
 				setComponent(<Following />);
 			} else if (params.id === "profile") {
+				setIsNotFound(false);
 				setComponent(<Profile />);
+			} else {
+				setIsNotFound(true);
+				setComponent(<NotFound />);
 			}
 		} else {
+			setIsNotFound(false);
 			navigate("/");
 		}
-	}, [user, params.id, navigate]);
+	}, [user, params.id]);
 
 	return (
 		<>
-			<NavBar
-				currency={props.currency}
-				language={props.language}
-				setCurrency={props.setCurrency}
-				setLang={props.setLang}
-			/>
+			{!isNotFound && <NavBar currency={props.currency} language={props.language} setCurrency={props.setCurrency} setLang={props.setLang} />}
 			{Component}
 		</>
 	);

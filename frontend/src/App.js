@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Welcome from "./Components/WelcomePage/Welcome";
 import Context from "./Components/ContextProvider/Context";
 import HomePage from "./Components/HomePage/HomePage";
+import NotFound from "./Components/Utilities/NotFound";
 
 function App() {
 	const [currency, setCurrency] = useState(
@@ -35,6 +36,7 @@ function App() {
 					}
 				/>
 				<Route path="/" element={<Welcome />} />
+				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</Context.Provider>
 	);
