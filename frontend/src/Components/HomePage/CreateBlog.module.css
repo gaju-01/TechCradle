@@ -1,0 +1,54 @@
+.decorate-cb-div input{
+    font-family: cursive;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid black;
+    height:  40px;
+    margin-bottom: 3rem;
+    width: 50%;
+    margin-left:25%;
+}
+
+.decorate-cb-div input:focus{
+    border-bottom: 2px solid green;
+}
+
+.decorate-cb-div textarea {
+    width: 50%;
+    margin-left: 25%;
+    margin-bottom: 3rem;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.decorate-cb-div label {
+    margin-left: 25%;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.decorate-cb-div button {
+    margin-left: 50%;
+    background-color: green;
+    color: white;
+    font-size: 15px;
+    font-weight: medium;
+    font-family: sans-serif;
+    border:none;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.decorate-cb-div button:focus {
+    background-color: rgb(3, 73, 44);
+}
+
+.decorate-cb-div button:hover {
+    background-color: rgb(3, 73, 44);
+}
+
+.decorate-cb-div p {
+    margin-left: 25%;
+    font-family: sans-serif;
+    font-weight: bold;
+}

@@ -1,0 +1,36 @@
+.decorate-profile-yc li {
+    color: green;
+    font-size: small;
+    font-weight: bold;
+    font-family: cursive;
+}
+
+.decorate-profile-yc li:hover {
+    color: rgb(3, 73, 44);
+}
+
+.decorate-profile-yc h2 {
+    font-style:italic;
+    font-family: fantasy;
+}
+
+.decorate-profile-message {
+    color:red;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.decorate-profile-container {
+    height: 6rem;
+    width: 6rem;
+    border-radius: 50%;
+}
+
+.decorate-profile-main-container {
+    display: flex;
+}
+
+.decorate-profile-personal {
+    width: 20rem;
+    margin-left: 5rem;
+}

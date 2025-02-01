@@ -1,10 +1,10 @@
 package CP.REST.API.SpringBoot.Blogs;
 
 import java.util.List;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
+import CP.REST.API.SpringBoot.ValidationToken.ValidationToken;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,10 +15,10 @@ public class User {
     @Id
     @GeneratedValue
     @JsonIgnore
-    private int id;
+    private long id;
 
     @JsonProperty("userName")
-    @Size(min = 2, message = "Enter the valid user name")
+    @Size(min = 2, max = 9, message = "Length of the user name must be greater than 1 and less than 10")
     private String userName;
 
     @JsonProperty("posts")
@@ -30,8 +30,15 @@ public class User {
     private List<Follow> followers;
 
     @JsonProperty("email")
-    @JsonIgnore
+    @Email(message = "Enter a valid Email")
     private String email;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    ValidationToken vToken;
+
+    @OneToOne(mappedBy = "user")
+    Profile profile;
 
     public User() {
 
@@ -42,7 +49,7 @@ public class User {
         this.email = email;
     }
 
-    public void setID(int id) {
+    public void setID(long id) {
         this.id = id;
     }
 
@@ -58,7 +65,7 @@ public class User {
         this.followers = followers;
     }
 
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 

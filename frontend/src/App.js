@@ -6,27 +6,35 @@ import Context from "./Components/ContextProvider/Context";
 import HomePage from "./Components/HomePage/HomePage";
 
 function App() {
-	const [language, setLanguage] = useState("en");
-	const [user, setUser] = useState("");
-	const [email, setEmail] = useState("");
-
+	const [currency, setCurrency] = useState(
+		sessionStorage.getItem("currency")
+			? sessionStorage.getItem("currency")
+			: "usd"
+	);
+	const [language, setLang] = useState(
+		sessionStorage.getItem("language")
+			? sessionStorage.getItem("language")
+			: "en"
+	);
 	return (
 		<Context.Provider
 			value={{
-				language: language,
-				setLanguage: setLanguage,
-				user: user,
-				setUser: setUser,
-				email: email,
-				setEmail: setEmail,
+				serverURL: "http://localhost:8080",
 			}}
 		>
 			<Routes>
-				<Route path="/home/:id" element={<HomePage />} />
 				<Route
-					path="/"
-					element={<Welcome language={language} setLanguage={setLanguage} />}
+					path="/home/:id"
+					element={
+						<HomePage
+							currency={currency}
+							language={language}
+							setCurrency={setCurrency}
+							setLang={setLang}
+						/>
+					}
 				/>
+				<Route path="/" element={<Welcome />} />
 			</Routes>
 		</Context.Provider>
 	);

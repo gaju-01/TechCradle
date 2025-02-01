@@ -1,6 +1,8 @@
 package CP.REST.API.SpringBoot.Blogs;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +29,13 @@ public class Blog {
     private String description;
 
     @JsonProperty("lastmodified")
-    private LocalTime lastmodified;
+    private LocalDate lastmodified;
+
+    @JsonProperty("price")
+    private long price;
+
+    @JsonProperty("sDesc")
+    private String sDesc;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
@@ -39,15 +47,17 @@ public class Blog {
 
     }
 
-    public Blog(String title, String description) {
+    public Blog(String title, String description, long price, String sDesc) {
         this.title = title;
         this.description = description;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
+        this.price = price;
+        this.sDesc = sDesc;
     }
 
     public void setID(int id) {
         this.id = id;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
     }
 
     public void setUser(User user) {
@@ -57,12 +67,22 @@ public class Blog {
 
     public void setTitle(String title) {
         this.title = title;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+        this.lastmodified = LocalDate.now();
+    }
+
+    public void setsDesc(String sDesc) {
+        this.sDesc = sDesc;
+        this.lastmodified = LocalDate.now();
     }
 
     public void setDescription(String description) {
         this.description = description;
-        this.lastmodified = LocalTime.now();
+        this.lastmodified = LocalDate.now();
     }
 
     public int getId() {
@@ -77,7 +97,7 @@ public class Blog {
         return this.title;
     }
 
-    public LocalTime getLastModified() {
+    public LocalDate getLastModified() {
         return this.lastmodified;
     }
 
@@ -87,5 +107,13 @@ public class Blog {
 
     public String getUserName() {
         return this.userName;
+    }
+
+    public long getPrice() {
+        return this.price;
+    }
+
+    public String getsDesc() {
+        return this.sDesc;
     }
 }

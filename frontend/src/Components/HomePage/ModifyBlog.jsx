@@ -1,13 +1,26 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Context from "../ContextProvider/Context";
+import CreateBlogStyles from  "./CreateBlog.module.css";
 
 const ModifyBlog = () => {
-	const [head, setHead] = useState("Create blogs");
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
 	const [mess, setMess] = useState("Blog with this title does not exsist");
+	const [price, setPrice] = useState(0);
+	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
+
+	const user = sessionStorage.getItem("user")
+		? sessionStorage.getItem("user")
+		: "";
+
+	const handlePrice = (event) => {
+		setPrice(event.target.value);
+	};
+	const handleSDesc = (event) => {
+		setSDesc(event.target.value);
+	};
 
 	const inputChangeHandler = (event) => {
 		setTitle(event.target.value);
@@ -22,12 +35,12 @@ const ModifyBlog = () => {
 		let mess = "";
 		axios({
 			method: "get",
-			url: `http://localhost:8080/cprestapi/blogs/findblog`,
+			url: `${context.serverURL}/cprestapi/blogs/findblog`,
 			params: {
 				title: title,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
 			.then((resp) => {
@@ -35,12 +48,12 @@ const ModifyBlog = () => {
 				if (mess === "The title is not available") {
 					axios({
 						method: "delete",
-						url: `http://localhost:8080/cprestapi/${context.user}/blogs/deleteblog`,
+						url: `${context.serverURL}/cprestapi/${user}/blogs/deleteblog`,
 						params: {
 							title: title,
 						},
 						headers: {
-							Authorization: "Basic " + window.btoa("user:pass"),
+							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 						},
 					})
 						.then((resp) => {
@@ -66,12 +79,12 @@ const ModifyBlog = () => {
 		let mess = "";
 		axios({
 			method: "get",
-			url: `http://localhost:8080/cprestapi/blogs/findblog`,
+			url: `${context.serverURL}/cprestapi/blogs/findblog`,
 			params: {
 				title: title,
 			},
 			headers: {
-				Authorization: "Basic " + window.btoa("user:pass"),
+				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 			},
 		})
 			.then((resp) => {
@@ -79,14 +92,16 @@ const ModifyBlog = () => {
 				if (mess === "The title is not available") {
 					axios({
 						method: "patch",
-						url: `http://localhost:8080/cprestapi/${context.user}/blogs/updateblog`,
+						url: `${context.serverURL}/cprestapi/${user}/blogs/updateblog`,
 						data: {
 							title: title,
 							description: text,
+							price: price,
+							sDesc: sDesc,
 						},
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: "Basic " + window.btoa("user:pass"),
+							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
 						},
 					})
 						.then((resp) => {
@@ -108,61 +123,40 @@ const ModifyBlog = () => {
 			});
 	};
 
-	useEffect(() => {
-		axios({
-			method: "get",
-			url: "http://localhost:8080/cprestapi/intl/title/title.modify.blog",
-			headers: {
-				"Accept-Language": context.language,
-				Authorization: "Basic " + window.btoa("user:pass"),
-			},
-		}).then((resp) => {
-			setHead(resp.data);
-		});
-	}, [context.language]);
-
 	return (
-		<div>
+		<div className={`${CreateBlogStyles["decorate-cb-div"]}`}>
 			<div>
-				<p className="fs-1">{head}</p>
+				<p style={{ color: "red" }}>{mess}</p>
 			</div>
-			<form onSubmit={submitHandler}>
-				<div className="mb-3">
-					<label htmlFor="exampleFormControlInput1" className="form-label">
-						Title of your blog
-					</label>
-					<input
-						type="text"
-						className="form-control"
-						id="exampleFormControlInput1"
-						placeholder="eg: Interfaces in Java"
-						onChange={inputChangeHandler}
-						value={title}
-					/>
-				</div>
-				<div className="mb-3">
-					<label htmlFor="exampleFormControlTextarea1" className="form-label">
-						Enter your description
-					</label>
-					<textarea
-						className="form-control"
-						id="exampleFormControlTextarea1"
-						rows="3"
-						value={text}
-						onChange={descChangeHandler}
-					></textarea>
-				</div>
-				<div className="mb-3">
-					<button type="submit" className="btn btn-success">
-						Submit
-					</button>
-				</div>
-			</form>
-			<button onClick={deleteHandler} type="submit" className="btn btn-success">
-				Delete
-			</button>
-			<p>{mess}</p>
-		</div>
+			<div>
+				<label htmlFor="exampleFormControlInput1">Title</label>
+			</div>
+			<div>
+				<input type="text" id="exampleFormControlInput1" placeholder="Enter the title of the blog (eg: Interfaces in Java)" onChange={inputChangeHandler} value={title}/>
+			</div>
+			<div>
+				<label htmlFor="exampleFormControlTextarea1">Description</label>
+			</div>
+			<div>
+				<textarea id="exampleFormControlTextarea1" rows="3" value={text} onChange={descChangeHandler} placeholder="Enter your description"></textarea>
+			</div>
+			<div>
+				<label htmlFor="price">Price(in USD)</label>
+			</div>
+			<div>
+				<input id="price" value={price} onChange={handlePrice} type="number" placeholder="Enter the price"/>
+			</div>
+			<div>
+				<label htmlFor="number">Short Description</label>
+			</div>
+			<div>
+				<input id="sd" value={sDesc} onChange={handleSDesc} placeholder="Enter the short description"/>
+			</div>
+			<div style={{display: "flex", marginLeft: "49%"}}>
+				<button style={{marginLeft: "0px"}} type="submit" onClick={submitHandler}>Submit</button>
+				<button style={{marginLeft: "1%"}} type="submit" onClick={deleteHandler}>Delete</button>
+			</div>
+		</div> 
 	);
 };
 export default ModifyBlog;

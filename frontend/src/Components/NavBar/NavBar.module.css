@@ -1,0 +1,33 @@
+.decorate-navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    color: white;
+    background-color: #333;
+    position: sticky;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.decorate-navbar li {
+  float: left;
+}
+
+.decorate-navbar-items {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    margin-top: 10px;
+    font-family: cursive;
+    text-decoration: none;
+}
+
+.decorate-navbar-items:hover:not(.active) {
+    border-bottom: 5px solid green;
+}
+
+.active {
+    background-color: #04AA6D;
+}
