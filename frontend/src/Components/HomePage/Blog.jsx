@@ -7,14 +7,11 @@ const Blog = (props) => {
 	const context = useContext(Context);
 	const [blogs, setBlogs] = useState([]);
 	const [messages, setMessages] = useState([]);
-	const [currencyRelated, setCurrencyRelated] = useState({});
 	const [searchTitle, setSearchTitle] = useState("");
 	const [filteredBlogs, setFilteredBlogs] = useState([]);
 	const [following, setFollowing] = useState(new Set());
 	const [message, setMessage] = useState("");
-	const currency = sessionStorage.getItem("currency")
-		? sessionStorage.getItem("currency")
-		: "usd";
+
 	const user = sessionStorage.getItem("user")
 		? sessionStorage.getItem("user")
 		: "";
@@ -64,20 +61,6 @@ const Blog = (props) => {
 				setMessage("Error fetching data, try again");
 			});
 	}, [context.serverURL, user]);
-
-	useEffect(() => {
-		axios
-			.get(
-				`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024-03-02/v1/currencies/usd.json`
-			)
-			.then((res) => {
-				console.log(res.data["usd"]);
-				setCurrencyRelated(res.data["usd"]);
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
-	}, [currency]);
 
 	useEffect(() => {
 		axios({
@@ -253,14 +236,7 @@ const Blog = (props) => {
 								<button type="submit" onClick={() => { followHandler(data.userName);}}>{following.has(data.userName) ? "Unfollow" : "Follow"}</button>
 							</div>
 							<p>{data.sDesc}</p>
-							{data.price === 0 && <div dangerouslySetInnerHTML={{__html: data.description}}/>}
-							{data.price !== 0 &&
-								<div className={`${BlogStyles["decorate-blogs-buy"]}`}>
-									<p>Please pay &nbsp;</p>	
-									<button>{(data.price * (currency === "usd" ? 1 : currencyRelated[currency])).toFixed(2)}</button>
-									<p>&nbsp; {currency.toUpperCase()} to buy the blog</p>
-								</div>
-							}
+							<div dangerouslySetInnerHTML={{__html: data.description}}/>
 							<hr></hr>
 						</div>
 					);

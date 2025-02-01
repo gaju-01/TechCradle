@@ -41,12 +41,6 @@ const NavBar = (props) => {
 		props.setLang(event.target.value);
 	};
 
-	const currencyHandler = (event) => {
-		sessionStorage.setItem("currency", event.target.value);
-		props.setCurrency(event.target.value);
-	};
-
-
 	return (
 		<>
 			<ul className={`${NavBarStyle["decorate-navbar"]}`}>
@@ -63,12 +57,6 @@ const NavBar = (props) => {
 						<option value="fr">French</option>
 						<option value="de">Dutch</option>
 					</select>
-				</li>
-				<li style={{float:"right", marginTop: "1rem", marginRight:"10px"}}>
-					<select className={`${WelcomeStyle["decorate-welcome-dropdown"]}`} value={props.currency} onChange={currencyHandler}>
-						<option defaultValue value="usd">USD</option>
-						<option value="inr">INR</option>
-					</select>	
 				</li>
 			</ul>
 			<p style={{ color: "red" }}>{message}</p>

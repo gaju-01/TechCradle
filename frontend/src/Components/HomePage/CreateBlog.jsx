@@ -9,14 +9,9 @@ const CreateBlog = () => {
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
 	const [mess, setMess] = useState("The title is available");
-	const [price, setPrice] = useState(0);
 	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
 	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user"): "";
-
-	const handlePrice = (event) => {
-		setPrice(event.target.value);
-	};
 
 	const handleSDesc = (event) => {
 		setSDesc(event.target.value);
@@ -25,10 +20,6 @@ const CreateBlog = () => {
 	const submitHandler = (event) => {
 		event.preventDefault();
 		let mess = "";
-		if (price < 0) {
-			setMess("Enter the valid price");
-			return;
-		}
 		axios({
 			method: "get",
 			url: `${context.serverURL}/cprestapi/blogs/findblog`,
@@ -48,7 +39,6 @@ const CreateBlog = () => {
 						data: {
 							title: title,
 							description: text,
-							price: price,
 							sDesc: sDesc,
 						},
 						headers: {
@@ -68,7 +58,6 @@ const CreateBlog = () => {
 		setTitle("");
 		setText("");
 		setSDesc("");
-		setPrice(0);
 	};
 
 	const inputChangeHandler = (event) => {
@@ -87,22 +76,16 @@ const CreateBlog = () => {
 				<input type="text" id="exampleFormControlInput1" placeholder="Enter the title of the blog (eg: Interfaces in Java)" onChange={inputChangeHandler} value={title}/>
 			</div>
 			<div>
-				<label>Description</label>
-			</div>
-			<div>
-				<TextEditor value={text} onChange={setText} />
-			</div>
-			<div>
-				<label>Price(in USD)</label>
-			</div>
-			<div>
-				<input id="price" placeholder="Enter the price" value={price} onChange={handlePrice} type="number"/>
-			</div>
-			<div>
 				<label>Short Description</label>
 			</div>
 			<div>
 				<input id="sd" placeholder="Enter the short description" value={sDesc} onChange={handleSDesc} type="text"/>
+			</div>
+			<div>
+				<label>Description</label>
+			</div>
+			<div>
+				<TextEditor value={text} onChange={setText} />
 			</div>
 			<div>
 				<button type="submit" onClick={submitHandler}>Submit</button>
