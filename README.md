@@ -1,4 +1,4 @@
-# CPRESTAPI
+# TechCradle
 CPRESTAPI is a Java-based project that showcases a robust content management system designed for a blogging website, developed using the powerful Spring Framework and its associated technologies.
 
 # Key Features
