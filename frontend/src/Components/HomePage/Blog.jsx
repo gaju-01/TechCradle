@@ -85,7 +85,7 @@ const Blog = (props) => {
 				setMessage("Error fetching data, try again");
 			});
 	}, [context.serverURL, props.author, searchTitle]);
-
+	
 	const followHandler = (user) => {
 		if (
 			user ===
@@ -232,7 +232,7 @@ const Blog = (props) => {
 						<div key={data.title}>
 							<h1>{data.title}</h1>
 							<div className={`${BlogStyles["decorate-blogs-author-div"]}`}>
-								<p><b>Written By</b> {data.userName}</p>
+								<p>Written By {data.userName}</p>
 								<button type="submit" onClick={() => { followHandler(data.userName);}}>{following.has(data.userName) ? "Unfollow" : "Follow"}</button>
 							</div>
 							<p>{data.sDesc}</p>
