@@ -7,8 +7,7 @@ import TextEditor from "../Utilities/TextEditor";
 const ModifyBlog = () => {
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
-	const [mess, setMess] = useState("Blog with this title does not exsist");
-	const [price, setPrice] = useState(0);
+	const [mess, setMess] = useState("");
 	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
 
@@ -16,9 +15,6 @@ const ModifyBlog = () => {
 		? sessionStorage.getItem("user")
 		: "";
 
-	const handlePrice = (event) => {
-		setPrice(event.target.value);
-	};
 	const handleSDesc = (event) => {
 		setSDesc(event.target.value);
 	};
@@ -93,7 +89,6 @@ const ModifyBlog = () => {
 						data: {
 							title: title,
 							description: text,
-							price: price,
 							sDesc: sDesc,
 						},
 						headers: {
@@ -132,22 +127,16 @@ const ModifyBlog = () => {
 				<input type="text" id="exampleFormControlInput1" placeholder="Enter the title of the blog (eg: Interfaces in Java)" onChange={inputChangeHandler} value={title}/>
 			</div>
 			<div>
-				<label htmlFor="exampleFormControlTextarea1">Description</label>
-			</div>
-			<div>
-				<TextEditor value={text} onChange={setText} placeholder="Enter your description" />
-			</div>
-			<div>
-				<label htmlFor="price">Price(in USD)</label>
-			</div>
-			<div>
-				<input id="price" value={price} onChange={handlePrice} type="number" placeholder="Enter the price"/>
-			</div>
-			<div>
 				<label htmlFor="number">Short Description</label>
 			</div>
 			<div>
 				<input id="sd" value={sDesc} onChange={handleSDesc} placeholder="Enter the short description"/>
+			</div>
+			<div>
+				<label htmlFor="exampleFormControlTextarea1">Description</label>
+			</div>
+			<div>
+				<TextEditor value={text} onChange={setText} placeholder="Enter your description" />
 			</div>
 			<div style={{display: "flex", marginLeft: "49%"}}>
 				<button style={{marginLeft: "0px"}} type="submit" onClick={submitHandler}>Submit</button>

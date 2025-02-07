@@ -66,7 +66,6 @@ public class BlogRESTController {
         Blog myBlog = optionalBlog.get();
         if (myBlog.getUserName().equals(name)) {
             myBlog.setDescription(blog.getDescription());
-            myBlog.setPrice(blog.getPrice());
             myBlog.setsDesc(blog.getsDesc());
             this.repo.save(myBlog);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(myBlog.getId())

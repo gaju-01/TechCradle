@@ -9,7 +9,6 @@ const Welcome = () => {
 	const [message, setMessage] = useState("");
 	const [welcome, setWelcome] = useState("Welcome");
 	const [otp, setOTP] = useState("");
-	const [currency, setCurrency] = useState(sessionStorage.getItem("currency") ? sessionStorage.getItem("currency"): "usd");
 	const [language, setLang] = useState(sessionStorage.getItem("language") ? sessionStorage.getItem("language") : "en");
 	const [email, setEmail] = useState(sessionStorage.getItem("email"));
 	const [user, setUser] = useState(sessionStorage.getItem("user"));
@@ -17,11 +16,6 @@ const Welcome = () => {
 	const languageHandler = (event) => {
 		setLang(event.target.value);
 		sessionStorage.setItem("language", event.target.value);
-	};
-
-	const currencyHandler = (event) => {
-		setCurrency(event.target.value);
-		sessionStorage.setItem("currency", event.target.value);
 	};
 
 	const clickHandler = () => {
@@ -169,12 +163,6 @@ const Welcome = () => {
 						<option defaultValue value="en">English</option>
 						<option value="fr">French</option>
 						<option value="de">Dutch</option>	
-					</select>
-				</div>
-				<div>
-					<select className={`${WelcomeStyle["decorate-welcome-dropdown"]}`} value={currency} onChange={currencyHandler}>
-						<option defaultValue value="usd">USD</option>
-						<option value="inr">INR</option>
 					</select>
 				</div>
 				<input placeholder="Enter your username" className={`${WelcomeStyle["decorate-welcome-input"]}`} type="text" name="user" id="user" value={user} onChange={inputChangeHandler}/>

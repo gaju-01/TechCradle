@@ -29,10 +29,6 @@ public class Blog {
     @JsonProperty("lastmodified")
     private LocalDate lastmodified;
 
-    @JsonProperty("price")
-    @Max(1000)
-    private long price;
-
     @JsonProperty("sDesc")
     private String sDesc;
 
@@ -46,11 +42,10 @@ public class Blog {
 
     }
 
-    public Blog(String title, String description, long price, String sDesc) {
+    public Blog(String title, String description, String sDesc) {
         this.title = title;
         this.description = description;
         this.lastmodified = LocalDate.now();
-        this.price = price;
         this.sDesc = sDesc;
     }
 
@@ -66,11 +61,6 @@ public class Blog {
 
     public void setTitle(String title) {
         this.title = title;
-        this.lastmodified = LocalDate.now();
-    }
-
-    public void setPrice(long price) {
-        this.price = price;
         this.lastmodified = LocalDate.now();
     }
 
@@ -106,10 +96,6 @@ public class Blog {
 
     public String getUserName() {
         return this.userName;
-    }
-
-    public long getPrice() {
-        return this.price;
     }
 
     public String getsDesc() {
