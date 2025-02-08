@@ -1,9 +1,9 @@
 # TechCradle
-TechCradle is a Java-based project that showcases a robust content management system designed for a blogging website, developed using the powerful Spring Framework and its associated technologies.
+TechCradle is a Java-based project that showcases a robust content management system designed for a blogging website, developed using the Spring Framework and its associated technologies.
 
 # Key Features
 * OTP based authentication
-*  User based resource access(temporarily disabled)
+* User based resource access(temporarily disabled)
 * JWT token based authorization
 * Supports English, French and Duth Language
 * Supports rich text editor that can handle links, images and text
@@ -12,7 +12,7 @@ TechCradle is a Java-based project that showcases a robust content management sy
 * Allows users to follow/unfollow others
 
 # Note
-* Please generate your own API key for the Google Gemini to generate the description using AI.
+* Please use your API key for the Google Gemini to generate the description using Generative Artificial Intelligence.
 
 # How to start the application
 * Use ```git clone``` to clone the repository that already exists on GitHub, including all of the files, branches, and commits.
