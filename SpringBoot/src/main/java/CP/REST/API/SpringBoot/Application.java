@@ -19,7 +19,7 @@ public class Application {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins("http://localhost:3000/");
+                        .allowedOrigins("http://localhost:3000/", "https://tech-cradle-mgacz477q-gaju-01s-projects.vercel.app/");
             }
         };
     }
