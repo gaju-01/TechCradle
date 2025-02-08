@@ -6,6 +6,8 @@ TechCradle is a Java-based project that showcases a robust content management sy
 *  User based resource access(temporarily disabled)
 * JWT token based authorization
 * Supports English, French and Duth Language
+* Supports rich text editor that can handle links, images and text
+* User can write with the help of AI to write their Blogs
 * Allows CRUD operations on Documents/Blogs
 * Allows users to follow/unfollow others
 
