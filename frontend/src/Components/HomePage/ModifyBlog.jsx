@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import Context from "../ContextProvider/Context";
 import CreateBlogStyles from  "./CreateBlog.module.css";
 import TextEditor from "../Utilities/TextEditor";
+import PopUp from "../Utilities/PopUp";
 
 const ModifyBlog = () => {
 	const [title, setTitle] = useState("");
@@ -10,6 +11,7 @@ const ModifyBlog = () => {
 	const [mess, setMess] = useState("");
 	const [sDesc, setSDesc] = useState("");
 	const context = useContext(Context);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const user = sessionStorage.getItem("user")
 		? sessionStorage.getItem("user")
@@ -19,6 +21,10 @@ const ModifyBlog = () => {
 		setSDesc(event.target.value);
 	};
 
+	const popUpHandler = () => {
+		setIsOpen((prevState) => !prevState);
+	}
+	
 	const inputChangeHandler = (event) => {
 		setTitle(event.target.value);
 	};
@@ -134,6 +140,8 @@ const ModifyBlog = () => {
 			</div>
 			<div>
 				<label htmlFor="exampleFormControlTextarea1">Description</label>
+				{isOpen && <PopUp setText={setText}/>}
+				<button type="submit" onClick={popUpHandler}>Use Gemini</button>
 			</div>
 			<div>
 				<TextEditor value={text} onChange={setText} placeholder="Enter your description" />

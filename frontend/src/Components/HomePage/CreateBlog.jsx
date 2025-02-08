@@ -4,18 +4,24 @@ import Context from "../ContextProvider/Context";
 import CreateBlogStyles from "./CreateBlog.module.css";
 import 'react-quill/dist/quill.snow.css';
 import TextEditor from "../Utilities/TextEditor";
+import PopUp from "../Utilities/PopUp";
 
 const CreateBlog = () => {
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
 	const [mess, setMess] = useState("The title is available");
 	const [sDesc, setSDesc] = useState("");
+	const [isOpen, setIsOpen] = useState(false);
 	const context = useContext(Context);
 	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user"): "";
 
 	const handleSDesc = (event) => {
 		setSDesc(event.target.value);
 	};
+
+	const popUpHandler = () => {
+		setIsOpen((prevState) => !prevState);
+	}
 
 	const submitHandler = (event) => {
 		event.preventDefault();
@@ -83,6 +89,8 @@ const CreateBlog = () => {
 			</div>
 			<div>
 				<label>Description</label>
+				{isOpen && <PopUp setText={setText}/>}
+				<button type="submit" onClick={popUpHandler}>Use Gemini</button>
 			</div>
 			<div>
 				<TextEditor value={text} onChange={setText} />
