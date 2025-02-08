@@ -13,6 +13,7 @@ TechCradle is a Java-based project that showcases a robust content management sy
 
 # Note
 * Please use your API key for the Google Gemini to generate the description using Generative Artificial Intelligence.
+Refer this issue for more details: https://github.com/gaju-01/TechCradle/issues/29
 
 # How to start the application
 * Use ```git clone``` to clone the repository that already exists on GitHub, including all of the files, branches, and commits.
