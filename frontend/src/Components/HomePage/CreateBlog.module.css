@@ -37,6 +37,7 @@
     border:none;
     height: 40px;
     border-radius: 10px;
+    margin-bottom: 5px;
 }
 
 .decorate-cb-div button:focus {
