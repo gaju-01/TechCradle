@@ -21,8 +21,11 @@ const PopUp = (props) => {
     const getResponseHandler = () => {
         async function run() {
             const chatSession = model.startChat({generationConfig, history: []});
-            const result = await chatSession.sendMessage(prompt);
-            props.setText(result.response.text());
+            const modifiedPrompt = prompt + " Generate the response in HTML format. Make the title tag as empty."
+            const result = await chatSession.sendMessage(modifiedPrompt);
+            const text = result.response.text();
+            const modifiedResult = text.slice(7, text.length - 3);
+            props.setText(modifiedResult);
         };
         run();
     }
