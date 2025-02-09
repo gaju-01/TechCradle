@@ -14,12 +14,14 @@ TechCradle is a Java-based project that showcases a robust content management sy
 # Note
 * Please use your API key for the Google Gemini to generate the description using Generative Artificial Intelligence.
 Refer this issue for more details: https://github.com/gaju-01/TechCradle/issues/29
-Images of the Gemini Response
-![Response00](https://github.com/user-attachments/assets/9373fa73-0bd5-4e5f-a61c-874415b63e0b)
-![Response01](https://github.com/user-attachments/assets/c86d092a-4c6c-406b-bfa5-5b978418e831)
-![Response02](https://github.com/user-attachments/assets/75677beb-7815-45cb-b1bc-a4ac9ea68c56)
-![Response03](https://github.com/user-attachments/assets/a24548ff-c988-43ab-9aac-650cb471ecdf)
-![Blogs00](https://github.com/user-attachments/assets/0f51b8b5-0d62-4a1e-9fad-585a93c38db9)
+
+# Gemini Response Images
+![Response00](https://github.com/user-attachments/assets/89410b00-5b7f-4b97-9e43-1e0d34d32065)
+![Response01](https://github.com/user-attachments/assets/43cf2d22-886e-475c-8aac-938deeb5b278)
+![Response03](https://github.com/user-attachments/assets/4b983815-a32e-4da9-b6a1-690ba2bf5100)
+![Blogs01](https://github.com/user-attachments/assets/f2d7e910-4d68-44d5-9402-dba88a83ddac)
+![Response04](https://github.com/user-attachments/assets/ee9af69e-c550-4c30-a81b-ecd1455323c2)
+![Response05](https://github.com/user-attachments/assets/14eff76a-c2ac-4650-90ce-5d004ff4b558)
 
 
 # How to start the application
