@@ -20,7 +20,7 @@ function App() {
 	return (
 		<Context.Provider
 			value={{
-				serverURL: "https://techcradle-production.up.railway.app",
+				serverURL: "http://localhost:8080",
 			}}
 		>
 			<Routes>

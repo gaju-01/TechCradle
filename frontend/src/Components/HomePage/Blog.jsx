@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Context from "../ContextProvider/Context";
 import BlogStyles from "./Blog.module.css";
+import parse from "html-react-parser";
 
 const Blog = (props) => {
 	const context = useContext(Context);
@@ -236,7 +237,7 @@ const Blog = (props) => {
 								<button type="submit" onClick={() => { followHandler(data.userName);}}>{following.has(data.userName) ? "Unfollow" : "Follow"}</button>
 							</div>
 							<p>{data.sDesc}</p>
-							<div dangerouslySetInnerHTML={{__html: data.description}}/>
+							<div>{parse(data.description)}</div>
 							<hr></hr>
 						</div>
 					);
