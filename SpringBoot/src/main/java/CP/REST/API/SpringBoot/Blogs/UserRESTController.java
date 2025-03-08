@@ -93,7 +93,7 @@ public class UserRESTController {
         list.forEach(it -> {
             User follower = this.userRepo.findByUserName(it.getUserName()).get();
             String email = follower.getEmail();
-            String link = "http://localhost:3000/home/blog/";
+            String link = "https://tech-cradle.vercel.app/home/blog/";
             String text = name + " has contributed a new blog\n Follow the link: " + link + "\n title of the blog is" + id;
             emailSenderService.sendEmail(email, "Blog Alert!!", text);
         });
