@@ -4,69 +4,34 @@ import Context from "../ContextProvider/Context";
 import ProfileStyle from "./Profile.module.css";
 
 const Following = () => {
-	const [list, setList] = useState([]);
+	const [following, setFollowing] = useState([]);
 	const context = useContext(Context);
 	const [message, setMessage] = useState("");
-	const user = sessionStorage.getItem("user")
-		? sessionStorage.getItem("user")
-		: "";
+	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user") : "";
+
+	const fetchFollowing = async () => {
+		await axios.get(`${context.serverURL}/cprestapi/following/${user}`,
+			{ headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+			.then((response) => setFollowing(response.data))
+			.catch((_) => setMessage("Error fetching data, try again"));
+	}
 
 	useEffect(() => {
-		axios({
-			url: `${context.serverURL}/cprestapi/following`,
-			params: {
-				parent: user,
-			},
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				setList(resp.data);
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
+		fetchFollowing();
 	}, [context.serverURL, user]);
 
-	const clickHandler = (data) => {
-		axios({
-			method: "delete",
-			url: `${context.serverURL}/cprestapi/removeUser`,
-			params: {
-				child: user,
-				parent: data,
-			},
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				axios({
-					url: `${context.serverURL}/cprestapi/following`,
-					params: {
-						parent: user,
-					},
-					headers: {
-						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-					},
-				})
-					.then((resp) => {
-						setList(resp.data);
-					})
-					.catch((resp) => {
-						setMessage("Error fetching data, try again");
-					});
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
+	const clickHandler = async (following) => {
+		await axios.delete(`${context.serverURL}/cprestapi/removeFollowing`,
+			{ params: { follower: user, following: following}, headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+			.catch((_) => setMessage("Error fetching data, try again"));
+		
+		await fetchFollowing();
 	};
 
 	return (
 		<>
 			<p className={`${ProfileStyle["decorate-profile-message"]}`}>{message}</p>
-			{list.map(function (data) {
+			{following?.map(function (data) {
 				return (
 					<div key={data}>
 						<p>{data}</p>

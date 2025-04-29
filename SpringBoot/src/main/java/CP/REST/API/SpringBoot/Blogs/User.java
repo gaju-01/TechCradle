@@ -8,37 +8,36 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 @Entity(name = "user_details")
 public class User {
-    @JsonProperty("id")
     @Id
     @GeneratedValue
     @JsonIgnore
     private long id;
 
-    @JsonProperty("userName")
+    @Getter
     @Size(min = 2, max = 9, message = "Length of the user name must be greater than 1 and less than 10")
     private String userName;
 
-    @JsonProperty("posts")
+    @Getter
     @OneToMany(mappedBy = "user")
     private List<Blog> blogs;
 
-    @JsonProperty("followers")
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "following")
     private List<Follow> followers;
 
-    @JsonProperty("email")
+    @OneToMany(mappedBy = "follower")
+    private List<Follow> followings;
+
+    @Getter
     @Email(message = "Enter a valid Email")
     private String email;
 
     @OneToOne(mappedBy = "user")
     @JsonIgnore
     ValidationToken vToken;
-
-    @OneToOne(mappedBy = "user")
-    Profile profile;
 
     public User() {
 
@@ -49,39 +48,8 @@ public class User {
         this.email = email;
     }
 
-    public void setID(long id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setBlogs(List<Blog> blogs) {
         this.blogs = blogs;
     }
 
-    public void setFollowers(List<Follow> followers) {
-        this.followers = followers;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public List<Blog> getBlogs() {
-        return this.blogs;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public List<Follow> getFollowers() {
-        return this.followers;
-    }
 }

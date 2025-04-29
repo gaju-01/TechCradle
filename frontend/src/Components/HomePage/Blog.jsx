@@ -7,217 +7,87 @@ import parse from "html-react-parser";
 const Blog = (props) => {
 	const context = useContext(Context);
 	const [blogs, setBlogs] = useState([]);
-	const [messages, setMessages] = useState([]);
+	const [message, setMessage] = useState("");
 	const [searchTitle, setSearchTitle] = useState("");
 	const [filteredBlogs, setFilteredBlogs] = useState([]);
 	const [following, setFollowing] = useState(new Set());
-	const [message, setMessage] = useState("");
-
-	const user = sessionStorage.getItem("user")
-		? sessionStorage.getItem("user")
-		: "";
-
-	const resetFollowing = (user) => {
-		axios({
-			url: `${context.serverURL}/cprestapi/following`,
-			params: {
-				parent: user,
-			},
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				const set = new Set();
-				const data = resp.data;
-				data.forEach((element) => {
-					set.add(element);
-				});
-				setFollowing(set);
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
-	};
-
-	useEffect(() => {
-		axios({
-			url: `${context.serverURL}/cprestapi/following`,
-			params: {
-				parent: user,
-			},
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				const set = new Set();
-				const data = resp.data;
-				data?.forEach((element) => {
-					set.add(element);
-				});
-				setFollowing(set);
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
-	}, [context.serverURL, user]);
-
-	useEffect(() => {
-		axios({
-			method: "get",
-			url: `${context.serverURL}/cprestapi/blogs`,
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((response) => {
-				setBlogs(response.data);
-				const temp = response.data.filter(
-					(ele) =>
-						ele.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
-						(props.author === null ||
-							props.author === undefined ||
-							props.author === ele.userName)
-				);
-				setFilteredBlogs(temp);
-			})
-			.catch((resp) => {
-				setMessage("Error fetching data, try again");
-			});
-	}, [context.serverURL, props.author, searchTitle]);
-	
-	const followHandler = (user) => {
-		if (
-			user ===
-			(sessionStorage.getItem("user") ? sessionStorage.getItem("user") : "")
-		) {
-			setMessages((prev) => [
-				...prev,
-				{ length: prev.length, value: "You cannot follow yourself" },
-			]);
-		} else {
-			if (!following.has(user)) {
-				axios({
-					method: "get",
-					url: `${context.serverURL}/cprestapi/followers/check`,
-					params: {
-						parent: user,
-						child: sessionStorage.getItem("user")
-							? sessionStorage.getItem("user")
-							: "",
-					},
-					headers: {
-						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-					},
-				})
-					.then((resp) => {
-						if (resp.data === "NO") {
-							axios({
-								method: "post",
-								url: `${context.serverURL}/cprestapi/followers`,
-								data: {
-									userName: sessionStorage.getItem("user")
-										? sessionStorage.getItem("user")
-										: "",
-								},
-								params: {
-									user: user,
-								},
-								headers: {
-									"Content-Type": "application/json",
-									Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-								},
-							})
-								.then((resp) => {
-									resetFollowing(user);
-								})
-								.catch((resp) => {
-									setMessage("Error fetching data, try again");
-								});
-						}
-					})
-					.catch((resp) => {
-						setMessage("Error fetching data, try again");
-					});
-				setMessages((prev) => [
-					...prev,
-					{ length: prev.length, value: `You are now following ${user}` },
-				]);
-			} else {
-				axios({
-					method: "delete",
-					url: `${context.serverURL}/cprestapi/removeUser`,
-					params: {
-						child: sessionStorage.getItem("user")
-							? sessionStorage.getItem("user")
-							: "",
-						parent: user,
-					},
-					headers: {
-						Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-					},
-				})
-					.then((resp) => {
-						resetFollowing();
-						setMessages((prev) => [
-							...prev,
-							{ length: prev.length, value: `You have unfollowed ${user}` },
-						]);
-					})
-					.catch((resp) => {
-						setMessage("Error fetching data, try again");
-					});
-			}
-		}
-	};
+	const [followingNotifications, setFollowingNotifications] = useState([]);
+	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user") : "";
 
 	const titleChangeHandler = (event) => {
 		setSearchTitle(event.target.value);
-		submitSearchTitleHandler(event.target.value);
+		if(!searchTitle) setFilteredBlogs([...blogs]);
+		else setFilteredBlogs([blogs.filter((blog) => blog.title.toLowerCase().includes(searchTitle.toLowerCase()))])
 	};
 
-	const submitSearchTitleHandler = (event) => {
-		if (searchTitle === "" || !searchTitle) {
-			const temp = blogs.filter(
-				(ele) =>
-					props.author === null ||
-					props.author === undefined ||
-					props.author === ele.userName
-			);
-			setFilteredBlogs(temp);
-		} else {
-			const temp = blogs.filter(
-				(ele) =>
-					ele.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
-					(props.author === null ||
-						props.author === undefined ||
-						props.author === ele.userName)
-			);
-			setFilteredBlogs(temp);
+	const followingNotificationHandler = (deleteIndex) => {
+		const prefixNotifications = followingNotifications.slice(0, deleteIndex);
+		const suffixNotifications = followingNotifications.slice(deleteIndex + 1, followingNotifications.length);
+		for (var i = 0; i < suffixNotifications.length; i++) { suffixNotifications[i].index = suffixNotifications[i].index - 1 }
+		setFollowingNotifications([...prefixNotifications, ...suffixNotifications]);
+	};
+	
+	const resetFollowing = async () => {
+		await axios.get(`${context.serverURL}/cprestapi/following/${user}`,
+			{ headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+			.then((response) => {
+				const setOfFollowing = new Set();
+				const listOfFollowing = response.data;
+				listOfFollowing?.forEach((followingName) => { setOfFollowing.add(followingName) });
+				setFollowing(setOfFollowing) })
+			.catch((_) =>  setMessage("Error fetching data, try again"));
+	};
+	
+	const followHandler = async (author) => {
+		var followingNotificationMessage
+		const params = { following: author, follower: user }
+		if (author === user) followingNotificationMessage = "You cannot follow yourself";
+		else {
+			var isFollowingAuthor
+			await axios.get(`${context.serverURL}/cprestapi/followers/check`,
+				{ params: params, headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}`} })
+				.then((response) => { isFollowingAuthor = response.data })
+				.catch((_) => setMessage("Error fetching data"));
+			
+			if(isFollowingAuthor) {
+				await axios.delete(`${context.serverURL}/cprestapi/removeFollowing`,
+					{ params: params, headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}`} })
+					.then((response) => followingNotificationMessage = response.data)
+					.catch((_) => setMessage("Error performing operation"));
+			} else {
+				await axios.post(`${context.serverURL}/cprestapi/follow`, {}, 
+					{ params: params, headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}`} })
+					.then((response) => followingNotificationMessage = response.data)
+					.catch((_) => setMessage("Error performing operation")); 
+			}
+			
+			await resetFollowing();	
 		}
+		if(followingNotificationMessage)
+			setFollowingNotifications((previousNotifications) => [...previousNotifications, {value: followingNotificationMessage, index: previousNotifications.length}]);	
 	};
 
-	const messagesHandler = (index) => {
-		var temp = messages;
-		const arr1 = temp?.slice(0, index);
-		for (var i = index + 1; i < temp.length; i++) {
-			temp[i].length = temp[i].length - 1;
-		}
-		const arr2 = temp?.slice(index + 1, temp.length);
-		const arr3 = [...arr1, ...arr2];
-		setMessages(arr3);
-	};
+	useEffect(() => {
+		axios.get(`${context.serverURL}/cprestapi/blogs`,
+			{ headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+			.then((response) => { setBlogs(response.data);
+													setFilteredBlogs([...response.data]); })
+			.catch((_) => setMessage("Error fetching data"));
+	}, [context.serverURL, props.author, searchTitle]);
 
+	useEffect(() => {
+		resetFollowing();
+	}, [context.serverURL, user]);
+	
 	return (
 		<div>
-			{messages.length > 0 && (
+			{followingNotifications.length > 0 && (
 				<div>
-					{messages.map(function (data, cnt) {
+					{followingNotifications.map(function (data, cnt) {
 						return (
 							<div className="alert alert-success" role="alert" key={cnt.toString()}>
 								<p>{data.value}</p>
-								<button type="button" className="btn-close" aria-label="Close" key={data.length.toString()} onClick={() => messagesHandler(data.length)}></button>
+								<button type="button" className="btn-close" aria-label="Close" key={data.index.toString()} onClick={() => followingNotificationHandler(data.index)}></button>
 							</div>
 						);
 					})}
@@ -234,9 +104,9 @@ const Blog = (props) => {
 							<h1>{data.title}</h1>
 							<div className={`${BlogStyles["decorate-blogs-author-div"]}`}>
 								<p>Written By {data.userName}</p>
-								<button type="submit" onClick={() => { followHandler(data.userName);}}>{following.has(data.userName) ? "Unfollow" : "Follow"}</button>
+								<button type="submit" onClick={() => { followHandler(data.userName) }}>{following.has(data.userName) ? "Unfollow" : "Follow"}</button>
 							</div>
-							<p>{data.sDesc}</p>
+							<p>{data.shortDescription}</p>
 							<div>{parse(data.description)}</div>
 							<hr></hr>
 						</div>
@@ -246,4 +116,5 @@ const Blog = (props) => {
 		</div>
 	);
 };
+
 export default Blog;

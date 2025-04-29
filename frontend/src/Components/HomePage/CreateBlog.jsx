@@ -9,10 +9,10 @@ import PopUp from "../Utilities/PopUp";
 const CreateBlog = () => {
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
-	const [mess, setMess] = useState("The title is available");
+	const [mess, setMess] = useState();
+	const context = useContext(Context);
 	const [sDesc, setSDesc] = useState("");
 	const [isOpen, setIsOpen] = useState(false);
-	const context = useContext(Context);
 	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user"): "";
 
 	const handleSDesc = (event) => {
@@ -23,51 +23,26 @@ const CreateBlog = () => {
 		setIsOpen((prevState) => !prevState);
 	}
 
-	const submitHandler = (event) => {
-		event.preventDefault();
-		let mess = "";
-		axios({
-			method: "get",
-			url: `${context.serverURL}/cprestapi/blogs/findblog`,
-			params: {
-				title: title,
-			},
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				mess = resp.data;
-				if (mess === "The title is available") {
-					axios({
-						method: "post",
-						url: `${context.serverURL}/cprestapi/users/${user}/blogs`,
-						data: {
-							title: title,
-							description: text,
-							sDesc: sDesc,
-						},
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-						},
-					}).catch((error) => {
-						setMess("Enter the proper description and price (<=1000 USD)!!");
-					});
-				}
-				setMess(mess);
-			})
-			.catch((error) => {
-				setMess("The title should me minimum of 2 characters!!");
-			});
-
-		setTitle("");
-		setText("");
-		setSDesc("");
-	};
-
 	const inputChangeHandler = (event) => {
 		setTitle(event.target.value);
+	};
+
+	const submitHandler = async (event) => {
+		event.preventDefault();
+
+		var isBlogPresent = true;
+		await axios.get(`${context.serverURL}/cprestapi/blogs/findblog`,
+			{ params: { title:title}, headers: {Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+			.then((_) => isBlogPresent = false)
+			.catch((exception) => setMess(exception.response.data));
+		
+		if(!isBlogPresent) {
+			await axios.post(`${context.serverURL}/cprestapi/users/${user}/blogs`,
+				{title: title, description: text, shortDescription: sDesc},
+				{headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+				.then((_) => setMess("Blog created"))
+				.catch((exception) => setMess(exception.response.data));
+		}
 	};
 
 	return (

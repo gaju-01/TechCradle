@@ -7,55 +7,31 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
 
 @Entity
 public class Follow {
 
-    @JsonProperty("id")
     @Id
+    @Getter
     @GeneratedValue
     @JsonIgnore
     private int id;
 
-    @JsonProperty("userName")
-    private String userName;
-
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private User user;
+    private User follower;
 
-    @JsonProperty("celeb")
-    private String celeb;
+    @Getter
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User following;
 
     public Follow() {
+
     }
 
-    public Follow(String userName) {
-        this.userName = userName;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        this.celeb = user.getUserName();
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public String getCeleb() {
-        return this.celeb;
+    public Follow(User follower, User following) {
+        this.follower = follower;
+        this.following = following;
     }
 }

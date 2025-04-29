@@ -8,12 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface FollowRepo extends JpaRepository<Follow, Integer> {
-    List<Follow> findByUser(User user);
+    List<Follow> findByFollowing(User following);
 
-    List<Follow> findByCeleb(String celeb);
+    List<Follow> findByFollower(User follower);
 
-    List<Follow> findByUserName(String userName);
-
-    @Query("SELECT f from Follow f WHERE f.user = :user AND f.userName = :userName")
-    List<Follow> findByUserNameAndUser(@Param("user") User user, @Param("userName") String userName);
+    @Query("SELECT f from Follow f WHERE f.following = :following AND f.follower = :follower")
+    List<Follow> findByFollowingAndFollower(@Param("following") User following, @Param("follower") User follower);
 }

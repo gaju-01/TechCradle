@@ -6,16 +6,13 @@ import TextEditor from "../Utilities/TextEditor";
 import PopUp from "../Utilities/PopUp";
 
 const ModifyBlog = () => {
+	const context = useContext(Context);
 	const [title, setTitle] = useState("");
 	const [text, setText] = useState("");
 	const [mess, setMess] = useState("");
 	const [sDesc, setSDesc] = useState("");
-	const context = useContext(Context);
 	const [isOpen, setIsOpen] = useState(false);
-
-	const user = sessionStorage.getItem("user")
-		? sessionStorage.getItem("user")
-		: "";
+	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user") : "";
 
 	const handleSDesc = (event) => {
 		setSDesc(event.target.value);
@@ -29,96 +26,44 @@ const ModifyBlog = () => {
 		setTitle(event.target.value);
 	};
 
-	const deleteHandler = (event) => {
-		event.preventDefault();
-		let mess = "";
-		axios({
-			method: "get",
-			url: `${context.serverURL}/cprestapi/blogs/findblog`,
-			params: {
-				title: title,
-			},
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				mess = resp.data;
-				if (mess === "The title is not available") {
-					axios({
-						method: "delete",
-						url: `${context.serverURL}/cprestapi/${user}/blogs/deleteblog`,
-						params: {
-							title: title,
-						},
-						headers: {
-							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-						},
-					})
-						.then((resp) => {
-							setMess("Blog is successfully deleted!!");
-						})
-						.catch((error) => {
-							setMess(
-								"Enter the valid title or you are not the author this blog!!"
-							);
-						});
-				} else {
-					setMess("The blog with this title does not exsist");
-				}
+	const checkIfBlogIsPresent = async () => {
+		var isBlogPresent = null;
+		await axios.get(`${context.serverURL}/cprestapi/blogs/findblog`,
+			{ params: { title: title }, headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+			.then((_) => isBlogPresent = false)
+			.catch((exception) => {
+				setMess(exception.response.data);
+				if(exception.response.data === "The title is not available") isBlogPresent = true;
 			})
-			.catch((error) => {
-				setMess("Enter the valid title or you are not the author this blog!!");
-			});
+		
+		return isBlogPresent;
+	}
+
+	const deleteHandler = async (event) => {
+		event.preventDefault();
+		const isBlogPresent = await checkIfBlogIsPresent();
+		if(isBlogPresent) {
+			await axios.delete(`${context.serverURL}/cprestapi/${user}/blogs/deleteblog`,
+				{ params: { title: title }, headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+				.then((response) => setMess(response.data))
+				.catch((exception) => setMess(exception.response.data));
+		} else {
+			setMess("Blog with this title does not exist");
+		}
 	};
 
-	const submitHandler = (event) => {
+	const submitHandler = async (event) => {
 		event.preventDefault();
-
-		let mess = "";
-		axios({
-			method: "get",
-			url: `${context.serverURL}/cprestapi/blogs/findblog`,
-			params: {
-				title: title,
-			},
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-			},
-		})
-			.then((resp) => {
-				mess = resp.data;
-				if (mess === "The title is not available") {
-					axios({
-						method: "patch",
-						url: `${context.serverURL}/cprestapi/${user}/blogs/updateblog`,
-						data: {
-							title: title,
-							description: text,
-							sDesc: sDesc,
-						},
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-						},
-					})
-						.then((resp) => {
-							setMess("Your blog was successfully updated!!");
-						})
-						.catch((error) => {
-							setMess(
-								"Enter the valid details or you are not the author this blog!!"
-							);
-						});
-				} else {
-					setMess("Blog with this title does not exsist");
-				}
-			})
-			.catch((error) => {
-				setMess(
-					"Enter the valid details or you are not the author this blog!!"
-				);
-			});
+		const isBlogPresent = await checkIfBlogIsPresent();
+		if(isBlogPresent) {
+			await axios.patch(`${context.serverURL}/cprestapi/${user}/blogs/updateblog`,
+				{title: title, description: text, shortDescription: sDesc},
+				{ headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}` }})
+				.then((_) => setMess("Updated the blog"))
+				.catch((exception) => setMess(exception.response.data));
+		} else {
+			setMess("Blog with this title does not exist");
+		}
 	};
 
 	return (

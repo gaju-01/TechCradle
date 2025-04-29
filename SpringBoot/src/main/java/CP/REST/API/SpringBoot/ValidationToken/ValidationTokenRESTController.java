@@ -1,9 +1,8 @@
 package CP.REST.API.SpringBoot.ValidationToken;
 
 import CP.REST.API.SpringBoot.Email.EmailSenderService;
-import CP.REST.API.SpringBoot.Exceptions.BasicUserDefinedException;
-import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
 import CP.REST.API.SpringBoot.Security.JwtAuthenticationResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,17 +13,6 @@ import CP.REST.API.SpringBoot.Blogs.User;
 
 import java.util.Optional;
 
-/**
- * @RestController is used to indicate that the class contain the controller methods that interact handling
- * the HTTP requests.
- * @EnableWebSecurity is used to enable the authorization semantics annotations such as,
- * @Secured
- * @PreAuthorize
- * @PostAuthorize And,
- * @AllowAccessForResource is a custom annotation that is used for pre authorization at method level.
- * These annotations helps users to access the resources based on their assigned roles and
- * maintain separation of  concerns.
- */
 @RestController
 @EnableMethodSecurity
 public class ValidationTokenRESTController {
@@ -41,9 +29,8 @@ public class ValidationTokenRESTController {
         this.jwtAuthenticationResource = jwtAuthenticationResource;
     }
 
-    // @AllowAccessForResource
-    @GetMapping(path = "/cprestapi/validate/gt")
-    public String generateToken(@RequestParam(name = "userName") String userName, @RequestParam(name = "email") String email) {
+    @GetMapping(path = "/cprestapi/generateOTP")
+    public ResponseEntity<?> generateToken(@RequestParam(name = "userName") String userName, @RequestParam(name = "email") String email) {
         Optional<User> opUser = this.userRepo.findByUserName(userName);
         User user = opUser.get();
         Optional<ValidationToken> opVToken = this.validationRepo.findByUserName(userName);
@@ -54,27 +41,19 @@ public class ValidationTokenRESTController {
         this.validationRepo.save(vToken);
         text = "Your verification token is: " + vToken.getOTP();
         this.emailSenderService.sendEmail(email, "Verification Token", text);
-        return "OK";
+        return ResponseEntity.ok("OTP sent to your mail");
     }
 
-   // @AllowAccessForResource
-    @GetMapping(path = "/cprestapi/verify/gt")
-    public String verifyToken(@RequestParam(name = "otp") String otp, @RequestParam(name = "userName") String userName, Authentication authentication) {
-        if (otp == null || otp.length() != 6) {
-            throw new BasicUserDefinedException("Enter the valid otp");
-        }
+    @GetMapping(path = "/cprestapi/verifyOTP")
+    public ResponseEntity<?> verifyToken(@RequestParam(name = "otp") String otp, @RequestParam(name = "userName") String userName, Authentication authentication) {
+        if (otp == null || otp.isEmpty() || userName == null || userName.isEmpty()) return ResponseEntity.badRequest().body("Enter valid OTP");
         Optional<ValidationToken> opVToken = this.validationRepo.findByUserName(userName);
         int myOTP = Integer.parseInt(otp);
-        if (opVToken.isPresent()) {
-            if (myOTP != 0 && opVToken.get().getOTP() == myOTP) {
-                this.validationRepo.deleteById(opVToken.get().getId());
-                return this.jwtAuthenticationResource.createToken(authentication);
-            } else {
-                this.validationRepo.deleteById(opVToken.get().getId());
-                throw new BasicUserDefinedException("Enter the valid otp");
-            }
+        if (opVToken.isPresent() && opVToken.get().getOTP() == myOTP) {
+            this.validationRepo.deleteById(opVToken.get().getId());
+            return ResponseEntity.ok(this.jwtAuthenticationResource.createToken(authentication));
         } else {
-            throw new BasicUserDefinedException("Enter the valid otp");
+            return ResponseEntity.badRequest().body("Enter valid OTP");
         }
     }
 }

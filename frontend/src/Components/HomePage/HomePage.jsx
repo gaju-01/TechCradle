@@ -12,9 +12,9 @@ import NotFound from "../Utilities/NotFound";
 
 const HomePage = (props) => {
 	const params = useParams();
-	const [Component, setComponent] = useState(<Welcome />);
-	const [isNotFound, setIsNotFound] = useState(false);
 	const navigate = useNavigate(); 
+	const [isNotFound, setIsNotFound] = useState(false);
+	const [Component, setComponent] = useState(<Welcome />);
 	const user = sessionStorage.getItem("user") ? sessionStorage.getItem("user") : "";
 
 	useEffect(() => {

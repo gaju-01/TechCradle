@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface BlogRepo extends JpaRepository<Blog, Integer> {
     Optional<Blog> findByTitle(String title);
 
-    @Query("SELECT b.title from Blog b WHERE b.userName = :userName")
-    List<String> findBlogTitlesByUserName(@Param("userName") String userName);
+    @Query("SELECT b.title from Blog b WHERE b.user = :user")
+    List<String> findBlogTitlesByUser(@Param("user") User user);
 }
