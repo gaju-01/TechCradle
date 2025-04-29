@@ -8,55 +8,48 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 @Entity
 public class Blog {
-    @JsonProperty("id")
+
+    @Getter
     @Id
     @GeneratedValue
     @JsonIgnore
     private int id;
 
-    @JsonProperty("title")
-    @Size(min = 2)
+    @Getter
+    @Size(min = 2, message = "The title should have minimum of 2 characters")
     private String title;
 
-    @JsonProperty("description")
-    @Size(min = 1)
     @Lob
+    @Getter
     private String description;
 
-    @JsonProperty("lastmodified")
     private LocalDate lastmodified;
 
-    @JsonProperty("sDesc")
-    private String sDesc;
+    @Getter
+    @Size(min = 5, message = "The short description should have minimum of 4 characters")
+    private String shortDescription;
 
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     private User user;
-
-    private String userName;
 
     public Blog() {
 
     }
 
-    public Blog(String title, String description, String sDesc) {
+    public Blog(String title, String description, String shortDescription) {
         this.title = title;
         this.description = description;
         this.lastmodified = LocalDate.now();
-        this.sDesc = sDesc;
-    }
-
-    public void setID(int id) {
-        this.id = id;
-        this.lastmodified = LocalDate.now();
+        this.shortDescription = shortDescription;
     }
 
     public void setUser(User user) {
         this.user = user;
-        this.userName = user.getUserName();
     }
 
     public void setTitle(String title) {
@@ -64,8 +57,8 @@ public class Blog {
         this.lastmodified = LocalDate.now();
     }
 
-    public void setsDesc(String sDesc) {
-        this.sDesc = sDesc;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
         this.lastmodified = LocalDate.now();
     }
 
@@ -74,31 +67,4 @@ public class Blog {
         this.lastmodified = LocalDate.now();
     }
 
-    public int getId() {
-        return this.id;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public LocalDate getLastModified() {
-        return this.lastmodified;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public String getsDesc() {
-        return this.sDesc;
-    }
 }

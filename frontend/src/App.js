@@ -18,23 +18,9 @@ function App() {
 			: "en"
 	);
 	return (
-		<Context.Provider
-			value={{
-				serverURL: "https://techcradle-production.up.railway.app",
-			}}
-		>
+		<Context.Provider value={{ serverURL: "http://localhost:8080", }} >
 			<Routes>
-				<Route
-					path="/home/:id"
-					element={
-						<HomePage
-							currency={currency}
-							language={language}
-							setCurrency={setCurrency}
-							setLang={setLang}
-						/>
-					}
-				/>
+				<Route path="/home/:id" element={ <HomePage currency={currency} language={language} setCurrency={setCurrency} setLang={setLang} /> }/>
 				<Route path="/" element={<Welcome />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>

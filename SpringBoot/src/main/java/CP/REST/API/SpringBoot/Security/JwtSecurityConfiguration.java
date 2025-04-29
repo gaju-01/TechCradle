@@ -38,18 +38,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 public class JwtSecurityConfiguration {
-    /**
-     * Any request that is made by the client has to pass through the security chains,
-     * 1. Authorize all kind of HTTP requests.
-     * 2. Implement a stateless session management policy.
-     * 3. Allow the basic default authentication.
-     * 4. Disable the frame options which hinders the visibility of h2-console.
-     * 5. Disable the CSRF temporarily.
-     *
-     * @param HttpSecurity - It is used to apply security filter chain measures
-     * @return SecurityFilterChain - after measures are taken Security filter chain is returned
-     * @throws Exception - throws Exception
-     */
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated());
@@ -61,14 +50,6 @@ public class JwtSecurityConfiguration {
         return http.build();
     }
 
-    /**
-     * The following bean creates the Embedded Database(DefaultResourceLoader) with database type as H2.
-     * It further adds "org/springframework/security/core/userdetails/jdbc/users.ddl" schema to our database
-     * using JDBC. It further helps in role based access and authorization of the backend application. Unlike the
-     * above-mentioned bean, the following code  can be used in development and production as well.
-     *
-     * @return DataSource
-     */
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
@@ -77,13 +58,6 @@ public class JwtSecurityConfiguration {
                 .build();
     }
 
-    /**
-     * The following code snippet can be used to create the roles and insert it in embedded
-     * H2 database using JDBCUserDetailsManager. It uses BCryptPassWordEncoder Hashing
-     * function to encode the password and store it in Embedded database.
-     *
-     * @return UserDetailsService
-     */
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
         var user = User.withUsername("user").password("pass").passwordEncoder(str -> bCryptPasswordEncoder().encode(str)).roles("USER").build();
@@ -102,11 +76,6 @@ public class JwtSecurityConfiguration {
         return detailersManager;
     }
 
-    /**
-     *  Creates and returns an instance of BCryptPasswordEncoder which is used to
-     *  hash the password and store it in embedded H2 database.
-     * @return BCryptPasswordEncoder
-     */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

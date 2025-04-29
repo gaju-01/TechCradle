@@ -5,99 +5,71 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import CP.REST.API.SpringBoot.Security.AllowAccessForResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-/**
- * @RestController is used to indicate that the class contain the controller methods that interact handling
- * the HTTP requests.
- * @EnableWebSecurity is used to enable the authorization semantics annotations such as,
- * @Secured
- * @PreAuthorize
- * @PostAuthorize And,
- * @AllowAccessForResource is a custom annotation that is used for pre-authorization at method level.
- * These annotations helps users to access the resources based on their assigned roles and
- * maintain separation of  concerns.
- */
 @RestController
-// @EnableMethodSecurity
 public class FollowRESTController {
 
-    private FollowRepo followRepo;
     private UserRepo userRepo;
+    private FollowRepo followRepo;
 
     public FollowRESTController(FollowRepo followRepo, UserRepo userRepo) {
-        this.followRepo = followRepo;
         this.userRepo = userRepo;
+        this.followRepo = followRepo;
     }
 
-    // @AllowAccessForResource
-    @PostMapping("/cprestapi/followers")
-    public ResponseEntity<Follow> makeFollowers(
-            @RequestParam(name = "user") String user,
-            @RequestBody Follow follow
-    ) {
-        Optional<User> opUser = this.userRepo.findByUserName(user);
-        User gotUser = opUser.get();
-        follow.setUser(gotUser);
-        this.followRepo.save(follow);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("{id}")
-                .buildAndExpand(follow.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+    @PostMapping("/cprestapi/follow")
+    public ResponseEntity<?> makeFollowing(@RequestParam(name = "follower") String follower, @RequestParam(name = "following") String  following) {
+        User followerEntity = this.userRepo.findByUserName(follower).get(), followingEntity = this.userRepo.findByUserName(following).get();
+        Follow followEntity = new Follow(followerEntity, followingEntity);
+        this.followRepo.save(followEntity);
+        return ResponseEntity.ok("You are now following " + following);
     }
 
-    // @AllowAccessForResource
-    @GetMapping("/cprestapi/followers/{user}")
-    public List<Follow> getFollowers(@PathVariable String user) {
-        Optional<User> opUser = this.userRepo.findByUserName(user);
-        User gotUser = opUser.get();
-        List<Follow> getList = this.followRepo.findByUser(gotUser);
-        return getList;
+    @GetMapping("/cprestapi/followers/{userName}")
+    public ResponseEntity<?> getFollowers(@PathVariable String userName) {
+        User followingEntity = this.userRepo.findByUserName(userName).get();
+        List<Follow> followers = this.followRepo.findByFollowing(followingEntity);
+        List<String> followerUserNames = new ArrayList<>();
+        for (Follow followEntity: followers) {
+            followerUserNames.add(followEntity.getFollower().getUserName());
+        }
+        return ResponseEntity.ok(followerUserNames);
     }
 
-    // @AllowAccessForResource
+    @GetMapping("/cprestapi/following/{userName}")
+    public ResponseEntity<?> getFollowing(@PathVariable String userName) {
+        User followerEntity = this.userRepo.findByUserName(userName).get();
+        List<Follow> following = this.followRepo.findByFollower(followerEntity);
+        List<String> followingUserNames = new ArrayList<>();
+        for (Follow followEntity: following) {
+            followingUserNames.add(followEntity.getFollowing().getUserName());
+        }
+        return ResponseEntity.ok(followingUserNames);
+    }
+
+    @DeleteMapping("/cprestapi/removeFollowing")
+    public ResponseEntity<?> removeFollowing(@RequestParam(name = "following") String following, @RequestParam(name = "follower") String follower) {
+        User followingEntity = this.userRepo.findByUserName(following).get(), followerEntity = this.userRepo.findByUserName(follower).get();
+        List<Follow> followersFollowingList = this.followRepo.findByFollowingAndFollower(followingEntity, followerEntity);
+        Follow followEntity = followersFollowingList.get(0);
+        this.followRepo.delete(followEntity);
+        return ResponseEntity.ok("Unfollowed " + following);
+    }
+
     @GetMapping("/cprestapi/followers/check")
-    public String checkIsPresent(
-            @RequestParam(name = "parent") String parent,
-            @RequestParam(name = "child") String child
-    ) {
-        Optional<User> opUser = this.userRepo.findByUserName(parent);
-        User gotUser = opUser.get();
-        List<Follow> getList = this.followRepo.findByUser(gotUser);
+    public ResponseEntity<?> checkIsPresent(@RequestParam(name = "following") String following, @RequestParam(name = "follower") String follower) {
+        User followingEntity = this.userRepo.findByUserName(following).get();
+        List<Follow> getList = this.followRepo.findByFollowing(followingEntity);
+        boolean isFollowing = false;
         for (Follow x : getList) {
-            if (x.getUserName().equals(child)) {
-                return "YES";
+            if (x.getFollower().getUserName().equals(follower)) {
+                isFollowing = true;
+                break;
             }
         }
-        return "NO";
-    }
-
-    // @AllowAccessForResource
-    @GetMapping("/cprestapi/following")
-    public List<String> following(@RequestParam(name = "parent") String parent) {
-        List<Follow> getList = this.followRepo.findByUserName(parent);
-        List<String> ans = new ArrayList<>();
-        for (Follow x : getList) {
-            ans.add(x.getCeleb());
-        }
-        return ans;
-    }
-
-    // @AllowAccessForResource
-    @DeleteMapping("/cprestapi/removeUser")
-    public String removeFollower(@RequestParam(name = "parent") String parent, @RequestParam(name = "child") String child) {
-        Optional<User> opUser = this.userRepo.findByUserName(parent);
-        User user = opUser.get();
-        List<Follow> opFollowUser = this.followRepo.findByUserNameAndUser(user, child);
-        Follow follow = opFollowUser.get(0);
-        this.followRepo.delete(follow);
-        return "OK";
+        return ResponseEntity.ok(isFollowing);
     }
 }

@@ -33,8 +33,7 @@ const PopUp = (props) => {
     useEffect(() => {
         axios.get(`${context.serverURL}/cprestapi/textgenerator/apikey`, 
 			{ headers: {Authorization: `Bearer ${sessionStorage.getItem("jwt")}`} })
-			.then((resp) => {setAPIKey(resp.data)})
-            .catch((resp) => {});
+			.then((response) => { setAPIKey(response.data) });
     }, [context.serverURL]);
 
     return <div className={`${PopUpStyles["decorate-popup"]}`}>
