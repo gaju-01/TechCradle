@@ -1,19 +1,48 @@
-# TechCradle
-TechCradle is a Java-based project that showcases a robust content management system designed for a blogging website, developed using the Spring Framework and its associated technologies.
+🚀 TechCradle - Intelligent Blogging Platform
 
-# Key Features
-* OTP based authentication
-* User based resource access(temporarily disabled)
-* JWT token based authorization
-* Supports English, French and Duth Language
-* Supports rich text editor that can handle links, images and text
-* Users can utilize generative artificial intelligence powered by Gemini Flash API to write their blogs
-* Allows CRUD operations on Documents/Blogs
-* Allows users to follow/unfollow others
+TechCradle is a powerful, Java-based content management system tailored for a modern blogging experience. Built using the Spring Framework and associated technologies, it offers secure authentication, multilingual support, and seamless blog authoring enriched with generative AI.
 
-# Note
-* Please use your API key for the Google Gemini to generate the description using Generative Artificial Intelligence.
-Refer this issue for more details: https://github.com/gaju-01/TechCradle/issues/29
+✨ Key Features
+
+🔐 OTP-based Authentication
+
+🛡️ JWT Token-based Authorization
+
+👥 User-based Resource Access (currently disabled)
+
+🌐 Multilingual Support: English, French, and Dutch
+
+📝 Rich Text Editing: Add links, images, and formatted text
+
+🤖 AI-Powered Blog Writing: Integrated with Gemini Flash API for generative writing assistance
+
+📚 Full Blog Lifecycle: Create, read, update, and delete blog documents
+
+🔔 Social Features: Follow and unfollow other users
+
+⚙️ Technologies Used
+
+Java 17
+
+Spring Boot
+
+Spring Security
+
+JWT (JSON Web Tokens)
+
+PostgreSQL / OracleDB (depending on deployment)
+
+Gemini Flash API (for AI content generation)
+
+🛠️ Requirements
+
+Java 17+
+
+Maven 3.6+
+
+Node.js & npm (if frontend included)
+
+Git
 
 # Gemini Response Images
 ![Response00](https://github.com/user-attachments/assets/89410b00-5b7f-4b97-9e43-1e0d34d32065)
