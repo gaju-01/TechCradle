@@ -19,7 +19,7 @@
 - **Spring Boot**
 - **Spring Security**
 - **JWT (JSON Web Tokens)**
-- **PostgreSQL / OracleDB** *(depending on deployment)*
+- **H2** *(depending on deployment)*
 - **Gemini Flash API** *(for AI content generation)*
 
 ## 🛠️ Requirements
@@ -53,18 +53,12 @@
    cd ../frontend
    npm install
    npm start
-   ``
+   ```
 
 ## 📌 Notes
 
 - Ensure environment variables are properly set for API keys (e.g., Gemini Flash API).
 - User role access is a planned feature and is currently disabled.
-
-## 📄 License
-
-[MIT](LICENSE)
-
-Git
 
 # Gemini Response Images
 ![Response00](https://github.com/user-attachments/assets/89410b00-5b7f-4b97-9e43-1e0d34d32065)
@@ -110,10 +104,7 @@ Git
    ```
 
 6. **Run the frontend application**
-   Use `npm start` to run the React-based frontend project.
-   ```bash
-   npm start
-   ```
+   Use `npm install` to install the dependencies and `npm start` to run the React-based frontend project.
 
 ### Getting Started with Create React App
 
