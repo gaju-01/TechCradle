@@ -60,12 +60,6 @@
 - Ensure environment variables are properly set for API keys (e.g., Gemini Flash API).
 - User role access is a planned feature and is currently disabled.
 
-## 📄 License
-
-[MIT](LICENSE)
-
-Git
-
 # Gemini Response Images
 ![Response00](https://github.com/user-attachments/assets/89410b00-5b7f-4b97-9e43-1e0d34d32065)
 ![Response01](https://github.com/user-attachments/assets/43cf2d22-886e-475c-8aac-938deeb5b278)
