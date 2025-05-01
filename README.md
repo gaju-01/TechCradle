@@ -19,7 +19,7 @@
 - **Spring Boot**
 - **Spring Security**
 - **JWT (JSON Web Tokens)**
-- **PostgreSQL / OracleDB** *(depending on deployment)*
+- **H2** *(depending on deployment)*
 - **Gemini Flash API** *(for AI content generation)*
 
 ## 🛠️ Requirements
@@ -104,10 +104,7 @@
    ```
 
 6. **Run the frontend application**
-   Use `npm start` to run the React-based frontend project.
-   ```bash
-   npm start
-   ```
+   Use `npm install` to install the dependencies and `npm start` to run the React-based frontend project.
 
 ### Getting Started with Create React App
 
