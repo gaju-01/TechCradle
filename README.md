@@ -1,4 +1,4 @@
-# 🚀 TechCradle - Intelligent Blogging Platform
+## 🚀 TechCradle - Intelligent Blogging Platform
 
 **TechCradle** is a powerful, Java-based content management system tailored for a modern blogging experience. Built using the Spring Framework and associated technologies, it offers secure authentication, multilingual support, and seamless blog authoring enriched with generative AI.
 
