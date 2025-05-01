@@ -1,46 +1,68 @@
-🚀 TechCradle - Intelligent Blogging Platform
+# 🚀 TechCradle - Intelligent Blogging Platform
 
-TechCradle is a powerful, Java-based content management system tailored for a modern blogging experience. Built using the Spring Framework and associated technologies, it offers secure authentication, multilingual support, and seamless blog authoring enriched with generative AI.
+**TechCradle** is a powerful, Java-based content management system tailored for a modern blogging experience. Built using the Spring Framework and associated technologies, it offers secure authentication, multilingual support, and seamless blog authoring enriched with generative AI.
 
-✨ Key Features
+## ✨ Key Features
 
-🔐 OTP-based Authentication
+- 🔐 **OTP-based Authentication**
+- 🛡️ **JWT Token-based Authorization**
+- 👥 **User-based Resource Access** *(currently disabled)*
+- 🌐 **Multilingual Support**: English, French, and Dutch
+- 📝 **Rich Text Editing**: Add links, images, and formatted text
+- 🤖 **AI-Powered Blog Writing**: Integrated with **Gemini Flash API** for generative writing assistance
+- 📚 **Full Blog Lifecycle**: Create, read, update, and delete blog documents
+- 🔔 **Social Features**: Follow and unfollow other users
 
-🛡️ JWT Token-based Authorization
+## ⚙️ Technologies Used
 
-👥 User-based Resource Access (currently disabled)
+- **Java 17**
+- **Spring Boot**
+- **Spring Security**
+- **JWT (JSON Web Tokens)**
+- **PostgreSQL / OracleDB** *(depending on deployment)*
+- **Gemini Flash API** *(for AI content generation)*
 
-🌐 Multilingual Support: English, French, and Dutch
+## 🛠️ Requirements
 
-📝 Rich Text Editing: Add links, images, and formatted text
+- Java 17+
+- Maven 3.6+
+- Node.js & npm *(if frontend included)*
+- Git
 
-🤖 AI-Powered Blog Writing: Integrated with Gemini Flash API for generative writing assistance
+## 🚀 Getting Started
 
-📚 Full Blog Lifecycle: Create, read, update, and delete blog documents
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/techcradle.git
+   cd techcradle
+   ```
 
-🔔 Social Features: Follow and unfollow other users
+2. **Install dependencies and build the project:**
+   ```bash
+   cd SpringBoot
+   mvn clean install
+   ```
 
-⚙️ Technologies Used
+3. **Run the application:**
+   ```bash
+   mvn spring-boot:run
+   ```
 
-Java 17
+4. **(Optional)** Start the frontend:
+   ```bash
+   cd ../frontend
+   npm install
+   npm start
+   ``
 
-Spring Boot
+## 📌 Notes
 
-Spring Security
+- Ensure environment variables are properly set for API keys (e.g., Gemini Flash API).
+- User role access is a planned feature and is currently disabled.
 
-JWT (JSON Web Tokens)
+## 📄 License
 
-PostgreSQL / OracleDB (depending on deployment)
-
-Gemini Flash API (for AI content generation)
-
-🛠️ Requirements
-
-Java 17+
-
-Maven 3.6+
-
-Node.js & npm (if frontend included)
+[MIT](LICENSE)
 
 Git
 
